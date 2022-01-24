@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -11,5 +11,13 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css');
+const PUB_JS_DIR = "public/js";
+const PUB_CSS_DIR = "public/css";
+
+const mixingJs = "resources/js/app.js";
+const mixingScss = "resources/sass/app.scss";
+
+mix
+    .js(mixingJs, PUB_JS_DIR)
+    .sass(mixingScss, PUB_CSS_DIR)
+    .disableNotifications();
