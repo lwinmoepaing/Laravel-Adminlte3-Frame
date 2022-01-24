@@ -7,4 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Branch extends Model
 {
     //
+    public $timestamps = true;
+
+    public function township()
+    {
+        return $this->belongsTo(Township::class);
+    }
 }

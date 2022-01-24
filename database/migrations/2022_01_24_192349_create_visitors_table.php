@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTownshipsTable extends Migration
+class CreateVisitorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateTownshipsTable extends Migration
      */
     public function up()
     {
-        Schema::create('townships', function (Blueprint $table) {
+        Schema::create('visitors', function (Blueprint $table) {
             $table->id();
-            $table->text('township_name');
-            $table->text('cities_id');
+            $table->text('name');
+            $table->string('phone', 100)->index('visitor_phone_index');
+            $table->text('company_name');
+            $table->text('email');
+            $table->foreignId('appointment_id')->constrained();
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateTownshipsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('townships');
+        Schema::dropIfExists('visitors');
     }
 }
