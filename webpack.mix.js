@@ -13,11 +13,13 @@ const mix = require("laravel-mix");
 
 const PUB_JS_DIR = "public/js";
 const PUB_CSS_DIR = "public/css";
+const PUB_FONT_DIR = "public/fonts";
+const DEFAULT_FONT_FOLDER = "resources/fonts";
 
 const mixingJs = "resources/js/app.js";
 const mixingScss = "resources/sass/app.scss";
 
-mix
-    .js(mixingJs, PUB_JS_DIR)
+mix.js(mixingJs, PUB_JS_DIR)
     .sass(mixingScss, PUB_CSS_DIR)
+    .copyDirectory(DEFAULT_FONT_FOLDER, PUB_FONT_DIR)
     .disableNotifications();
