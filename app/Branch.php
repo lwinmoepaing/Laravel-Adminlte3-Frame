@@ -13,4 +13,9 @@ class Branch extends Model
     {
         return $this->belongsTo(Township::class);
     }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }

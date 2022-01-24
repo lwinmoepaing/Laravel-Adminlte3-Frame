@@ -15,7 +15,7 @@ class CreateAppointmentsTable extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->text('title');
+            $table->string('title');
             $table->text('staff_name');
             $table->text('staff_email');
             $table->foreignId('branch_id')->constrained();
@@ -23,6 +23,7 @@ class CreateAppointmentsTable extends Migration
             $table->timestamp('meeting_time');
             $table->integer('status')->unsigned()->index('appointment_status_index');
             $table->text('reason')->nullable();
+            $table->text('description')->nullable();
             $table->foreignId('user_id')->nullable()->constraint();
             $table->timestamps();
         });
