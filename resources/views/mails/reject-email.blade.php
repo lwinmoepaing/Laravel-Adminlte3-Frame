@@ -24,11 +24,11 @@
     </p>
 
     <p style="margin: .5rem 0; font-size: 13px;">
-       Meeting title: {{ $title }} {{ '<' }} A{{ str_pad($id, 6, '0', STR_PAD_LEFT)  . '>'}}
+       Meeting title: {{ $title }}
     </p>
 
     <p style="margin: .5rem 0; font-size: 13px;">
-       Appointment ID: {{ '<' }} A{{ str_pad($id, 6, '0', STR_PAD_LEFT)  . '>'}}
+       Appointment ID: A{{ str_pad($id, 6, '0', STR_PAD_LEFT) }}
     </p>
 
     <p style="margin: .5rem 0; font-size: 13px;">
