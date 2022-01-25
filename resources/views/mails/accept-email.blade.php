@@ -16,7 +16,7 @@
 <body style="border: 1px solid #dfdfdf; box-sizing: border-box; padding: 10px; margin: 0">
 
     <p style="margin: .5rem 0; color: #090">
-        You have been invited Meeting. <{{ $to_email }}>
+        Invitation Meeting Acceptance. <{{ $to_email }}>
     </p>
 
     <p style="margin: .5rem 0; font-size: 13px;">
@@ -43,12 +43,10 @@
         <span style="display: inline-block; min-width: 120px">Address</span> {{ $address }}
     </p>
 
-    <a style="background-color: #fff; border:solid 1px; border-color:#0078D7;color: #0078D7; text-decoration: none;border-radius:2px; margin-bottom:6px; padding:8px; text-align:center; margin-right:8px; font-size: 12px; margin-top: 8px; display: inline-block;" href="{{route('appointment.checkconfirm', ['appointment_id' => $id, 'is_confirmed' => 'true' ])}}"> Confirm </a>
-    <a style="background-color: #fff; border:solid 1px; border-color:red; color: red; text-decoration: none; border-radius:2px; margin-bottom:6px; padding:8px; text-align:center; margin-right:8px; font-size: 12px; margin-top: 8px; display: inline-block;" href="{{route('appointment.checkconfirm', ['appointment_id' => $id, 'is_confirmed' => 'false' ])}}"> Reject </a>
+    <p style="margin: .5rem 0; font-size: 13px;">
+        Thank you for using uab Recipient Appointment Platform.
+    </p>
 
-    @isset($is_back)
-        <a href="/"> Back Home </a>
-    @endisset
 
 
 </body>

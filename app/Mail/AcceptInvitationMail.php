@@ -13,7 +13,8 @@ use Illuminate\Queue\SerializesModels;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
 
-class InviteAppointmentMail extends Mailable
+
+class AcceptInvitationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -24,7 +25,6 @@ class InviteAppointmentMail extends Mailable
      */
     public function __construct(Appointment $appointment)
     {
-        //
         $this->appointment = $appointment;
     }
 
@@ -35,13 +35,12 @@ class InviteAppointmentMail extends Mailable
      */
     public function build()
     {
-
-        $dateStr = $this->appointment->meeting_time->format('F d Y H:i');
+        $dateStr = Carbon::parse($this->appointment->meeting_time)->format('F d Y H:i');
         $calendarFormat = Carbon::parse($this->appointment->meeting_time);
         // GMT+6:30
         $calendar = Calendar::create();
 
-        $events = Event::create('Invitation: uab Meeting' . '<A' . str_pad($this->appointment->id, 6, '0', STR_PAD_LEFT) . '>')
+        $events = Event::create('Acceptance Meeting of your invitation' . '<A' . str_pad($this->appointment->id, 6, '0', STR_PAD_LEFT) . '>')
                 ->startsAt(new DateTime($calendarFormat, new DateTimeZone('Asia/Rangoon')))
                 ->endsAt(new DateTime($calendarFormat->addHour(1), new DateTimeZone('Asia/Rangoon')))
                 ->address($this->appointment->branch->branch_name)
@@ -58,7 +57,7 @@ class InviteAppointmentMail extends Mailable
         );
 
         return $this
-            ->view('invitation-email')
+            ->view('mails.accept-email')
             ->with([
                 'title' => $this->appointment->title,
                 'start_date' => $dateStr,

@@ -3,5 +3,5 @@
 @section('title', 'Home Page')
 
 @section('content')
-    <a href="/appointment-request">Request Appointment</a>
+    <a href="{{route('appointment.view')}}">Request Appointment</a>
 @endsection

@@ -17,6 +17,11 @@ Route::get('/', 'Home\HomeController@index')->name('home');
 Route::post('/', 'Home\HomeController@postMail')->name('postMail');
 
 // Appointment for Client View
-Route::get('/appointment-request', 'ClientView\ClientViewController@index')->name('appointment.view');
-Route::post('/appointment-request', 'ClientView\ClientViewController@appointSubmit')->name('appointment.submit');
-Route::get('/appointment-confirm/{appointment_id}', 'Appointment\AppointmentController@checkConfirm')->name('appointment.checkconfirm');
+
+Route::name('appointment.')->prefix('/appointment')->group(function () {
+    Route::get('/request', 'ClientView\ClientViewController@index')->name('view');
+    Route::post('/request', 'ClientView\ClientViewController@appointSubmit')->name('submit');
+    Route::get('/confirm/{appointment_id}', 'Appointment\AppointmentController@checkConfirm')->name('checkconfirm');
+});
+
+
