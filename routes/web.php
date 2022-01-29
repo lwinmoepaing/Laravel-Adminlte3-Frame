@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'Home\HomeController@index')->name('home');
+Route::get('/', 'Home\HomeController@index')->name('index');
 
 // Appointment for Client View
 
@@ -24,3 +24,6 @@ Route::name('appointment.')->prefix('/appointment')->group(function () {
 });
 
 
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

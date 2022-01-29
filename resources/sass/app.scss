@@ -1,18 +1,8 @@
-@font-face {
-    font-family: "Objective-Regular";
-    src: url("/fonts/Objective-Regular.ttf") format("ttf");
-}
-@font-face {
-    font-family: "Objective-Medium";
-    src: url("/fonts/Objective-Medium.ttf") format("ttf");
-}
-@font-face {
-    font-family: "Objective-Bold";
-    src: url("/fonts/Objective-Bold.ttf") format("ttf");
-}
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
 
-@import "bootstrap";
+// Variables
+@import 'variables';
 
-@import "tempusdominus-bootstrap-4/src/sass/_tempusdominus-bootstrap-4.scss";
-
-@import "font-awesome/scss/font-awesome.scss";
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';

@@ -6,8 +6,10 @@ use App\Division;
 use App\Staff;
 use App\StaffRole;
 use App\Township;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class CommonSeeder extends Seeder
 {
@@ -138,12 +140,21 @@ class CommonSeeder extends Seeder
             ],
         ];
 
+        $users = [
+            [
+                "name" => "admin",
+                "email" => "admin@gmail.com",
+                "password" => Hash::make("admin123"),
+            ]
+        ];
+
         $divisions = $this->addDateAndID($divisions);
         $townships = $this->addDateAndID($townships);
         $branches = $this->addDateAndID($branches);
         $departments = $this->addDateAndID($departments);
         $staffRoles = $this->addDateAndID($staffRoles);
         $staffs = $this->addDateAndID($staffs);
+        $users = $this->addDateAndID($users);
 
         Division::insert($divisions);
         Township::insert($townships);
@@ -151,6 +162,7 @@ class CommonSeeder extends Seeder
         Department::insert($departments);
         StaffRole::insert($staffRoles);
         Staff::insert($staffs);
+        User::insert($users);
     }
 
     public function addDateAndID($arr) {
