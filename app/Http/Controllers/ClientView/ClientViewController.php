@@ -37,14 +37,6 @@ class ClientViewController extends Controller
 
         Mail::to($appointment->staff_email)->send(new InviteAppointmentMail($appointment));
 
-        return view('invitation-email', [
-            'title' => $appointment->title,
-            'start_date' => $appointment->meeting_time->format('Y-m-d'),
-            'request_from' => $appointment->visitors[0]->name . ' (' .$appointment->visitors[0]->email . ')',
-            'to_email' => $appointment->staff_email,
-            'department' => $appointment->department->department_name,
-            'address' => $appointment->branch->branch_address,
-            'id' => $appointment->id,
-        ]);
+        return view('welcome');
     }
 }

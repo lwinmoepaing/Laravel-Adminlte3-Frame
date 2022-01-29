@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'Home\HomeController@index')->name('home');
-Route::post('/', 'Home\HomeController@postMail')->name('postMail');
 
 // Appointment for Client View
 

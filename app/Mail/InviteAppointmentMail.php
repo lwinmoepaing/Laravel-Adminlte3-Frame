@@ -58,7 +58,7 @@ class InviteAppointmentMail extends Mailable
         );
 
         return $this
-            ->view('invitation-email')
+            ->view('mail.invitation-email')
             ->with([
                 'title' => $this->appointment->title,
                 'start_date' => $dateStr,
