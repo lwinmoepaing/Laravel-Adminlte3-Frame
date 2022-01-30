@@ -35,9 +35,7 @@
 @push('body-scripts')
 <script>
     (function() {
-
-        console.log(NProgress);
-
+        console.log(Date.today());
     })()
 </script>
 @endpush

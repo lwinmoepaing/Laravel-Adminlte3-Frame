@@ -900,6 +900,11 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
+"@eonasdan/tempus-dominus@^6.0.0-beta1":
+  version "6.0.0-beta1"
+  resolved "https://registry.yarnpkg.com/@eonasdan/tempus-dominus/-/tempus-dominus-6.0.0-beta1.tgz#9c87fbf2f0059d300c1504f299a0cab9f8d2a145"
+  integrity sha512-ZKaWNqjhJg8b1MwIvutIOwy2Gh8MGSC+Ka/RNFVoxsfJ5+WrH15ptMBnfWLhi+lyr6WjtCY3ZPCZTPfWIyHlEw==
+
 "@fortawesome/fontawesome-free@^5.15.3":
   version "5.15.4"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.15.4.tgz#ecda5712b61ac852c760d8b3c79c96adca5554e5"
@@ -1684,6 +1689,19 @@ bootstrap-colorpicker@^3.2.0:
     jquery ">=2.2"
     popper.js ">=1.10"
 
+bootstrap-daterangepicker@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/bootstrap-daterangepicker/-/bootstrap-daterangepicker-3.1.0.tgz#632e6fb2de4b6360c5c0a9d5f6adb9aace051fe8"
+  integrity sha512-oaQZx6ZBDo/dZNyXGVi2rx5GmFXThyQLAxdtIqjtLlYVaQUfQALl5JZMJJZzyDIX7blfy4ppZPAJ10g8Ma4d/g==
+  dependencies:
+    jquery ">=1.10"
+    moment "^2.9.0"
+
+bootstrap-progressbar@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/bootstrap-progressbar/-/bootstrap-progressbar-0.9.0.tgz#cc00fb94797111556dc9af7ea6b5cadbee30cac4"
+  integrity sha1-zAD7lHlxEVVtya9+prXK2+4wysQ=
+
 bootstrap-slider@^11.0.2:
   version "11.0.2"
   resolved "https://registry.yarnpkg.com/bootstrap-slider/-/bootstrap-slider-11.0.2.tgz#4b167c165f322339cc66f0c7166b5a39e289e251"
@@ -2058,6 +2076,14 @@ charenc@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/charenc/-/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
   integrity sha1-wKHS86cJLgN3S/qD8UwPxXkKhmc=
+
+chart.js@2.9.3:
+  version "2.9.3"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-2.9.3.tgz#ae3884114dafd381bc600f5b35a189138aac1ef7"
+  integrity sha512-+2jlOobSk52c1VU6fzkh3UwqHMdSlgH1xFv9FKMqHiNCpXsGPQa/+81AFa+i3jZ253Mq9aAycPwDjnn1XbRNNw==
+  dependencies:
+    chartjs-color "^2.1.0"
+    moment "^2.10.2"
 
 chart.js@^2.9.4:
   version "2.9.4"
@@ -2926,6 +2952,11 @@ datatables.net@>=1.10.25, datatables.net@>=1.11.3, datatables.net@^1.10.15, data
   integrity sha512-z9LG4O0VYOYzp+rnArLExvnUWV8ikyWBcHYZEKDfVuz7BKxQdEq4a/tpO0Trbm+FL1+RY7UEIh+UcYNY/hwGxA==
   dependencies:
     jquery ">=1.7"
+
+datejs@^1.0.0-rc3:
+  version "1.0.0-rc3"
+  resolved "https://registry.yarnpkg.com/datejs/-/datejs-1.0.0-rc3.tgz#bffa1efedefeb41fdd8a242af55afa01fb58de57"
+  integrity sha1-v/oe/t7+tB/diiQq9Vr6AftY3lc=
 
 daterangepicker@^3.1.0:
   version "3.1.0"
@@ -3799,6 +3830,11 @@ flag-icon-css@^3.5.0:
   resolved "https://registry.yarnpkg.com/flag-icon-css/-/flag-icon-css-3.5.0.tgz#430747d5cb91e60babf85494de99173c16dc7cf2"
   integrity sha512-pgJnJLrtb0tcDgU1fzGaQXmR8h++nXvILJ+r5SmOXaaL/2pocunQo2a8TAXhjQnBpRLPtZ1KCz/TYpqeNuE2ew==
 
+flot-pie@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/flot-pie/-/flot-pie-1.0.0.tgz#1c750a50535aa640ba2f5a5bcf7b32d8dd20dec1"
+  integrity sha1-HHUKUFNapkC6L1pbz3sy2N0g3sE=
+
 flot@^4.2.2:
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/flot/-/flot-4.2.2.tgz#0661d9e3805c86ccd36560f9602a0d1484d60fe8"
@@ -3948,6 +3984,11 @@ function-bind@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
   integrity sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==
+
+gaugeJS@^1.3.7:
+  version "1.3.7"
+  resolved "https://registry.yarnpkg.com/gaugeJS/-/gaugeJS-1.3.7.tgz#e7e126bb66e2a6c0047d858abc1ee7fc1ee91639"
+  integrity sha512-te8IYMlgZOSbDmiecCwI+IOEUvEhYbniC+2qicPz7Bco5XV05QMtUr8ILqPuR+txtPC5855dZZojUHi0r15oWQ==
 
 gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
@@ -4333,6 +4374,11 @@ icheck-bootstrap@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/icheck-bootstrap/-/icheck-bootstrap-3.0.1.tgz#60c9c9a71524e1d9dd5bd05167a62fef05cc3a1b"
   integrity sha512-Rj3SybdcMcayhsP4IJ+hmCNgCKclaFcs/5zwCuLXH1WMo468NegjhZVxbSNKhEjJjnwc4gKETogUmPYSQ9lEZQ==
+
+icheck@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/icheck/-/icheck-1.0.2.tgz#06d08da3d47ae448c153b2639b86e9ad7fdf7128"
+  integrity sha1-BtCNo9R65EjBU7Jjm4bprX/fcSg=
 
 iconv-lite@0.4.24:
   version "0.4.24"
@@ -7244,6 +7290,11 @@ simple-swizzle@^0.2.2:
   integrity sha1-pNprY1/8zMoz9w0Xy5JZLeleVXo=
   dependencies:
     is-arrayish "^0.3.1"
+
+skycons@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/skycons/-/skycons-1.0.0.tgz#afb160c5901470aae84676fbc38bbd7dd5b69d8f"
+  integrity sha1-r7FgxZAUcKroRnb7w4u9fdW2nY8=
 
 slash@^1.0.0:
   version "1.0.0"

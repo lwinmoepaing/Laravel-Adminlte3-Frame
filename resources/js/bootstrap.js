@@ -1,4 +1,4 @@
-window._ = require('lodash');
+window._ = require("lodash");
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -7,11 +7,36 @@ window._ = require('lodash');
  */
 
 try {
-    window.Popper = require('popper.js').default;
-    window.$ = window.jQuery = require('jquery');
-    window.NProgress = require('nprogress');
+    window.Popper = require("popper.js").default;
+    window.$ = window.jQuery = require("jquery");
 
-    require('bootstrap');
+    // For Adminlte3 Dependencies
+    window.NProgress = require("nprogress");
+    window.FastClick = require("fastclick");
+    window.Chart = require("chart.js");
+    window.skycons = require("skycons");
+    window.Gauge = require("gaugeJS");
+    window.moment = require("moment");
+
+    // Jquery Plugins
+    require("icheck");
+    require("flot");
+    require("flot-pie");
+    require("./adminlte3/jquery.flot.time");
+    require("./adminlte3/jquery.flot.stack");
+    require("./adminlte3/jquery.flot.resize");
+    require("./adminlte3/jquery.flot.orderBars");
+    require("./adminlte3/jquery.flot.spline");
+    require("./adminlte3/jquery.flot.curvedlines");
+
+    // Need jquery DateTimeBootstrap4 Picker
+    require("tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.js");
+
+    require("datejs");
+
+    // Bootstrap v4.x.x
+    require("bootstrap");
+    require("bootstrap-progressbar/bootstrap-progressbar.min");
 } catch (e) {}
 
 /**
@@ -20,9 +45,9 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = require('axios');
+window.axios = require("axios");
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
