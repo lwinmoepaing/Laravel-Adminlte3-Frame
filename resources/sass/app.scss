@@ -7,7 +7,6 @@
 // Bootstrap
 @import "~bootstrap/scss/bootstrap";
 
-
 // FontAwesome
 @import "font-awesome";
 
@@ -23,3 +22,8 @@
 // Bootstrap4 DatetimePicker
 @import "~tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.css";
 
+// AdminLte3
+@import "./adminlte3/custom_theme.scss";
+
+// My Scss
+@import "./custom_my.scss";

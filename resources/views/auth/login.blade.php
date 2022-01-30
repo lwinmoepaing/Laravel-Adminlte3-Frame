@@ -8,19 +8,29 @@
     <div class="login_wrapper">
         <div class="animate form login_form">
         <div>
-            <img src="../build/images/uab-logo.png" class="brand-logo d-block mx-auto" alt="" style="width: 220px; height: auto;">
+            <img src="{{URL('/images/auth/uab-logo.png')}}" class="brand-logo d-block mx-auto" alt="" style="width: 220px; height: auto;">
         </div>
         <section class="login_content">
-            <form>
+            <form action="{{ route('login') }}" method="POST">
+
+            @csrf
+
             <h1>Login Form</h1>
+
             <div>
                 <input type="text" class="form-control" placeholder="Username" required="" />
             </div>
+
             <div>
                 <input type="password" class="form-control" placeholder="Password" required="" />
             </div>
+
             <div>
-                <a class="btn btn-primary btn-block submit text-white" href="index.html">Log in</a>
+                <button class="btn btn-primary btn-block submit text-white">Log in</button>
+            </div>
+
+            <div class="my-3">
+                <a class="text-primary" href="{{route('appointment.view')}}">Request Appointment</a>
             </div>
 
             <div class="clearfix"></div>

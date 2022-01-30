@@ -5,9 +5,8 @@
 @section('content')
 
 <div>
-
     {{-- Appointment Request Form --}}
-    <div class="container">
+    <div class="container-fluid">
 
         @error('visitors.*')
             <div aria-live="assertive" aria-atomic="true" >
@@ -47,7 +46,7 @@
         <form action="{{route('appointment.view')}}" method="POST" id="appoint-form-submit">
             @csrf
             <div class="row">
-                <div class="col">
+                <div class="col-sm-12   ">
                     <div class="form-group">
                         <label for="title">Meeting Title</label>
                         <input autocomplete="off" type="text" class="form-control @error('title') is-invalid @enderror" id="titleInput" name="title" value="{{ old('title') }}">
@@ -156,8 +155,6 @@
 
     </div>
     {{-- Appointment Request Form Finished --}}
-
-
 </div>
 
 <script>

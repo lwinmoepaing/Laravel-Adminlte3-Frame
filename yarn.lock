@@ -900,11 +900,6 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
-"@eonasdan/tempus-dominus@^6.0.0-beta1":
-  version "6.0.0-beta1"
-  resolved "https://registry.yarnpkg.com/@eonasdan/tempus-dominus/-/tempus-dominus-6.0.0-beta1.tgz#9c87fbf2f0059d300c1504f299a0cab9f8d2a145"
-  integrity sha512-ZKaWNqjhJg8b1MwIvutIOwy2Gh8MGSC+Ka/RNFVoxsfJ5+WrH15ptMBnfWLhi+lyr6WjtCY3ZPCZTPfWIyHlEw==
-
 "@fortawesome/fontawesome-free@^5.15.3":
   version "5.15.4"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.15.4.tgz#ecda5712b61ac852c760d8b3c79c96adca5554e5"
@@ -4955,12 +4950,24 @@ jquery@>=1.10, jquery@>=1.12.0, jquery@>=1.7, "jquery@>=1.8.0 <4.0.0", jquery@>=
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
   integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
 
+jquery@~1.11.3:
+  version "1.11.3"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-1.11.3.tgz#dd8b74278b27102d29df63eae28308a8cfa1b583"
+  integrity sha1-3Yt0J4snEC0p32Pq4oMIqM+htYM=
+
 jqvmap-novulnerability@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/jqvmap-novulnerability/-/jqvmap-novulnerability-1.5.1.tgz#140c42623ebbe9b9076ea2dd3b8d155fe9f38ae7"
   integrity sha512-O6Jr7AGiut9iNJMelPdy8pH83tNXadOqmhJm5FZy9gtaZ5uuhZK3VNu+YLFuTpXeZI8YXUvlFUYbJJi5XHA+tw==
   dependencies:
     jquery "^3.4.0"
+
+jqvmap@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/jqvmap/-/jqvmap-1.5.1.tgz#1670a731d02386373da4cfaebd4db0eb634d4cfb"
+  integrity sha1-FnCnMdAjhjc9pM+uvU2w62NNTPs=
+  dependencies:
+    jquery "~1.11.3"
 
 js-tokens@^3.0.2:
   version "3.0.2"

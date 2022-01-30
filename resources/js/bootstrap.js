@@ -17,6 +17,8 @@ try {
     window.skycons = require("skycons");
     window.Gauge = require("gaugeJS");
     window.moment = require("moment");
+    // For Date Plugin for AdminLte3
+    require("datejs");
 
     // Jquery Plugins
     require("icheck");
@@ -29,14 +31,18 @@ try {
     require("./adminlte3/jquery.flot.spline");
     require("./adminlte3/jquery.flot.curvedlines");
 
-    // Need jquery DateTimeBootstrap4 Picker
-    require("tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.js");
+    // Jquery Vmap
+    require("jqvmap");
 
-    require("datejs");
+    // Jquery DateRange Picker
+    require("daterangepicker");
 
     // Bootstrap v4.x.x
     require("bootstrap");
     require("bootstrap-progressbar/bootstrap-progressbar.min");
+
+    // Need jquery DateTimeBootstrap4 Picker
+    require("tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.js");
 } catch (e) {}
 
 /**
