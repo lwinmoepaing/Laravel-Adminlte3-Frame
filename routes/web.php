@@ -21,7 +21,7 @@ Route::name('appointment.')->prefix('/appointment')->group(function () {
     Route::get('/', 'ClientView\ClientViewController@index')->name('index');
     Route::get('/request', 'ClientView\ClientViewController@index')->name('view');
     Route::post('/request', 'ClientView\ClientViewController@appointSubmit')->name('submit');
-    Route::get('/confirm/{appointment_id}', 'Appointment\AppointmentController@checkConfirm')->name('checkconfirm');
+    Route::get('/confirm/{appointment_id}', 'Appointment\AppointmentController@confirmFromClient')->name('client-confirm');
 });
 
 // Appoints For AdminDashboard
@@ -30,14 +30,18 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
     Route::get('/dashboard', 'Admin\AdminController@index')->name('dashboard'); // admin.dashboard
     Route::get('/rooms', 'Admin\AdminController@showRooms')->name('rooms'); // admin.rooms
     Route::get('/appointment', 'Admin\AdminController@showAppointment')->name('appointment'); // admin.appointment
-    Route::get('/appointment/{appintment_id}', 'Admin\AdminController@showAppointmentDetail')->name('appointment.detail');
+    Route::get('/appointment/{appintment_id}', 'Admin\AdminController@showAppointmentDetail')->name('appointment.detail'); // admin.appointment.detail
 
     /**
      * Routes For Data
      * Data => [ 'data/staffs', 'data/departments', 'data/branches', * ]
      */
     Route::name('data.')->prefix('/data')->group(function () {
-        //
+        Route::get('/staff', 'Admin\AdminController@showStaff')->name('staff');
+        Route::get('/department', 'Admin\AdminController@showStaff')->name('department');
+        Route::get('/branch', 'Admin\AdminController@showStaff')->name('branch');
+        Route::get('/township', 'Admin\AdminController@showStaff')->name('township');
+        Route::get('/city', 'Admin\AdminController@showStaff')->name('city');
     });
 });
 

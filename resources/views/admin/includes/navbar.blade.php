@@ -12,7 +12,7 @@
             <img src="{{URL('images/auth/profile.png')}}" alt="..." class="img-circle profile_img">
         </div>
         <div class="profile_info">
-            <span>Welcome,</span>
+            <span> uab </span>
             @auth
                 <h2>{{Auth::user()->name}}</h2>
             @endauth
@@ -37,11 +37,11 @@
             </li>
             <li><a><i class="fa fa-list-ul"></i> Data <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                <li><a href="staff.html"> <i class="fa fa-user-o"></i> Staff</a></li>
-                <li><a href="department.html"> <i class="fa fa-building-o"></i> Department</a></li>
-                <li><a href="branch.html"> <i class="fa fa-building"></i> Branch</a></li>
-                <li><a href="township.html"> <i class="fa fa-map-marker"></i> Township</a></li>
-                <li><a href="city.html"> <i class="fa fa-map-o"></i> City</a></li>
+                <li><a href="{{route('admin.data.staff')}}"> <i class="fa fa-user-o"></i> Staff</a></li>
+                <li><a href="{{route('admin.data.department')}}"> <i class="fa fa-building-o"></i> Department</a></li>
+                <li><a href="{{route('admin.data.branch')}}"> <i class="fa fa-building"></i> Branch</a></li>
+                <li><a href="{{route('admin.data.township')}}"> <i class="fa fa-map-marker"></i> Township</a></li>
+                <li><a href="{{route('admin.data.city')}}"> <i class="fa fa-map-o"></i> City</a></li>
                 </ul>
             </li>
             {{-- <li>
@@ -77,7 +77,7 @@
                 <li class="nav-item dropdown open" style="padding-left: 15px;">
                 <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
                     @auth
-                        <img src="{{URL('images/auth/profile.png')}}" alt=""> {{ Auth::user()->name }}
+                        <img src="{{ URL('images/auth/profile.png') }}" alt=""> {{ Auth::user()->name }}
                     @endauth
                 </a>
                 <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">

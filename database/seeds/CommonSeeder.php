@@ -3,6 +3,7 @@
 use App\Branch;
 use App\Department;
 use App\Division;
+use App\Room;
 use App\Staff;
 use App\StaffRole;
 use App\Township;
@@ -148,10 +149,22 @@ class CommonSeeder extends Seeder
             ]
         ];
 
+        $rooms = [
+            [
+                "room_name" => "Kayar",
+                "branch_id" => 1,
+            ],
+            [
+                "room_name" => "Kachin",
+                "branch_id" => 1,
+            ]
+        ];
+
         $divisions = $this->addDateAndID($divisions);
         $townships = $this->addDateAndID($townships);
         $branches = $this->addDateAndID($branches);
         $departments = $this->addDateAndID($departments);
+        $rooms = $this->addDateAndID($rooms);
         $staffRoles = $this->addDateAndID($staffRoles);
         $staffs = $this->addDateAndID($staffs);
         $users = $this->addDateAndID($users);
@@ -160,6 +173,7 @@ class CommonSeeder extends Seeder
         Township::insert($townships);
         Branch::insert($branches);
         Department::insert($departments);
+        Room::insert($rooms);
         StaffRole::insert($staffRoles);
         Staff::insert($staffs);
         User::insert($users);
@@ -173,7 +187,6 @@ class CommonSeeder extends Seeder
             $arr[$key]['updated_at'] = Carbon::now();
             $id++;
         }
-
         return $arr;
     }
 }

@@ -19,13 +19,23 @@ class Appointment extends Model
         'meeting_time',
         'status',
         'reason',
+        'is_approve_by_officer',
+        'is_cancel_by_officer',
+        'is_request_from_client',
     ];
 
 
     public static $APPOINTMENT_STATUS_TYPE = [
         "PENDING" => 1,
-        "APPROVE" => 2,
+        "ARRIVED" => 2,
         "REJECT" => 3,
+        "FINISHED" => 4,
+    ];
+
+
+    public static $APPOINTMENT_CREATE_TYPE = [
+        "FROM_CLIENT" => 1,
+        "FROM_RECIPIENT" => 2,
     ];
 
 
@@ -42,6 +52,8 @@ class Appointment extends Model
             $appointment->department_id = $data['department'];
             $appointment->meeting_time = new DateTime($data['date'] . ' ' . $data['time']);
             $appointment->status = Appointment::$APPOINTMENT_STATUS_TYPE['PENDING'];
+            $appointment->staff_id = $data["staff_id"];
+            $appointment->is_request_from_client = $data["is_request_from_client"] ? $data["is_request_from_client"] : 0;
             $appointment->reason = '';
             $appointment->save();
 
@@ -58,6 +70,7 @@ class Appointment extends Model
             return $appointment;
         } catch (QueryException $e){
             DB::rollBack();
+            dd($e);
             return false;
         }
     }

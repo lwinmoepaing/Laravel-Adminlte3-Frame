@@ -16,27 +16,27 @@ class AppointmentController extends Controller
 {
     //
 
-    public function checkConfirm(Request $request, Appointment $appointmentId)
+    public function confirmFromClient(Request $request, Appointment $appointmentId)
     {
         $isConfirm = $request->query('is_confirmed') === 'true';
 
-        if ($appointmentId->status !== Appointment::$APPOINTMENT_STATUS_TYPE['PENDING']) {
+        if ($appointmentId->is_approve_by_officer !== 0) {
             return response()->json(['message' => 'Already Confirm This Appointment', 'statusCode' => 200]);
         }
 
         if (!$isConfirm) {
             $appointmentId->status = Appointment::$APPOINTMENT_STATUS_TYPE['REJECT'];
+            $appointmentId->is_cancel_by_officer = 1;
             $appointmentId->save();
 
             foreach ($appointmentId->visitors as $key => $visitor) {
                 Mail::to($visitor->email)->send(new RejectInvitationMail($appointmentId));
             }
 
-
             return response()->json(['message' => 'Successfully Rejeced this Appointment', 'statusCode' => 200]);
         }
 
-        $appointmentId->status = Appointment::$APPOINTMENT_STATUS_TYPE['APPROVE'];
+        $appointmentId->is_approve_by_officer = 1;
         $appointmentId->save();
         foreach ($appointmentId->visitors as $key => $visitor) {
             Mail::to($visitor->email)->send(new AcceptInvitationMail($appointmentId));

@@ -35,4 +35,16 @@ class AdminController extends Controller
             'navTitle' => 'Appointment - ' . $appintment_id
         ]);
     }
+
+    public function showStaff() {
+        return view('admin.rooms', [
+            'navTitle' => 'Staff'
+        ]);
+    }
+
+    public function showDepartment() {
+        return view('admin.rooms', [
+            'navTitle' => 'Department'
+        ]);
+    }
 }

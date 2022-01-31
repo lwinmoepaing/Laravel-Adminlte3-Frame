@@ -8,6 +8,8 @@ use App\Department;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientAppointmentRequest;
 use App\Mail\InviteAppointmentMail;
+use App\Staff;
+use App\User;
 use Illuminate\Support\Facades\Mail;
 
 class ClientViewController extends Controller
@@ -28,6 +30,14 @@ class ClientViewController extends Controller
     public function appointSubmit(ClientAppointmentRequest $request) {
 
         $validated = $request->validated();
+        $staff = Staff::where('email', $validated['staff_email'])->first();
+        if (!$staff) {
+            return dd('Staff Not Found');
+        }
+
+        $validated["is_request_from_client"] = 1;
+        $validated["staff_id"] = $staff->id;
+
         $appModel = new Appointment();
         $appointment = $appModel->creatAppointment($validated);
 

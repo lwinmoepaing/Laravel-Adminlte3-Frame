@@ -24,8 +24,12 @@ class CreateAppointmentsTable extends Migration
             $table->integer('status')->unsigned()->index('appointment_status_index');
             $table->text('reason')->nullable();
             $table->text('description')->nullable();
+            $table->integer('create_type')->unsinged()->default(1);
+            $table->tinyInteger('is_approve_by_officer')->unsigned()->default(0);
+            $table->tinyInteger('is_cancel_by_officer')->unsigned()->default(0);
+            $table->tinyInteger('is_requested_from_client')->unsigned()->default(0);
             $table->foreignId('user_id')->nullable()->constraint();
-            $table->foreignId('staff_id')->nullable()->constraint();
+            $table->foreignId('staff_id')->constraint();
             $table->timestamps();
         });
     }

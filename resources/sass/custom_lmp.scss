@@ -183,3 +183,22 @@
     align-items: center;
     font-size: 18px;
 }
+
+.nav li li.current-page a {
+    color: #000;
+}
+
+.nav-sm ul.nav.child_menu {
+    background-color: #fff;
+    border: 1px solid #f3f3f3;
+    width: 70px;
+}
+
+.nav-sm ul.nav.child_menu li a {
+    text-align: center !important;
+    font-size: 9px !important;
+}
+
+.nav-sm ul.nav.child_menu li a > i {
+    font-size: 18px !important;
+}
