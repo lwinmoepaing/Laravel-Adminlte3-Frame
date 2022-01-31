@@ -18,6 +18,7 @@ Route::get('/', 'Auth\LoginController@showloginForm')->name('index');
 
 // Appointment for Client View
 Route::name('appointment.')->prefix('/appointment')->group(function () {
+    Route::get('/', 'ClientView\ClientViewController@index')->name('index');
     Route::get('/request', 'ClientView\ClientViewController@index')->name('view');
     Route::post('/request', 'ClientView\ClientViewController@appointSubmit')->name('submit');
     Route::get('/confirm/{appointment_id}', 'Appointment\AppointmentController@checkConfirm')->name('checkconfirm');
@@ -27,16 +28,17 @@ Route::name('appointment.')->prefix('/appointment')->group(function () {
 Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function () {
     Route::get('/', 'Admin\AdminController@index')->name('index'); // admin.index
     Route::get('/dashboard', 'Admin\AdminController@index')->name('dashboard'); // admin.dashboard
-    Route::get('/appointment', 'Admin\AdminController@showAppointment')->name('appointment'); // admin.appointment
     Route::get('/rooms', 'Admin\AdminController@showRooms')->name('rooms'); // admin.rooms
+    Route::get('/appointment', 'Admin\AdminController@showAppointment')->name('appointment'); // admin.appointment
+    Route::get('/appointment/{appintment_id}', 'Admin\AdminController@showAppointmentDetail')->name('appointment.detail');
 
     /**
      * Routes For Data
-     * Data => [
-     *  'data/staffs', 'data/departments', 'data/branches',
-     * ]
+     * Data => [ 'data/staffs', 'data/departments', 'data/branches', * ]
      */
-    Route::name('data.')->prefix('/data')->group(function () {});
+    Route::name('data.')->prefix('/data')->group(function () {
+        //
+    });
 });
 
 

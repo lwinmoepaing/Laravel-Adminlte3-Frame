@@ -48,7 +48,7 @@
         <!-- appointments -->
         <div class="row">
         <div class="col-md-12 mb-2">
-            <a class="card upcoming-section p-3" href="appointment-detail.html">
+            <a class="card upcoming-section p-3" href="{{ route('admin.appointment.detail', ["appintment_id" => "2"]) }}">
             <div class="text-center w-10 appointment-time">
                 <span class="d-block border p-3 rounded">
                 <b>10:30</b><br>
@@ -79,7 +79,7 @@
         </div>
 
         <div class="col-md-12 mb-2">
-            <a class="card upcoming-section p-3" href="appointment-detail.html">
+            <a class="card upcoming-section p-3" href="{{ route('admin.appointment.detail', ["appintment_id" => "2"]) }}">
             <div class="text-center w-10 appointment-time">
                 <span class="d-block border p-3 rounded">
                 <b>10:30</b><br>
@@ -110,7 +110,7 @@
         </div>
 
         <div class="col-md-12 mb-2">
-            <a class="card upcoming-section p-3" href="appointment-detail.html">
+            <a class="card upcoming-section p-3" href="{{ route('admin.appointment.detail', ["appintment_id" => "2"]) }}">
             <div class="text-center w-10 appointment-time">
                 <span class="d-block border p-3 rounded">
                 <b>10:30</b><br>

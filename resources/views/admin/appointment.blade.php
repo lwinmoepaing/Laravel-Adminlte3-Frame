@@ -34,7 +34,7 @@
           <div class="tab-pane fade show active" id="request" role="tabpanel" aria-labelledby="request-tab">
             <div class="row my-3">
               <div class="col-md-6 mb-2">
-                <a class="card upcoming-section p-3" href="appointment-detail.html">
+                <a class="card upcoming-section p-3" href="{{ route('admin.appointment.detail', ["appintment_id" => "1"]) }}">
                   <!-- <div class="text-center w-10 appointment-time">
                     <span class="d-block border p-3 rounded">
                       <b>10:30</b><br>
@@ -78,7 +78,7 @@
           <div class="tab-pane fade" id="upcoming" role="tabpanel" aria-labelledby="upcoming-tab">
             <div class="row my-3">
               <div class="col-md-6 mb-2">
-                <a class="card upcoming-section p-3" href="appointment-detail.html">
+                <a class="card upcoming-section p-3" href="{{ route('admin.appointment.detail', ["appintment_id" => "1"]) }}">
                   <div class="text-center w-10 appointment-time">
                     <span class="d-block border p-3 rounded">
                       <b>10:30</b><br>
@@ -123,7 +123,7 @@
           <div class="tab-pane fade" id="occupied" role="tabpanel" aria-labelledby="occupied-tab">
             <div class="row my-3">
               <div class="col-md-6 mb-2">
-                <a class="card upcoming-section p-3" href="appointment-detail.html">
+                <a class="card upcoming-section p-3" href="{{ route('admin.appointment.detail', ["appintment_id" => "1"]) }}">
                   <div class="text-center w-10 appointment-time">
                     <span class="d-block border p-3 rounded">
                       <b>10:30</b><br>
@@ -172,7 +172,7 @@
           <div class="tab-pane fade" id="finished" role="tabpanel" aria-labelledby="finished-tab">
             <div class="row my-3">
               <div class="col-md-6 mb-2">
-                <a class="card upcoming-section p-3" href="appointment-detail.html">
+                <a class="card upcoming-section p-3" href="{{ route('admin.appointment.detail', ["appintment_id" => "1"]) }}">
                   <div class="text-center w-10 appointment-time">
                     <span class="d-block border p-3 rounded">
                       <b>10:30</b><br>

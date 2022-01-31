@@ -1,7 +1,7 @@
 <div class="col-md-3 left_col">
     <div class="left_col scroll-view">
         <div class="navbar nav_title" style="border: 0;">
-            <a href="index.html" class="site_title"><img src="{{URL('images/auth/uab-logo.png')}}" alt=""></a>
+            <a href="{{ route('admin.index') }}" class="site_title"><img src="{{URL('images/auth/uab-logo.png')}}" alt=""></a>
         </div>
 
         <div class="clearfix"></div>
@@ -37,11 +37,11 @@
             </li>
             <li><a><i class="fa fa-list-ul"></i> Data <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                <li><a href="staff.html"> <i class="fa fa-user"></i> Staff</a></li>
-                <li><a href="department.html"> <i class="fa fa-building"></i> Department</a></li>
+                <li><a href="staff.html"> <i class="fa fa-user-o"></i> Staff</a></li>
+                <li><a href="department.html"> <i class="fa fa-building-o"></i> Department</a></li>
                 <li><a href="branch.html"> <i class="fa fa-building"></i> Branch</a></li>
                 <li><a href="township.html"> <i class="fa fa-map-marker"></i> Township</a></li>
-                <li><a href="city.html"> <i class="fa fa-square"></i> City</a></li>
+                <li><a href="city.html"> <i class="fa fa-map-o"></i> City</a></li>
                 </ul>
             </li>
             {{-- <li>
@@ -63,26 +63,32 @@
 <!-- top navigation -->
 <div class="top_nav fixed-top">
     <div class="nav_menu">
-        <div class="nav toggle">
-            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-        </div>
-        <nav class="nav navbar-nav">
-        <ul class=" navbar-right">
-            <li class="nav-item dropdown open" style="padding-left: 15px;">
-            <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                @auth
-                    <img src="{{URL('images/auth/profile.png')}}" alt=""> {{ Auth::user()->name }}
-                @endauth
-            </a>
-            <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item"  href="javascript:;"> Profile</a>
-                <a class="dropdown-item"
-                    href="{{ route('logout') }}"
-                    onclick="event.preventDefault();document.getElementById('logout-form').submit();"
-                ><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+       <div>
+            <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
             </div>
-            </li>
-        </ul>
+            <span class="nav-custom-title">
+                {{ $navTitle ?? 'Dashboard'}}
+            </span>
+       </div>
+
+        <nav class="nav navbar-nav">
+            <ul class="navbar-right">
+                <li class="nav-item dropdown open" style="padding-left: 15px;">
+                <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                    @auth
+                        <img src="{{URL('images/auth/profile.png')}}" alt=""> {{ Auth::user()->name }}
+                    @endauth
+                </a>
+                <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item"  href="javascript:;"> Profile</a>
+                    <a class="dropdown-item"
+                        href="{{ route('logout') }}"
+                        onclick="event.preventDefault();document.getElementById('logout-form').submit();"
+                    ><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                </div>
+                </li>
+            </ul>
         </nav>
     </div>
 </div>
