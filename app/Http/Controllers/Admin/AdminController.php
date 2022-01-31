@@ -13,4 +13,13 @@ class AdminController extends Controller
     public function index() {
         return view('admin.dashboard');
     }
+
+
+    public function showAppointment() {
+        return view('admin.appointment');
+    }
+
+    public function showRooms() {
+        return view('admin.dashboard');
+    }
 }

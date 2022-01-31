@@ -142,7 +142,7 @@ class CommonSeeder extends Seeder
 
         $users = [
             [
-                "name" => "admin",
+                "name" => "Admin",
                 "email" => "admin@gmail.com",
                 "password" => Hash::make("admin123"),
             ]

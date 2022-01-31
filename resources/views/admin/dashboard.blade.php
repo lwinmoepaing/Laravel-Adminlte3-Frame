@@ -38,7 +38,9 @@
         <div class="col-md-6 mb-2">
             <form class="form-inline mb-2" style="justify-content: flex-end;">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <button class="btn btn-primary btn_min_block my-2 my-sm-0" type="submit">
+                <i class="fa fa-search text-white"></i>
+            </button>
             </form>
         </div>
         </div>

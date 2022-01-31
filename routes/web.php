@@ -14,19 +14,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'Home\HomeController@index')->name('index');
+Route::get('/', 'Auth\LoginController@showloginForm')->name('index');
 
 // Appointment for Client View
-
 Route::name('appointment.')->prefix('/appointment')->group(function () {
     Route::get('/request', 'ClientView\ClientViewController@index')->name('view');
     Route::post('/request', 'ClientView\ClientViewController@appointSubmit')->name('submit');
     Route::get('/confirm/{appointment_id}', 'Appointment\AppointmentController@checkConfirm')->name('checkconfirm');
 });
 
-// Appoints For Dashboard
-Route::name('admin')->prefix('/admin')->group(function () {
-    Route::get('/dashboard', 'Admin\AdminController@index')->name('dashboard');
+// Appoints For AdminDashboard
+Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function () {
+    Route::get('/', 'Admin\AdminController@index')->name('index'); // admin.index
+    Route::get('/dashboard', 'Admin\AdminController@index')->name('dashboard'); // admin.dashboard
+    Route::get('/appointment', 'Admin\AdminController@showAppointment')->name('appointment'); // admin.appointment
+    Route::get('/rooms', 'Admin\AdminController@showRooms')->name('rooms'); // admin.rooms
+
+    /**
+     * Routes For Data
+     * Data => [
+     *  'data/staffs', 'data/departments', 'data/branches',
+     * ]
+     */
+    Route::name('data.')->prefix('/data')->group(function () {});
 });
 
 

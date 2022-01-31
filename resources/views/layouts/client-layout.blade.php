@@ -9,7 +9,6 @@
     </title>
 
     <link rel="stylesheet" href="{{ URL::asset ('css/app.css') }}">
-    <script src="{{ URL::asset ('js/app.js') }}"></script>
     @stack('head-scripts')
 
 </head>
@@ -17,6 +16,9 @@
     <div class="">
         @yield('content')
     </div>
+
+    <script src="{{ URL::asset ('js/app.js') }}"></script>
+
     @stack('body-scripts')
 </body>
 </html>

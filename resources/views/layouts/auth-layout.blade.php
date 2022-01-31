@@ -10,12 +10,14 @@
 
     <link rel="stylesheet" href="{{ URL::asset ('css/app.css') }}">
     <link rel="stylesheet" href="{{ URL::asset ('css/custom.css') }}">
-    <script src="{{ URL::asset ('js/app.js') }}"></script>
     @stack('head-scripts')
 
 </head>
 <body id="login">
     @yield('content')
+
+    <script src="{{ URL::asset ('js/app.js') }}"></script>
+
     @stack('body-scripts')
 </body>
 </html>

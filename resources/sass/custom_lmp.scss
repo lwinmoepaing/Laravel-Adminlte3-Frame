@@ -3,3 +3,148 @@
     height: auto !important;
     left: -20px;
 }
+
+.left_col {
+    height: 100%;
+}
+
+.nav-sm .nav.side-menu .menu_section > ul {
+    width: 80px;
+}
+
+.nav-sm .nav.side-menu li a {
+    padding: 0;
+    margin: 30px 0;
+}
+
+.nav-sm .container.body .right_col {
+    margin-left: 100px;
+}
+
+.nav-sm .navbar.nav_title > a {
+    width: 100px !important;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-sm .navbar.nav_title > a > img {
+    width: 100%;
+    height: auto;
+}
+
+.nav-sm .main_container .top_nav {
+    margin-left: 100px;
+}
+
+.nav_menu {
+    border-left: 1px solid #f5f5f5;
+}
+
+.card {
+    border-radius: 20px;
+    border-color: #f7f7f7;
+}
+
+.img-circle.profile_img {
+    border-color: #f0f0f0;
+}
+
+.form-control {
+    border-color: #f7f7f7;
+    border-radius: 10px;
+}
+
+.btn {
+    border-radius: 10px;
+}
+
+.rounded {
+    border-radius: 10px !important;
+}
+
+.nav-sm .container.body .col-md-3.left_col {
+    width: 100px;
+}
+
+.nav-md .container.body .right_col {
+    /* padding: 10px 20px 0; */
+    margin-left: 230px;
+}
+
+.right_col {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-top: 56px !important;
+}
+
+@media (max-width: 991px) {
+    .nav-md .container.body .right_col {
+        width: 100%;
+        padding-right: 0;
+        margin-left: 0 !important;
+    }
+
+    .custom-appointment-btn {
+        display: none !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-numbers,
+    .main-wrapper {
+        width: 100% !important;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .btn_min_block {
+        display: block;
+        width: 100%;
+    }
+}
+
+.custom-appointment-btn {
+    height: 42px;
+    margin-top: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.my-navtabs .nav-item a.active {
+    border-left: 2px solid white;
+    border-right: 2px solid white;
+}
+
+.height-57 {
+    height: 57px;
+}
+
+.my-navtabs .nav-item a.active {
+    border-bottom: 3px solid #6868ac;
+    font-weight: 800;
+    color: #6868ac !important;
+}
+
+.text-flex-center {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.badge {
+    border-radius: 10px;
+}
+
+.nav-tabs {
+    border: none !important;
+}
+
+
+.nav-sm .navbar.nav_title {
+    width: 80px;
+    padding-left: 10px;
+}
