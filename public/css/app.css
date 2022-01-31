@@ -15742,6 +15742,7 @@ a.text-dark:focus {
 
 body .container.body .right_col {
   background: #f7f7f7;
+  min-height: 100vh;
 }
 
 .nav-md .container.body .right_col {
@@ -20845,5 +20846,11 @@ a,
   .main-wrapper {
     width: 100% !important;
   }
+}
+
+.uab-logo {
+  width: 220px !important;
+  height: auto !important;
+  left: -20px;
 }
 

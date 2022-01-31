@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,7 +24,10 @@ Route::name('appointment.')->prefix('/appointment')->group(function () {
     Route::get('/confirm/{appointment_id}', 'Appointment\AppointmentController@checkConfirm')->name('checkconfirm');
 });
 
+// Appoints For Dashboard
+Route::name('admin')->prefix('/admin')->group(function () {
+    Route::get('/dashboard', 'Admin\AdminController@index')->name('dashboard');
+});
+
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

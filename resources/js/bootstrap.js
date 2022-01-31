@@ -43,6 +43,7 @@ try {
 
     // Need jquery DateTimeBootstrap4 Picker
     require("tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.js");
+    require("./adminlte3/custom.admin");
 } catch (e) {}
 
 /**
