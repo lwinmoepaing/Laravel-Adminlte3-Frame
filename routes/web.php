@@ -48,7 +48,9 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
         Route::post('/staff-edit/{id}', 'Admin\AdminStaffController@submitEdit')->name('staff-edit-submit');
 
         // Departments Functions
-        Route::get('/department', 'Admin\AdminController@showStaff')->name('department');
+        Route::get('/department', 'Admin\AdminDepartmentController@showDepartment')->name('department');
+
+        // Branches
         Route::get('/branch', 'Admin\AdminController@showStaff')->name('branch');
         Route::get('/township', 'Admin\AdminController@showStaff')->name('township');
         Route::get('/city', 'Admin\AdminController@showStaff')->name('city');
