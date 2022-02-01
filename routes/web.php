@@ -37,7 +37,17 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
      * Data => [ 'data/staffs', 'data/departments', 'data/branches', * ]
      */
     Route::name('data.')->prefix('/data')->group(function () {
-        Route::get('/staff', 'Admin\AdminController@showStaff')->name('staff');
+        // Staff Functions
+        Route::get('/staff', 'Admin\AdminStaffController@showStaff')->name('staff');
+        Route::get('/staff/{id}', 'Admin\AdminStaffController@showStaffDetail')->name('staff-detail');
+        Route::delete('/staff/{id}', 'Admin\AdminStaffController@deleteStaff')->name('staff-remove');
+        Route::get('/staff-create', 'Admin\AdminStaffController@showCreateForm')->name('staff-create');
+        Route::post('/staff-create', 'Admin\AdminStaffController@submitCreate')->name('staff-create-submit');
+        Route::post('/staff-recover', 'Admin\AdminStaffController@restoreStaff')->name('staff-recover');
+        Route::get('/staff-edit/{id}', 'Admin\AdminStaffController@showStaffEditDetail')->name('staff-edit');
+        Route::post('/staff-edit/{id}', 'Admin\AdminStaffController@submitEdit')->name('staff-edit-submit');
+
+        // Departments Functions
         Route::get('/department', 'Admin\AdminController@showStaff')->name('department');
         Route::get('/branch', 'Admin\AdminController@showStaff')->name('branch');
         Route::get('/township', 'Admin\AdminController@showStaff')->name('township');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Staff;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -15,7 +16,6 @@ class AdminController extends Controller
             'navTitle' => 'Dashboard'
         ]);
     }
-
 
     public function showAppointment() {
         return view('admin.appointment', [
@@ -33,12 +33,6 @@ class AdminController extends Controller
         return view('admin.appointment-detail', [
             'appintment_id' => $appintment_id,
             'navTitle' => 'Appointment - ' . $appintment_id
-        ]);
-    }
-
-    public function showStaff() {
-        return view('admin.rooms', [
-            'navTitle' => 'Staff'
         ]);
     }
 

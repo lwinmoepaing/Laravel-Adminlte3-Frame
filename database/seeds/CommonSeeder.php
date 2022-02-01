@@ -3,6 +3,7 @@
 use App\Branch;
 use App\Department;
 use App\Division;
+use App\Role;
 use App\Room;
 use App\Staff;
 use App\StaffRole;
@@ -119,7 +120,7 @@ class CommonSeeder extends Seeder
                 "name" => "Nay Lin Aung",
                 "department_id" => 2,
                 "branch_id" => 1,
-                "staff_role" => 2,
+                "staff_role_id" => 2,
                 "email" => "nay.nla@uab.com.mm",
                 "phone" => "09250160095"
             ],
@@ -127,7 +128,7 @@ class CommonSeeder extends Seeder
                 "name" => "Thant Zin That",
                 "department_id" => 2,
                 "branch_id" => 1,
-                "staff_role" => 4,
+                "staff_role_id" => 4,
                 "email" => "thetzinthet@uab.com.mm",
                 "phone" => "09782417621"
             ],
@@ -135,7 +136,7 @@ class CommonSeeder extends Seeder
                 "name" => "Lwin Moe Paing",
                 "department_id" => 2,
                 "branch_id" => 1,
-                "staff_role" => 4,
+                "staff_role_id" => 4,
                 "email" => "lwinmoepaing@uab.com.mm",
                 "phone" => "09420059241"
             ],
@@ -146,6 +147,7 @@ class CommonSeeder extends Seeder
                 "name" => "Admin",
                 "email" => "admin@gmail.com",
                 "password" => Hash::make("admin123"),
+                "role_id" => 1,
             ]
         ];
 
@@ -160,6 +162,12 @@ class CommonSeeder extends Seeder
             ]
         ];
 
+        $roles = [
+            ["name" => "Admin"],
+            ["name" => "Recipient"],
+        ];
+
+        $roles = $this->addDateAndID($roles);
         $divisions = $this->addDateAndID($divisions);
         $townships = $this->addDateAndID($townships);
         $branches = $this->addDateAndID($branches);
@@ -176,6 +184,7 @@ class CommonSeeder extends Seeder
         Room::insert($rooms);
         StaffRole::insert($staffRoles);
         Staff::insert($staffs);
+        Role::insert($roles);
         User::insert($users);
     }
 

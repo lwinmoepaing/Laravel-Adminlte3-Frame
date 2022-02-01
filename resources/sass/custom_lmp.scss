@@ -202,3 +202,65 @@
 .nav-sm ul.nav.child_menu li a > i {
     font-size: 18px !important;
 }
+
+.icon-btn-position i {
+    position: relative;
+    top: 2px;
+}
+
+.btn-success {
+    background: #169f85;
+    border: 1px solid #169f85;
+}
+
+.form-control {
+    border-color: #ebebeb;
+    border-radius: 10px;
+}
+
+.custom-select {
+    border-color: #ebebeb;
+    border-radius: 10px;
+}
+
+.max-w-500 {
+    max-width: 500px;
+}
+
+.max-w-600 {
+    max-width: 600px;
+}
+
+.breadcrumb {
+    border-radius: 10px;
+}
+
+.datetimepicker-input {
+    border-radius: 10px !important;
+}
+
+.btn-outline-primary i.fa,
+.btn-outline-success i.fa,
+.btn-outline-warning i.fa,
+.btn-outline-danger i.fa,
+.btn-outline-info i.fa {
+    color: #6868ac !important;
+    position: relative;
+    top: -0.4px;
+}
+
+.btn-outline-danger i.fa {
+    color: #ef2649 !important;
+}
+
+.btn-outline-primary:hover i.fa,
+.btn-outline-success:hover i.fa,
+.btn-outline-warning:hover i.fa,
+.btn-outline-danger:hover i.fa,
+.btn-outline-info:hover i.fa {
+    color: #fff !important;
+}
+
+.text-decoration-underline {
+    text-decoration: underline !important;
+}

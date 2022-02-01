@@ -18,10 +18,11 @@ class CreateStaffTable extends Migration
             $table->string('name');
             $table->foreignId('department_id')->constrained();
             $table->foreignId('branch_id')->constrained();
-            $table->foreignId('staff_role')->constrained();
+            $table->foreignId('staff_role_id')->constrained();
             $table->string('email')->unique();
             $table->string('phone');
             $table->string('secondary_phone')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

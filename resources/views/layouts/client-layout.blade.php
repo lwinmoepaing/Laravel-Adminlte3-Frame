@@ -9,6 +9,12 @@
     </title>
 
     <link rel="stylesheet" href="{{ URL::asset ('css/app.css') }}">
+
+    <link rel="icon" href="{{ URL('/uab.ico') }}" sizes="32x32" />
+    <link rel="icon" href="{{ URL('/uab.ico') }}" sizes="192x192" />
+    <link rel="apple-touch-icon" href="{{ URL('/uab.ico') }}" />
+    <meta name="msapplication-TileImage" content="{{ URL('/uab.ico') }}" />
+
     @stack('head-scripts')
 
 </head>
