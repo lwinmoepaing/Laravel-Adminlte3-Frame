@@ -18,6 +18,9 @@ class CreateRoomsTable extends Migration
             $table->string('room_name');
             $table->foreignId('branch_id')->constrained();
             $table->integer('status')->default(1)->unsigned()->index('room_status_index');
+            $table->integer('seat_count')->nullable()->index('room_seat_count');
+            $table->string('area')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

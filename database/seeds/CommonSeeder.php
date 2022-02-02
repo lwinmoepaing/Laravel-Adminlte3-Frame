@@ -152,25 +152,43 @@ class CommonSeeder extends Seeder
 
         $users = [
             [
+                "name" => "Super Admin",
+                "email" => "superadmin@gmail.com",
+                "password" => Hash::make("admin123"),
+                "role_id" => 1,
+            ],
+            [
                 "name" => "Admin",
                 "email" => "admin@gmail.com",
                 "password" => Hash::make("admin123"),
-                "role_id" => 1,
+                "role_id" => 2,
+            ],
+            [
+                "name"  => "Recipient",
+                "email" => "recipient@gmail.com",
+                "passowrd" => Hash::make("recipient123"),
+                "role_id" => 3,
             ]
+
         ];
 
         $rooms = [
             [
                 "room_name" => "Kayar",
+                "seat_count" => 20,
+                "area" => "10ft 20ft",
                 "branch_id" => 1,
             ],
             [
                 "room_name" => "Kachin",
+                "seat_count" => 25,
                 "branch_id" => 1,
+                "area" => "",
             ]
         ];
 
         $roles = [
+            ["name" => "SuperAdmin"],
             ["name" => "Admin"],
             ["name" => "Recipient"],
         ];

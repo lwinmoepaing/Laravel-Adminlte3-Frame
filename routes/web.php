@@ -28,9 +28,22 @@ Route::name('appointment.')->prefix('/appointment')->group(function () {
 Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function () {
     Route::get('/', 'Admin\AdminController@index')->name('index'); // admin.index
     Route::get('/dashboard', 'Admin\AdminController@index')->name('dashboard'); // admin.dashboard
-    Route::get('/rooms', 'Admin\AdminController@showRooms')->name('rooms'); // admin.rooms
     Route::get('/appointment', 'Admin\AdminController@showAppointment')->name('appointment'); // admin.appointment
     Route::get('/appointment/{appintment_id}', 'Admin\AdminController@showAppointmentDetail')->name('appointment.detail'); // admin.appointment.detail
+
+
+    Route::name('rooms.')->prefix('/rooms')->group(function () {
+        // Rooms
+        Route::get('/', 'Admin\AdminRoomController@showRooms')->name('index'); // admin.rooms.index
+        Route::get('/room-edit/{id}', 'Admin\AdminRoomController@showRoomEditDetail')->name('room-edit'); // admin.rooms.room-edit
+        Route::post('/room-edit/{id}', 'Admin\AdminRoomController@submitEdit')->name('room-edit-submit'); // admin.rooms.room-edit-submit
+        Route::get('/room-create', 'Admin\AdminRoomController@showCreateForm')->name('room-create'); // admin.rooms.room-create
+        Route::post('/room-create', 'Admin\AdminRoomController@submitCreate')->name('room-create-submit'); // admin.rooms.room-create-submit
+        Route::get('/detail/{id}', 'Admin\AdminRoomController@showRoomDetail')->name('room-detail'); // admin.rooms.room-detail
+        Route::delete('/{id}', 'Admin\AdminRoomController@deleteRoom')->name('room-remove');
+
+        Route::get('/appointment-view', 'Admin\AdminRoomController@showAppointmentRooms')->name('appointment-view'); // admin.rooms.appointment
+    });
 
     /**
      * Routes For Data

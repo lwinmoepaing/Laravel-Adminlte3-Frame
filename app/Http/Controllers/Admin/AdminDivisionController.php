@@ -12,6 +12,7 @@ class AdminDivisionController extends Controller
         $divisions = Division::paginate(10);
 
         return view('admin.division.division-view', [
+            'navTitle' => 'City',
             'divisions' => $divisions
         ]);
     }
@@ -20,6 +21,7 @@ class AdminDivisionController extends Controller
         $division = $id;
 
         return view('admin.division.division-edit', [
+            'navTitle' => 'City',
             'division' => $division,
         ]);
     }

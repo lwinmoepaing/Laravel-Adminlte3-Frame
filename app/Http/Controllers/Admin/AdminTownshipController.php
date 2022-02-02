@@ -17,6 +17,7 @@ class AdminTownshipController extends Controller
         $divisions = Division::all();
 
         return view('admin.township.township-view', [
+            'navTitle' => 'Township',
             'townships' => $townships,
             'divisions' => $divisions
         ]);
@@ -27,7 +28,17 @@ class AdminTownshipController extends Controller
         $divisions = Division::all();
 
         return view('admin.township.township-edit', [
+            'navTitle' => 'Township',
             'township' => $township,
+            'divisions' => $divisions,
+        ]);
+    }
+
+    public function showCreateForm() {
+        $divisions = Division::all();
+
+        return view('admin.township.township-create', [
+            'navTitle' => 'Township',
             'divisions' => $divisions,
         ]);
     }
@@ -37,14 +48,6 @@ class AdminTownshipController extends Controller
         $township = Township::find($id);
         $township->fill($validated)->save();
         return back()->with('success', 'Successfully Updated');
-    }
-
-    public function showCreateForm() {
-        $divisions = Division::all();
-
-        return view('admin.township.township-create', [
-            'divisions' => $divisions,
-        ]);
     }
 
     public function submitCreate(AdminTownshipRequest $request) {

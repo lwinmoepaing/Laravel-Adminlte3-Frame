@@ -15,6 +15,7 @@ class AdminBranchController extends Controller
         $branches = Branch::with(['township'])->paginate(20);
 
         return view('admin.branch.branch-view', [
+            'navTitle' => 'Branch',
             'branches' => $branches,
         ]);
     }
@@ -25,6 +26,7 @@ class AdminBranchController extends Controller
         $townships = Township::all();
 
         return view('admin.branch.branch-edit', [
+            'navTitle' => 'Branch',
             'branch' => $branch,
             'townships' => $townships,
         ]);
@@ -34,6 +36,7 @@ class AdminBranchController extends Controller
 
         $townships = Township::all();
         return view('admin.branch.branch-create', [
+            'navTitle' => 'Branch',
             'townships' => $townships,
         ]);
     }

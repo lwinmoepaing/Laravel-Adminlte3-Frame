@@ -15,12 +15,15 @@ class AdminDepartmentController extends Controller
         $departments = Department::paginate(20);
 
         return view('admin.department.department-view', [
+            'navTitle' => 'Department',
             'departments' => $departments,
         ]);
     }
 
     public function showCreateForm() {
-        return view('admin.department.department-create');
+        return view('admin.department.department-create', [
+            'navTitle' => 'Department',
+        ]);
     }
 
     public function showDepartmentEditDetail(Department $id)  {
@@ -28,6 +31,7 @@ class AdminDepartmentController extends Controller
 
 
         return view('admin.department.department-edit', [
+            'navTitle' => 'Department',
             'department' => $department
         ]);
     }

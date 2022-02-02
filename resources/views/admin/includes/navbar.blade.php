@@ -32,9 +32,14 @@
             <li class="{{ request()->routeIs('admin.appointment') ? 'active' : '' }}">
                 <a href="{{ route('admin.appointment') }}"><i class="fa fa-address-book"></i> Appointments</a>
             </li>
-            <li class="{{ request()->routeIs('admin.rooms') ? 'active' : '' }}">
-                <a href="{{ route('admin.rooms') }}"><i class="fa fa-clone"></i> Rooms </a>
+
+            <li><a><i class="fa fa-clone"></i> Rooms <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="{{ route('admin.rooms.index') }}"> <i class="fa fa-clone"></i> Rooms List </a></li>
+                    <li><a href="{{ route('admin.rooms.appointment-view') }}"> <i class="fa fa-address-book"></i> Appointment View </a></li>
+                </ul>
             </li>
+
             <li><a><i class="fa fa-list-ul"></i> Data <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                 <li><a href="{{route('admin.data.staff')}}"> <i class="fa fa-user-o"></i> Staff</a></li>
@@ -81,7 +86,7 @@
                     @endauth
                 </a>
                 <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item"  href="javascript:;"> Profile</a>
+                    {{-- <a class="dropdown-item"  href="javascript:;"> Profile</a> --}}
                     <a class="dropdown-item"
                         href="{{ route('logout') }}"
                         onclick="event.preventDefault();document.getElementById('logout-form').submit();"

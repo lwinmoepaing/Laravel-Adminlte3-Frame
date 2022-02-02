@@ -40,6 +40,7 @@ class AdminStaffController extends Controller
         $staffs = $id->load(['role', 'branch', 'department']);
 
         return view('admin.staff.staff-detail', [
+            'navTitle' => 'Staff',
             'staff' => $staffs
         ]);
     }
@@ -55,6 +56,7 @@ class AdminStaffController extends Controller
         // return response()->json($staffRoles);
 
         return view('admin.staff.staff-edit', [
+            'navTitle' => 'Staff',
             'staff' => $staff,
             'branches' => $branches,
             'departments' => $departments,
@@ -68,6 +70,7 @@ class AdminStaffController extends Controller
         $staffRoles = StaffRole::all();
 
         return view('admin.staff.staff-create', [
+            'navTitle' => 'Staff',
             'branches' => $branches,
             'departments' => $departments,
             'staffRoles' => $staffRoles,

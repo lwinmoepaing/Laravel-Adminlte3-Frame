@@ -21005,6 +21005,18 @@ body {
   min-height: 380px;
 }
 
+.min-180 {
+  min-height: 180px;
+}
+
+.min-150 {
+  min-height: 150px;
+}
+
+.min-130 {
+  min-height: 130px;
+}
+
 .flex-center-helper {
   display: flex;
   justify-content: center;

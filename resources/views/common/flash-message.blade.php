@@ -28,7 +28,9 @@
 	<strong class="text-white">{{ $flashMessage }}</strong>
 </div>
 @endif
-{{--
+
+
+
 @if ($errors->any())
 <div class="alert alert-danger">
 	<button type="button" class="close text-white" data-dismiss="alert">×</button>
@@ -38,4 +40,4 @@
         {{ $error }}<br/>
     @endforeach
 </div>
-@endif --}}
+@endif

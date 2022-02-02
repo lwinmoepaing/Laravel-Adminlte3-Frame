@@ -30,6 +30,7 @@ class CreateAppointmentsTable extends Migration
             $table->tinyInteger('is_requested_from_client')->unsigned()->default(0);
             $table->foreignId('user_id')->nullable()->constraint();
             $table->foreignId('staff_id')->constraint();
+            $table->foreignId('room_id')->nullable()->constrained();
             $table->timestamps();
         });
     }
