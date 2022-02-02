@@ -49,9 +49,18 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
 
         // Departments Functions
         Route::get('/department', 'Admin\AdminDepartmentController@showDepartment')->name('department');
+        Route::get('/department-create', 'Admin\AdminDepartmentController@showCreateForm')->name('department-create');
+        Route::post('/department-create', 'Admin\AdminDepartmentController@submitCreate')->name('department-create-submit');
+        Route::get('/department-edit/{id}', 'Admin\AdminDepartmentController@showDepartmentEditDetail')->name('department-edit');
+        Route::post('/department-edit/{id}', 'Admin\AdminDepartmentController@submitEdit')->name('department-edit-submit');
 
         // Branches
-        Route::get('/branch', 'Admin\AdminController@showStaff')->name('branch');
+        Route::get('/branch', 'Admin\AdminBranchController@showBranch')->name('branch');
+        Route::get('/branch-edit/{id}', 'Admin\AdminBranchController@showStaffEditDetail')->name('branch-edit');
+        Route::post('/branch-edit/{id}', 'Admin\AdminBranchController@submitEdit')->name('branch-edit-submit');
+        Route::get('/branch-create', 'Admin\AdminBranchController@showCreateForm')->name('branch-create');
+        Route::post('/branch-create', 'Admin\AdminBranchController@submitCreate')->name('branch-create-submit');
+
         Route::get('/township', 'Admin\AdminController@showStaff')->name('township');
         Route::get('/city', 'Admin\AdminController@showStaff')->name('city');
     });

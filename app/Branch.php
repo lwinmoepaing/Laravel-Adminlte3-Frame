@@ -9,6 +9,10 @@ class Branch extends Model
     //
     public $timestamps = true;
 
+    protected $fillable = [
+        'branch_name', 'branch_address', 'township_id'
+    ];
+
     public function township()
     {
         return $this->belongsTo(Township::class);

@@ -1,3 +1,4 @@
+
 @extends('layouts.admin-layout')
 
 @section('content')
@@ -11,7 +12,7 @@
                 <a href="{{ route('admin.index') }}" role="button">Dashboard</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-                <a href="{{ route('admin.data.department') }}" role="button" disabled>Department</a>
+                <a href="{{ route('admin.data.branch') }}" role="button" disabled>Branch</a>
             </li>
             </ol>
         </nav>
@@ -19,7 +20,7 @@
 
 
     <div class="card pt-3 pb-2 px-4 mt-3">
-        <a  href="{{ route('admin.data.department-create') }}" class="btn btn-primary btn-block"> <i class="fa fa-building-o text-white"></i> <i class="fa fa-plus text-white"></i> Add Department </a>
+        <a  href="{{ route('admin.data.branch-create') }}" class="btn btn-primary btn-block"> <i class="fa fa-building text-white"></i> <i class="fa fa-plus text-white"></i> Add Branch </a>
     </div>
 
 
@@ -31,17 +32,21 @@
             <thead>
               <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Department Name</th>
+                <th scope="col">Branch Name</th>
+                <th scope="col">Branch Address</th>
+                <th scope="col">Township</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
-                @foreach ($departments as $department )
+                @foreach ($branches as $branch )
                     <tr>
-                        <th scope="row">{{ $department->id }}</th>
-                        <td>{{ $department->department_name }}</td>
+                        <th scope="row">{{ $branch->id }}</th>
+                        <td>{{ $branch->branch_name }}</td>
+                        <td>{{ $branch->branch_address }}</td>
+                        <td>{{ $branch->township->township_name }}</td>
                         <td>
-                            <a href="{{ route('admin.data.department-edit', ['id' => $department->id ]) }}" role="button" type="button" class="btn btn-sm btn-success icon-btn-position"><i class="fa text-white fa-edit"></i></a>
+                            <a href="{{ route('admin.data.branch-edit', ['id' => $branch->id ]) }}" role="button" type="button" class="btn btn-sm btn-success icon-btn-position"><i class="fa text-white fa-edit"></i></a>
                         </td>
                     </tr>
                 @endforeach
@@ -51,7 +56,7 @@
     </div>
 
     <div class="mt-3">
-        {{  $departments->links() }}
+        {{  $branches->links() }}
     </div>
 
     </div>

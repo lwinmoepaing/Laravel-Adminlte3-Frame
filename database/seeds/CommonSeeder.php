@@ -1,5 +1,6 @@
 <?php
 
+
 use App\Branch;
 use App\Department;
 use App\Division;

@@ -18,4 +18,39 @@ class AdminDepartmentController extends Controller
             'departments' => $departments,
         ]);
     }
+
+    public function showCreateForm() {
+        return view('admin.department.department-create');
+    }
+
+    public function showDepartmentEditDetail(Department $id)  {
+        $department = $id;
+
+
+        return view('admin.department.department-edit', [
+            'department' => $department
+        ]);
+    }
+
+    public function submitEdit(Request $request, $id) {
+
+        $validatedData = $request->validate([
+            'department_name' => 'required|unique:departments,department_name,' . $id . ',id',
+        ]);
+
+        $department = Department::find($id);
+        $department->fill($validatedData)->save();
+        return back()->with('success', 'Successfully Updated');
+    }
+
+    public function submitCreate(Request $request) {
+        $validatedData = $request->validate([
+            'department_name' => 'required|unique:departments,department_name',
+        ]);
+
+        $department = new Department();
+        $department->fill($validatedData)->save();
+        return redirect()->route('admin.data.department')->with('success', 'Successfully Added');
+    }
+
 }

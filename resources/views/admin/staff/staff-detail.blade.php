@@ -81,7 +81,7 @@
                     <a href="{{ route('admin.data.staff-edit', ['id' => $staff->id ]) }}" role="button" type="button" class="btn btn-block btn-primary icon-btn-position mt-2"><i class="fa text-white fa-edit"></i> Edit Profile </a>
                 </div>
                 <div class="col-sm-12">
-                    <a href="{{ route('admin.data.staff')}}" role="button" class="btn btn-secondary btn-block icon-btn-position mt-2"> Cancel </a>
+                    <a href="{{ route('admin.data.staff')}}" role="button" class="btn btn-secondary btn-block icon-btn-position mt-2"> Go to Staff List </a>
                 </div>
             </div>
             </div>

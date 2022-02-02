@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AdminStaffFormRequest extends FormRequest
+class AdminBranchFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,9 @@ class AdminStaffFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'branch_id' => 'required',
-            'department_id' => 'required',
-            'staff_role_id' => 'required',
+            'branch_name' => 'required',
+            'branch_address' => 'required',
+            'township_id' => 'required',
         ];
     }
 }
