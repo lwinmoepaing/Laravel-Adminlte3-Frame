@@ -18,6 +18,7 @@ class CreateBranchesTable extends Migration
             $table->string('branch_name');
             $table->string('branch_address');
             $table->foreignId('township_id')->constrained();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

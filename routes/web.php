@@ -61,7 +61,14 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
         Route::get('/branch-create', 'Admin\AdminBranchController@showCreateForm')->name('branch-create');
         Route::post('/branch-create', 'Admin\AdminBranchController@submitCreate')->name('branch-create-submit');
 
-        Route::get('/township', 'Admin\AdminController@showStaff')->name('township');
+        // Townships
+        Route::get('/township', 'Admin\AdminTownshipController@showTownship')->name('township');
+        Route::get('/township-edit/{id}', 'Admin\AdminTownshipController@showTownshipEditDetail')->name('township-edit');
+        Route::post('/township-edit/{id}', 'Admin\AdminTownshipController@submitEdit')->name('township-edit-submit');
+        Route::get('/township-create', 'Admin\AdminTownshipController@showCreateForm')->name('township-create');
+        Route::post('/township-create', 'Admin\AdminTownshipController@submitCreate')->name('township-create-submit');
+
+        // Divisions And Cities
         Route::get('/city', 'Admin\AdminController@showStaff')->name('city');
     });
 });

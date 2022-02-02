@@ -27,14 +27,21 @@ class CommonSeeder extends Seeder
         $divisions = [
             [
                 "division_name" => 'Yangon',
-            ]
+            ],
+            [
+                "division_name" => 'Mandalay',
+            ],
         ];
 
         $townships = [
             [
                 "township_name" => "Kamaryut",
                 "division_id" => 1,
-            ]
+            ],
+            [
+                "township_name" => "SanChaung",
+                "division_id" => 1,
+            ],
         ];
 
         $branches = [
