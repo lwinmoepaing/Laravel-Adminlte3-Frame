@@ -31,7 +31,7 @@
 
 
 
-@if ($errors->any())
+{{-- @if ($errors->any())
 <div class="alert alert-danger">
 	<button type="button" class="close text-white" data-dismiss="alert">×</button>
 	Please check the form below for errors
@@ -40,4 +40,4 @@
         {{ $error }}<br/>
     @endforeach
 </div>
-@endif
+@endif --}}

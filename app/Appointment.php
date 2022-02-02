@@ -30,6 +30,7 @@ class Appointment extends Model
         "ARRIVED" => 2, // Occupied
         "REJECT" => 3,
         "FINISHED" => 4,
+        "EXPIRED" => 5,
     ];
 
 
@@ -55,6 +56,8 @@ class Appointment extends Model
             $appointment->staff_id = $data["staff_id"];
             $appointment->is_request_from_client = $data["is_request_from_client"] ? $data["is_request_from_client"] : 0;
             $appointment->reason = '';
+            $appointment->is_approve_by_officer = 0;
+            $appointment->is_cancel_by_officer = 0;
             $appointment->save();
 
             foreach ($data['visitors'] as $item) {
@@ -70,13 +73,17 @@ class Appointment extends Model
             return $appointment;
         } catch (QueryException $e){
             DB::rollBack();
-            dd($e);
+            dd($e->getMessage());
             return false;
         }
     }
 
 
     // All Relationships
+    public function staff() {
+        return $this->belongsTo(Staff::class);
+    }
+
     public function visitors()
     {
         return $this->hasMany(Visitor::class);
@@ -90,5 +97,10 @@ class Appointment extends Model
     public function branch()
     {
         return $this->belongsTo(Branch::class);
+    }
+
+    public function visitor()
+    {
+        return $this->hasOne(Visitor::class)->oldest();
     }
 }

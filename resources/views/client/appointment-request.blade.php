@@ -6,9 +6,13 @@
 
 @include('common.pre-loader')
 
+@include('common.uab-headbar')
+
 <div class="container-fluid">
     {{-- Appointment Request Form --}}
     <div class="max-w-1000 mx-auto">
+
+        @include('common.flash-message')
 
         @error('visitors.*')
             <div aria-live="assertive" aria-atomic="true" >
@@ -172,7 +176,6 @@
 
     </div>
 
-    <button id="testEmail">test email </button>
     {{-- Appointment Request Form Finished --}}
 </div>
 
@@ -480,7 +483,6 @@
                 if (response && response.isSuccess === true) {
                     return true;
                 }
-
                 return false;
             }).catch(function(err) {
                 $(preLoader).addClass('d-none');
@@ -504,7 +506,10 @@
                 return ;
             }
 
-            checkIsValidOfficerEmail().then(isValidOfficerEmail => {
+            $('#officer-loading').removeClass('d-none');
+
+            setTimeout(() => {
+                checkIsValidOfficerEmail().then(isValidOfficerEmail => {
                 if (!isValidOfficerEmail) {
                     event.preventDefault();
                     $('#officer_warning_toast').toast('show');
@@ -515,6 +520,8 @@
                     $(formSubmit).submit();
                 }
             });
+            }, 800);
+
         });
 
         $('#testEmail').click(function() {

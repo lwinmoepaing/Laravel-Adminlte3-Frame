@@ -31,25 +31,20 @@ class ClientViewController extends Controller
     public function appointSubmit(ClientAppointmentRequest $request) {
 
         $validated = $request->validated();
-        $staff = Staff::where('email', $validated['staff_email'])->first();
-        if (!$staff) {
-            return dd('Staff Not Found');
-        }
-
+        $staff = Staff::with(['branch'])->where('email', $validated['staff_email'])->first();
         $validated["is_request_from_client"] = 1;
         $validated["staff_id"] = $staff->id;
 
         $appModel = new Appointment();
         $appointment = $appModel->creatAppointment($validated);
 
-        dd($appointment);
-        // if (!$appointment) {
-        //     return view('errors.something-went-wrong');
-        // }
+        if (!$appointment) {
+            return view('errors.something-went-wrong');
+        }
 
         // Mail::to($appointment->staff_email)->send(new InviteAppointmentMail($appointment));
 
-        return view('welcome');
+        return back()->with('success', 'Succesfully Created Your Appointment, We\'ll inform later.');
     }
 
 

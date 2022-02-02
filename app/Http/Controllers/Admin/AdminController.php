@@ -23,12 +23,6 @@ class AdminController extends Controller
         ]);
     }
 
-    public function showRooms() {
-        return view('admin.rooms', [
-            'navTitle' => 'Rooms'
-        ]);
-    }
-
     public function showAppointmentDetail($appintment_id) {
         return view('admin.appointment-detail', [
             'appintment_id' => $appintment_id,
@@ -36,9 +30,4 @@ class AdminController extends Controller
         ]);
     }
 
-    public function showDepartment() {
-        return view('admin.rooms', [
-            'navTitle' => 'Department'
-        ]);
-    }
 }

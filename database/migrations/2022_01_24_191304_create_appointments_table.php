@@ -20,7 +20,8 @@ class CreateAppointmentsTable extends Migration
             $table->text('staff_email');
             $table->foreignId('branch_id')->constrained();
             $table->foreignId('department_id')->constrained();
-            $table->timestamp('meeting_time');
+            $table->timestamp('meeting_time')->index('appointment_meeting_time_index');
+            $table->timestamp('meeting_leave_time')->nullable();
             $table->integer('status')->unsigned()->index('appointment_status_index');
             $table->text('reason')->nullable();
             $table->text('description')->nullable();

@@ -367,3 +367,21 @@
     background: rgba(255, 255, 255, 0.85);
     z-index: 9999999;
 }
+
+.uab-headbar-icon {
+    width: 349px;
+    height: 89px;
+    -o-object-fit: contain;
+    display: block;
+    object-fit: contain;
+    margin: auto auto;
+    /* padding-top: 12px; */
+    position: relative;
+    top: 16px;
+}
+
+.uab-headbar-nav {
+    height: 134px;
+    background-color: #fff;
+    margin-bottom: 20px;
+}

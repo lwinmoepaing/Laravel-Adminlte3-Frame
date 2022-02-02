@@ -27,7 +27,7 @@ Route::name('appointment.')->prefix('/appointment')->group(function () {
 
 // Appoints For AdminDashboard
 Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function () {
-    Route::get('/', 'Admin\AdminController@index')->name('index'); // admin.index
+    Route::get('/', 'Admin\AdminAppointmentController@showDashboard')->name('index'); // admin.index
     Route::get('/dashboard', 'Admin\AdminController@index')->name('dashboard'); // admin.dashboard
     Route::get('/appointment', 'Admin\AdminController@showAppointment')->name('appointment'); // admin.appointment
     Route::get('/appointment/{appintment_id}', 'Admin\AdminController@showAppointmentDetail')->name('appointment.detail'); // admin.appointment.detail
