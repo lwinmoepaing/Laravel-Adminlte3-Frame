@@ -8,4 +8,8 @@ class Division extends Model
 {
     //
     public $timestamps = true;
+
+    protected $fillable = [
+        'division_name',
+    ];
 }

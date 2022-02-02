@@ -41,7 +41,7 @@
                 <li><a href="{{route('admin.data.department')}}"> <i class="fa fa-building-o"></i> Department</a></li>
                 <li><a href="{{route('admin.data.branch')}}"> <i class="fa fa-building"></i> Branch</a></li>
                 <li><a href="{{route('admin.data.township')}}"> <i class="fa fa-map-marker"></i> Township</a></li>
-                <li><a href="{{route('admin.data.city')}}"> <i class="fa fa-map-o"></i> City</a></li>
+                <li><a href="{{route('admin.data.division')}}"> <i class="fa fa-map-o"></i> City</a></li>
                 </ul>
             </li>
             {{-- <li>

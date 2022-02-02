@@ -13,7 +13,7 @@
             <a href="{{ route('admin.data.township') }}" role="button">Township</a>
           </li>
           <li class="breadcrumb-item active" aria-current="page">
-            Edit
+            Create
           </li>
         </ol>
     </nav>
