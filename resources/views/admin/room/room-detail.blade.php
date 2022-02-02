@@ -65,7 +65,7 @@
                     <div> Seat Count </div>
                 </div>
                 <div class="col-sm-12 col-md-6">
-                    <div> {{ $room->seat_count }} </div>
+                    <div> {{ $room->seat_count ?? '-' }} </div>
                 </div>
             </div>
             <div class="row mb-2">

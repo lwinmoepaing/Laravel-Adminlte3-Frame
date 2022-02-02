@@ -1,12 +1,14 @@
 @extends('layouts.client-layout')
 
-@section('title', 'Uab: Appointment Request Form')
+@section('title', 'uab | Appointment Request Form')
 
 @section('content')
 
-<div>
+@include('common.pre-loader')
+
+<div class="container-fluid">
     {{-- Appointment Request Form --}}
-    <div class="container-fluid">
+    <div class="max-w-1000 mx-auto">
 
         @error('visitors.*')
             <div aria-live="assertive" aria-atomic="true" >
@@ -35,6 +37,20 @@
                 </div>
                 <div class="toast-body" id="warning_text">
                     At first, You need to fill all visitors information.
+                </div>
+            </div>
+        </div>
+
+        <div aria-live="assertive" aria-atomic="true" >
+            <div class="toast" id="officer_warning_toast" style="position: absolute; top: 10px; right: 10px;" data-autohide="true" data-delay="4000">
+                <div class="toast-header bg-primary text-white">
+                    <strong class="mr-auto text-white">Retry Staff Email!!</strong>
+                    <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body" id="warning_text">
+                    Not Found Staff Email Address
                 </div>
             </div>
         </div>
@@ -100,7 +116,7 @@
             <h5> uab Staff Information </h5>
 
             <div class="row">
-                <div class="col-sm-12 col-md-3">
+                <div class="col-sm-12 col-md-4">
                     <div class="form-group">
                         <label for="staff_branch">Branch</label>
                         <select class="custom-select" id="staff_branch" name="branch">
@@ -114,7 +130,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-12 col-md-3">
+                <div class="col-sm-12 col-md-3 d-none">
                     <div class="form-group">
                         <label for="staff_department">Department</label>
                         <select class="custom-select" id="staff_department" name="department">
@@ -127,7 +143,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-3">
+
+                <div class="col-sm-12 col-md-4">
                     <div class="form-group">
                         <label for="staff_name">uab Staff Name</label>
                         <input autocomplete="off" type="text" class="form-control @error('staff_name') is-invalid @enderror" id="staff_name" name="staff_name" value="{{ old('staff_name') }}">
@@ -136,12 +153,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-3">
+                <div class="col-sm-12 col-md-4">
                     <div class="form-group">
                         <label for="staff_email">uab Staff Email</label>
                         <input type="email" class="form-control @error('staff_email') is-invalid @enderror" id="staff_email" name="staff_email" value="{{ old('staff_email') }}">
-                        <div class="invalid-feedback">
-                            Required Staff Email or invalid email
+                        <div class="invalid-feedback" id="emailError">
+                            Required Staff Email or invalid email or not found
                         </div>
                     </div>
                 </div>
@@ -154,16 +171,20 @@
         </form>
 
     </div>
+
+    <button id="testEmail">test email </button>
     {{-- Appointment Request Form Finished --}}
 </div>
 
+
+
+@push('body-scripts')
 <script>
     $(document).ready(function () {
         $('#error_toast').toast('show');
     });
 </script>
 
-@push('body-scripts')
 <script>
     $(document).ready(function() {
         var titleInput = $('#titleInput');
@@ -180,8 +201,14 @@
         //  Global Touched
         var isTouched = false;
 
-        $(datePicker).datetimepicker({format: "L"});
-        $(timePicker).datetimepicker({format: 'LT'});
+        $(datePicker).datetimepicker({
+            format: 'L',
+            minDate: new Date(),
+        });
+        $(timePicker).datetimepicker({
+            format: 'LT',
+            minDate: new Date(),
+        });
 
         [datePicker, timePicker].forEach( function(item) {
             $(item)[0].isContentEditable = false;
@@ -431,6 +458,41 @@
                 );
         };
 
+        function checkIsValidOfficerEmail () {
+            var isValid = false;
+            var preLoader = $('#officer-loading');
+            var url = "{{ route('appointment.checkemail') }}";
+            var email = $(emailInput).val();
+            $(preLoader).removeClass('d-none');
+            var csrf = "{{ csrf_token() }}";
+
+            return axios.post(url, {
+                _token: csrf,
+                email: email
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then(function(res) {
+                $(preLoader).addClass('d-none');
+                console.log('Finished Fetching');
+                var response = res.status === 200 ? res.data : null;
+                if (response && response.isSuccess === true) {
+                    return true;
+                }
+
+                return false;
+            }).catch(function(err) {
+                $(preLoader).addClass('d-none');
+                console.log('Finished Fetching');
+                console.log(err);
+
+                return false;
+            });
+
+
+        }
+
         // Validator
         $(submitBtn).click(function (event) {
             isTouched = true;
@@ -442,9 +504,29 @@
                 return ;
             }
 
-            $(formSubmit).submit();
+            checkIsValidOfficerEmail().then(isValidOfficerEmail => {
+                if (!isValidOfficerEmail) {
+                    event.preventDefault();
+                    $('#officer_warning_toast').toast('show');
+                    $(emailInput).focus();
+                    $(emailInput).addClass('is-invalid');
+                    return;
+                } else {
+                    $(formSubmit).submit();
+                }
+            });
+        });
+
+        $('#testEmail').click(function() {
+          checkIsValidOfficerEmail().then(isValid => {
+            console.log('isValid ---', isValid);
+          });
         });
     });
+
+    // console.log('AXIOS');
+    // console.log(axios);
+
 </script>
 @endpush
 

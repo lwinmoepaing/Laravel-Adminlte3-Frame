@@ -10,6 +10,7 @@ use App\Http\Requests\ClientAppointmentRequest;
 use App\Mail\InviteAppointmentMail;
 use App\Staff;
 use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class ClientViewController extends Controller
@@ -41,12 +42,33 @@ class ClientViewController extends Controller
         $appModel = new Appointment();
         $appointment = $appModel->creatAppointment($validated);
 
-        if (!$appointment) {
-            return view('errors.something-went-wrong');
-        }
+        dd($appointment);
+        // if (!$appointment) {
+        //     return view('errors.something-went-wrong');
+        // }
 
-        Mail::to($appointment->staff_email)->send(new InviteAppointmentMail($appointment));
+        // Mail::to($appointment->staff_email)->send(new InviteAppointmentMail($appointment));
 
         return view('welcome');
+    }
+
+
+    public function checkEmail(Request $request) {
+        $validated = $request->validate([
+            'email' => 'email|required'
+        ]);
+
+        $staff = Staff::where('email', $request->email)->first();
+
+        if (!$staff) {
+            return response()->json([
+                'isSuccess' => false
+            ]);
+        }
+
+        return response()->json([
+            'isSuccess' => true,
+            'data' => $staff,
+        ]);
     }
 }

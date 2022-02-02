@@ -18,7 +18,7 @@
     @stack('head-scripts')
 
 </head>
-<body>
+<body style="background: #f6f6f6">
     <div class="">
         @yield('content')
     </div>

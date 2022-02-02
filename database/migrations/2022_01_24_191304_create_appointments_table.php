@@ -27,7 +27,7 @@ class CreateAppointmentsTable extends Migration
             $table->integer('create_type')->unsinged()->default(1);
             $table->tinyInteger('is_approve_by_officer')->unsigned()->default(0);
             $table->tinyInteger('is_cancel_by_officer')->unsigned()->default(0);
-            $table->tinyInteger('is_requested_from_client')->unsigned()->default(0);
+            $table->tinyInteger('is_request_from_client')->unsigned()->default(0);
             $table->foreignId('user_id')->nullable()->constraint();
             $table->foreignId('staff_id')->constraint();
             $table->foreignId('room_id')->nullable()->constrained();

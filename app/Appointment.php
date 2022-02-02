@@ -27,7 +27,7 @@ class Appointment extends Model
 
     public static $APPOINTMENT_STATUS_TYPE = [
         "PENDING" => 1,
-        "ARRIVED" => 2,
+        "ARRIVED" => 2, // Occupied
         "REJECT" => 3,
         "FINISHED" => 4,
     ];
