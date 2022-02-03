@@ -15,9 +15,9 @@ class CreateAppointmentsTable extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('staff_name')->nullable();
-            $table->text('staff_email');
+            $table->string('title')->index('appointment_title_index');
+            $table->text('staff_name')->index('appointment_staff_name_index');
+            $table->text('staff_email')->index('appointment_staff_email_index');
             $table->foreignId('branch_id')->constrained();
             $table->foreignId('department_id')->constrained();
             $table->timestamp('meeting_time')->index('appointment_meeting_time_index');

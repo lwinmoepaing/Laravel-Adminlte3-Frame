@@ -32,11 +32,11 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
 
 
 
-    Route::name('appointment.')->prefix('/rooms')->group(function () {
+    Route::name('appointment.')->prefix('/appointment')->group(function () {
         // Appointment
-        Route::get('/appointment', 'Admin\AdminAppointmentController@showTodayAppointmentList')->name('appointment-view'); // admin.appointment.appointment-view
-        Route::get('/appointment/{appointment_id}', 'Admin\AdminAppointmentController@showAppointmentDetail')->name('appointment-detail'); // admin.appointment.appointment-detail
-        Route::post('/appointment/{appointment_id}', 'Admin\AdminAppointmentController@submitUpdateAppointment')->name('appointment-status-update'); // admin.appointment.appointment-status-update
+        Route::get('/', 'Admin\AdminAppointmentController@showTodayAppointmentList')->name('appointment-view'); // admin.appointment.appointment-view
+        Route::get('/{appointment_id}', 'Admin\AdminAppointmentController@showAppointmentDetail')->name('appointment-detail'); // admin.appointment.appointment-detail
+        Route::post('//appointment_id}', 'Admin\AdminAppointmentController@submitUpdateAppointment')->name('appointment-status-update'); // admin.appointment.appointment-status-update
     });
 
 

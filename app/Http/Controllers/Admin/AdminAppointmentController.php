@@ -101,9 +101,16 @@ class AdminAppointmentController extends Controller
             ->get();
 
         $todayRequestAppointments = Appointment::where('status', $pendingStatus)
+            ->with(['staff.department', 'branch', 'visitor'])
             ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
             ->where('is_approve_by_officer', 0)
             ->where('create_type', Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'])
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        $todayOccupiedAppointments = Appointment::where('status', $arrivedStatus)
+            ->with(['staff.department', 'branch', 'visitor'])
+            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
             ->orderBy('id', 'DESC')
             ->get();
 
@@ -119,7 +126,9 @@ class AdminAppointmentController extends Controller
             'finishedAppointmentCount' => $finishedAppointmentCount,
             'todayUpcomingAppointments' => $todayUpcomingAppointments,
             'todayRequestAppointments' => $todayRequestAppointments,
-            'finishedAppointments' => $finishedAppointments
+            'todayOccupiedAppointments' => $todayOccupiedAppointments,
+            'finishedAppointments' => $finishedAppointments,
+            'showTab' => $request->query('showTab')
         ];
 
         // return response()->json($responseData);

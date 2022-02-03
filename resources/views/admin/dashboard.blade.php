@@ -5,28 +5,33 @@
     <div class="container main-wrapper">
         <div class="row">
         <div class="col-lg-4 col-sm-12 tile_stats_count mb-3">
-            <div class="card p-3">
-            <span class="count_top"><img src="{{URL('/images/auth/request.png')}}" alt="request"></span>
-
-            <div class="count text-right">{{ $todayRequestAppointmentCount }}</div>
-            <span class="count_bottom text-right">Request Appointments</span>
-            </div>
+            <a href="{{ route('admin.appointment.appointment-view', ['showTab' => 'request']) }}">
+                <div class="card p-3">
+                    <span class="count_top"><img src="{{URL('/images/auth/request.png')}}" alt="request"></span>
+                    <div class="count text-right">{{ $todayRequestAppointmentCount }}</div>
+                    <span class="count_bottom text-right">Request Appointments</span>
+                </div>
+            </a>
         </div>
 
         <div class="col-lg-4 col-sm-12 tile_stats_count mb-3">
-            <div class="card p-3">
-            <span class="count_top"><img src="{{URL('/images/auth/occupied.png')}}" alt="occupied"></span>
-            <div class="count green text-right">{{ $occupiedAppointmentCount }}</div>
-            <span class="count_bottom text-right">Current Occupied</span>
-            </div>
+            <a href="{{ route('admin.appointment.appointment-view', ['showTab' => 'occupied']) }}">
+                <div class="card p-3">
+                    <span class="count_top"><img src="{{URL('/images/auth/occupied.png')}}" alt="occupied"></span>
+                    <div class="count green text-right">{{ $occupiedAppointmentCount }}</div>
+                    <span class="count_bottom text-right">Current Occupied</span>
+                </div>
+            </a>
         </div>
 
         <div class="col-lg-4 col-sm-12 tile_stats_count mb-3">
-            <div class="card p-3">
-            <span class="count_top"><img src="{{URL('/images/auth/upcoming.png')}}" alt="upcoming"></span>
-            <div class="count text-right">{{ $upcommingAppointmentCount }}</div>
-            <span class="count_bottom text-right">Upcoming Appointments</span>
-            </div>
+            <a href="{{ route('admin.appointment.appointment-view', ['showTab' => 'upcoming']) }}">
+                    <div class="card p-3">
+                        <span class="count_top"><img src="{{URL('/images/auth/upcoming.png')}}" alt="upcoming"></span>
+                        <div class="count text-right">{{ $upcommingAppointmentCount }}</div>
+                        <span class="count_bottom text-right">Upcoming Appointments</span>
+                    </div>
+            </a>
         </div>
         </div>
     </div>
