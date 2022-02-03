@@ -50,11 +50,11 @@
         <div class="row">
             @foreach ($todayUpcomingAppointments as $appointment)
                 <div class="col-md-12 mb-2">
-                    <a class="card upcoming-section p-3" href="{{ route('admin.appointment.detail', ["appintment_id" => $appointment->id]) }}">
-                    <div class="text-center w-10 appointment-time">
+                    <a class="card upcoming-section p-3" href="{{ route('admin.appointment.appointment-detail', ["appointment_id" => $appointment->id]) }}">
+                    <div class="text-center min-w-85 appointment-time">
                         <span class="d-block border p-3 rounded">
                             <b>
-                                {{ date('g:i', strtotime($appointment->meeting_time)) }}
+                                {{ date('g : i', strtotime($appointment->meeting_time)) }}
                             </b>
                             <br>
                             {{ date('A', strtotime($appointment->meeting_time)) }}
@@ -73,17 +73,19 @@
                             </h5>
                         </div>
 
-                        <div class="col-md-6 mb-2">
-                            <h6>
-                                <i class="fa fa-user mr-2" style="font-size: 16px;"></i>
-                                {{ $appointment->visitor->name }}
-                            </h6>
-                            <span>
-                                {{ $appointment->visitor->phone }},
-                                {{ $appointment->visitor->company_name }},
-                                {{ $appointment->visitor->email }}
-                            </span>
-                        </div>
+                        @if($appointment->visitor)
+                            <div class="col-md-6 mb-2">
+                                <h6>
+                                    <i class="fa fa-user mr-2" style="font-size: 16px;"></i>
+                                    {{ $appointment->visitor->name }}
+                                </h6>
+                                <span>
+                                    {{ $appointment->visitor->phone }},
+                                    {{ $appointment->visitor->company_name }},
+                                    {{ $appointment->visitor->email }}
+                                </span>
+                            </div>
+                        @endif
 
                         <div class="col-md-6 mb-2">
                             <h6>

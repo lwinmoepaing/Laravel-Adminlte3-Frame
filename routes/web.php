@@ -29,8 +29,15 @@ Route::name('appointment.')->prefix('/appointment')->group(function () {
 Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function () {
     Route::get('/', 'Admin\AdminAppointmentController@showDashboard')->name('index'); // admin.index
     Route::get('/dashboard', 'Admin\AdminController@index')->name('dashboard'); // admin.dashboard
-    Route::get('/appointment', 'Admin\AdminController@showAppointment')->name('appointment'); // admin.appointment
-    Route::get('/appointment/{appintment_id}', 'Admin\AdminController@showAppointmentDetail')->name('appointment.detail'); // admin.appointment.detail
+
+
+
+    Route::name('appointment.')->prefix('/rooms')->group(function () {
+        // Appointment
+        Route::get('/appointment', 'Admin\AdminAppointmentController@showTodayAppointmentList')->name('appointment-view'); // admin.appointment.appointment-view
+        Route::get('/appointment/{appointment_id}', 'Admin\AdminAppointmentController@showAppointmentDetail')->name('appointment-detail'); // admin.appointment.appointment-detail
+        Route::post('/appointment/{appointment_id}', 'Admin\AdminAppointmentController@submitUpdateAppointment')->name('appointment-status-update'); // admin.appointment.appointment-status-update
+    });
 
 
     Route::name('rooms.')->prefix('/rooms')->group(function () {

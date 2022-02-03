@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 class Appointment extends Model
 {
+    // For Including Json ( For Accerrors)
+    protected $appends = [
+        'status_name'
+    ];
+
     //
     protected $fillable = [
         'title',
@@ -17,18 +22,21 @@ class Appointment extends Model
         'branch_id',
         'department_id',
         'meeting_time',
+        'meeting_leave_time',
         'status',
         'reason',
+        'description',
+        'created_type',
+        'room_id',
         'is_approve_by_officer',
         'is_cancel_by_officer',
-        'is_request_from_client',
     ];
 
 
     public static $APPOINTMENT_STATUS_TYPE = [
         "PENDING" => 1,
-        "OCCUPIED" => 2, // Occupied
-        "REJECT" => 3,
+        "OCCUPIED" => 2, // Occupied or Arrived
+        "REJECTED" => 3,
         "FINISHED" => 4,
         "EXPIRED" => 5,
     ];
@@ -37,7 +45,29 @@ class Appointment extends Model
     public static $APPOINTMENT_CREATE_TYPE = [
         "FROM_CLIENT" => 1,
         "FROM_RECIPIENT" => 2,
+        "FROM_ADMIN" => 3,
     ];
+
+    // Custom Attributes For ACCESSORS
+       public function getStatusNameAttribute() {
+        if ($this->status == $this::$APPOINTMENT_STATUS_TYPE['PENDING']) {
+            return "Pending";
+        }
+        if ($this->status == $this::$APPOINTMENT_STATUS_TYPE['OCCUPIED']) {
+            return "Occupied";
+        }
+        if ($this->status == $this::$APPOINTMENT_STATUS_TYPE['REJECTED']) {
+            return "Rejected";
+        }
+        if ($this->status == $this::$APPOINTMENT_STATUS_TYPE['FINISHED']) {
+            return "Finished";
+        }
+        if ($this->status == $this::$APPOINTMENT_STATUS_TYPE['EXPIRED']) {
+            return "Expired";
+        }
+
+        return "Expired";
+    }
 
 
     // Create Appoint Method
@@ -54,8 +84,8 @@ class Appointment extends Model
             $appointment->meeting_time = new DateTime($data['date'] . ' ' . $data['time']);
             $appointment->status = Appointment::$APPOINTMENT_STATUS_TYPE['PENDING'];
             $appointment->staff_id = $data["staff_id"];
-            $appointment->is_request_from_client = $data["is_request_from_client"] ? $data["is_request_from_client"] : 0;
             $appointment->reason = '';
+            $appointment->create_type = 1;
             $appointment->is_approve_by_officer = 0;
             $appointment->is_cancel_by_officer = 0;
             $appointment->save();
@@ -73,7 +103,7 @@ class Appointment extends Model
             return $appointment;
         } catch (QueryException $e){
             DB::rollBack();
-            dd($e->getMessage());
+            // dd($e->getMessage());
             return false;
         }
     }
@@ -103,4 +133,10 @@ class Appointment extends Model
     {
         return $this->hasOne(Visitor::class)->oldest();
     }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
 }

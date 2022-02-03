@@ -11,7 +11,7 @@
         <div class="profile_pic">
             <img src="{{URL('images/auth/profile.png')}}" alt="..." class="img-circle profile_img">
         </div>
-        <div class="profile_info">
+    <div class="profile_info">
             <span> uab </span>
             @auth
                 <h2>{{Auth::user()->name}}</h2>
@@ -29,8 +29,8 @@
             <li class="{{ request()->routeIs('admin.index') ? 'active' : '' }}">
                 <a href="{{ route('admin.index') }}"><i class="fa fa-home"></i> Dashboard</a>
             </li>
-            <li class="{{ request()->routeIs('admin.appointment') ? 'active' : '' }}">
-                <a href="{{ route('admin.appointment') }}"><i class="fa fa-address-book"></i> Appointments</a>
+            <li class="{{ request()->routeIs('admin.appointment.appointment-view') ? 'active' : '' }}">
+                <a href="{{ route('admin.appointment.appointment-view') }}"><i class="fa fa-address-book"></i> Appointments</a>
             </li>
 
             <li><a><i class="fa fa-clone"></i> Rooms <span class="fa fa-chevron-down"></span></a>

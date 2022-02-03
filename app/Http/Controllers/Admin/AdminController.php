@@ -23,10 +23,10 @@ class AdminController extends Controller
         ]);
     }
 
-    public function showAppointmentDetail($appintment_id) {
+    public function showAppointmentDetail($appointment_id) {
         return view('admin.appointment-detail', [
-            'appintment_id' => $appintment_id,
-            'navTitle' => 'Appointment - ' . $appintment_id
+            'appointment_id' => $appointment_id,
+            'navTitle' => 'Appointment - ' . $appointment_id
         ]);
     }
 

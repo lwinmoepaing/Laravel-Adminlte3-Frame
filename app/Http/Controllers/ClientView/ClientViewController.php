@@ -32,7 +32,7 @@ class ClientViewController extends Controller
 
         $validated = $request->validated();
         $staff = Staff::with(['branch'])->where('email', $validated['staff_email'])->first();
-        $validated["is_request_from_client"] = 1;
+        $validated["create_type"] = Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'];
         $validated["staff_id"] = $staff->id;
 
         $appModel = new Appointment();

@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Appointment;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminAppointmentUpdateRequest;
+use App\Room;
 use Carbon\Carbon;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminAppointmentController extends Controller
 {
@@ -20,11 +24,13 @@ class AdminAppointmentController extends Controller
 
         $todayRequestAppointmentCount = Appointment::where('status', $pendingStatus)
             ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
+            ->where('create_type', Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'])
             ->where('is_approve_by_officer', 0)
             ->count();
 
         $upcommingAppointmentCount = Appointment::where('status', $pendingStatus)
             ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
+            ->where('create_type', Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'])
             ->where('is_approve_by_officer', 1)
             ->count();
 
@@ -58,21 +64,215 @@ class AdminAppointmentController extends Controller
         return view('admin.dashboard', $responseData);
     }
 
-    public function showAppointment(Request $request) {
+    public function showTodayAppointmentList(Request $request) {
         $startOfDay = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
         $endOfDay = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 
         $pendingStatus = Appointment::$APPOINTMENT_STATUS_TYPE['PENDING'];
-        $expiredStatus = Appointment::$APPOINTMENT_STATUS_TYPE['EXPIRED'];
         $arrivedStatus = Appointment::$APPOINTMENT_STATUS_TYPE['OCCUPIED'];
+        $finishedStatus = Appointment::$APPOINTMENT_STATUS_TYPE['FINISHED'];
 
+        $todayRequestAppointmentCount = Appointment::where('status', $pendingStatus)
+            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
+            ->where('create_type', Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'])
+            ->where('is_approve_by_officer', 0)
+            ->count();
 
-        $branchQuery = Appointment::where('status', $pendingStatus)
+        $upcommingAppointmentCount = Appointment::where('status', $pendingStatus)
+            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
+            ->where('create_type', Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'])
+            ->where('is_approve_by_officer', 1)
+            ->count();
+
+        $occupiedAppointmentCount = Appointment::where('status', $arrivedStatus)
+            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
+            ->count();
+
+        $finishedAppointmentCount = Appointment::where('status', $finishedStatus)
+            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
+            ->count();
+
+        $todayUpcomingAppointments = Appointment::where('status', $pendingStatus)
+            ->with(['staff.department', 'branch', 'visitor'])
             ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
             ->where('is_approve_by_officer', 1)
+            ->where('create_type', Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'])
+            ->orderBy('id', 'DESC')
             ->get();
-        if ($branchQuery) {
-            $branchQuery->where('email', $branchQuery);
-        }
+
+        $todayRequestAppointments = Appointment::where('status', $pendingStatus)
+            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
+            ->where('is_approve_by_officer', 0)
+            ->where('create_type', Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'])
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        $finishedAppointments = Appointment::where('status', $finishedStatus)
+            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        $responseData = [
+            'todayRequestAppointmentCount' => $todayRequestAppointmentCount,
+            'upcommingAppointmentCount' => $upcommingAppointmentCount,
+            'occupiedAppointmentCount' => $occupiedAppointmentCount,
+            'finishedAppointmentCount' => $finishedAppointmentCount,
+            'todayUpcomingAppointments' => $todayUpcomingAppointments,
+            'todayRequestAppointments' => $todayRequestAppointments,
+            'finishedAppointments' => $finishedAppointments
+        ];
+
+        // return response()->json($responseData);
+
+        return view('admin.appointment.appointment-view', $responseData);
     }
+
+
+    public function showAppointmentDetail(Appointment $appointment_id) {
+        $appointment = $appointment_id->load(['branch', 'room', 'visitor', 'staff']);
+
+        $roomQuery = Room::where('branch_id', $appointment->branch_id);
+
+        $appointmentStatus = Appointment::$APPOINTMENT_STATUS_TYPE;
+        $appointmentStatusList = [];
+
+        // When Appointment Pending , Show All Free Rooms
+        if ($appointment->status == $appointmentStatus["PENDING"]) {
+            $roomQuery = $roomQuery->where('status', Room::$APPOINTMENT_STATUS_TYPE['VACANT']);
+            $rooms = $roomQuery->get();
+            $appointmentStatusList = [
+                'Pending' => $appointmentStatus["PENDING"],
+                'Arrived' => $appointmentStatus["OCCUPIED"],
+                'Rejected' => $appointmentStatus['REJECTED'],
+            ];
+        }
+
+        // If Appointment is OCCUPIED , REJECT , FINISHED , EXPIRED, Rooms are not valid
+        if ($appointment->status != $appointmentStatus["PENDING"]) {
+            $rooms = [];
+        }
+
+        // If Appointment status is Arrived
+        if ($appointment->status == $appointmentStatus["OCCUPIED"]) {
+            $appointmentStatusList = [
+                'Arrived' => $appointmentStatus["OCCUPIED"],
+                'Finished' => $appointmentStatus["FINISHED"],
+            ];
+        }
+
+        if ($appointment->status == $appointmentStatus["REJECTED"]) {
+            $appointmentStatusList = [
+                'Rejected' => $appointmentStatus["REJECTED"],
+            ];
+        }
+
+        if ($appointment->status == $appointmentStatus["FINISHED"]) {
+            $appointmentStatusList = [
+                'Finished' => $appointmentStatus["FINISHED"],
+            ];
+        }
+
+        $responseData = [
+            'navTitle' => 'Appointment - ID ' . $appointment_id->id,
+            'appointment_id' => $appointment->id,
+            'appointmentStatusList' => $appointmentStatusList,
+            'appointment' => $appointment,
+            'rooms' => $rooms,
+        ];
+
+        // return response()->json($responseData);
+
+        return view('admin.appointment.appointment-detail', $responseData);
+    }
+
+
+    public function submitUpdateAppointment(AdminAppointmentUpdateRequest $request, $appointment_id) {
+        $validated = $request->validated();
+        $appointmentStatus = Appointment::$APPOINTMENT_STATUS_TYPE;
+        $appointment = Appointment::find($appointment_id);
+
+        // return dd(auth()->id());
+
+        // Cancel Process
+        if ( $validated['status'] == $appointmentStatus["REJECTED"] ) {
+           $appointment->fill(['status'=> $validated['status']]);
+           $appointment->save();
+           return back()
+                    ->with('success', 'Successfully Rejected!!');
+        }
+
+        // Pending Change -> Pending Process
+        if ( $validated['status'] == $appointmentStatus["PENDING"] ) {
+            return back()
+                    ->with('error', 'You need to change Pending Status first.')
+                    ->with('pendingError', 'You can choose Arrived or Reject');
+        }
+
+        // Pending -> Occupied Changing Process
+        if ( $validated['status'] == $appointmentStatus['OCCUPIED'] ) {
+
+            // If Old Status is Occupied
+            if ($appointment->status == $validated['status']) {
+                return back()
+                        ->with('roomError', 'Status is already arriving.')
+                        ->with('error', 'You need to change Arrived Status.');
+            }
+
+            if (!isset($validated['room_id'])) {
+                return back()
+                        ->with('roomError', 'You need to wait available room.')
+                        ->with('error', 'You need to wait available room.');
+            }
+
+            DB::beginTransaction();
+            try {
+                $appointment->fill([
+                    'status' => $validated['status'],
+                    'user_id' => auth()->id(),
+                ]);
+                $appointment->save();
+                $room = Room::find($validated['room_id']);
+                $room->status = Room::$APPOINTMENT_STATUS_TYPE['OCCUPIED'];
+                $room->save();
+                DB::commit();
+
+                // SMS send to Officer
+
+                return back()
+                        ->with('success', 'Successfully Update Arrived Status');
+            } catch(QueryException $e) {
+                DB::rollBack();
+                return back()
+                        ->with('error', $e->getMessage());
+            }
+
+        }
+
+        // Occupied -> Finished Changing Process
+        if ( $validated['status'] == $appointmentStatus['FINISHED'] ) {
+            DB::beginTransaction();
+            try {
+                $appointment->fill([
+                    'status' => $validated['status'],
+                    'meeting_leave_time' => Carbon::now(),
+                    'user_id' => auth()->id(),
+                ]);
+                $appointment->save();
+                $room = Room::find($appointment->room_id);
+                $room->status = Room::$APPOINTMENT_STATUS_TYPE['VACANT'];
+                $room->save();
+                DB::commit();
+                return back()
+                        ->with('success', 'Successfully Finished This Appointment');
+            } catch(QueryException $e) {
+                DB::rollBack();
+                return back()
+                        ->with('error', $e->getMessage());
+            }
+
+        }
+
+        return back()->with('success', 'Hello ' . $appointment_id);
+    }
+
 }

@@ -80,7 +80,11 @@
                         <th scope="row">{{ $room->id }}</th>
                         <td>{{ $room->room_name }}</td>
                         <td>{{ $room->branch->branch_name }}</td>
-                        <td>{{ $room->status_name }}</td>
+                        <td
+                            class="
+                                {{ $room->status == 1 ? 'text-success' : ($room->status == 2 ? 'text-danger' : 'text-warning' )}}
+                            "
+                        >{{ $room->status_name }}</td>
                         <td>
                             <a href="{{ route('admin.rooms.room-detail', [ 'id' => $room->id ]) }}" role="button" type="button" class="btn btn-sm btn-primary icon-btn-position"><i class="fa text-white fa-eye"></i></a>
                             <a href="{{ route('admin.rooms.room-edit', [ 'id' => $room->id ]) }}" role="button" type="button" class="btn btn-sm btn-success icon-btn-position"><i class="fa text-white fa-edit"></i></a>
