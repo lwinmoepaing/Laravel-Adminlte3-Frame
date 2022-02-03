@@ -48,7 +48,7 @@
 
         <!-- appointments -->
         <div class="row">
-            @foreach ($todayAppointments as $appointment)
+            @foreach ($todayUpcomingAppointments as $appointment)
                 <div class="col-md-12 mb-2">
                     <a class="card upcoming-section p-3" href="{{ route('admin.appointment.detail', ["appintment_id" => $appointment->id]) }}">
                     <div class="text-center w-10 appointment-time">

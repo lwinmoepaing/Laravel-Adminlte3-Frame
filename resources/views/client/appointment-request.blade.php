@@ -122,6 +122,16 @@
             <div class="row">
                 <div class="col-sm-12 col-md-4">
                     <div class="form-group">
+                        <label for="staff_email">uab Staff Email</label>
+                        <input type="email" class="form-control @error('staff_email') is-invalid @enderror" id="staff_email" name="staff_email" value="{{ old('staff_email') }}">
+                        <div class="invalid-feedback" id="emailError">
+                            Required Staff Email or invalid email or not found
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
                         <label for="staff_branch">Branch</label>
                         <select class="custom-select" id="staff_branch" name="branch">
                             @foreach ($branches as $key => $branch)
@@ -157,15 +167,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-4">
-                    <div class="form-group">
-                        <label for="staff_email">uab Staff Email</label>
-                        <input type="email" class="form-control @error('staff_email') is-invalid @enderror" id="staff_email" name="staff_email" value="{{ old('staff_email') }}">
-                        <div class="invalid-feedback" id="emailError">
-                            Required Staff Email or invalid email or not found
-                        </div>
-                    </div>
-                </div>
+
             </div>
             {{-- Staff Information Finished --}}
 
