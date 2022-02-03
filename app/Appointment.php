@@ -103,7 +103,7 @@ class Appointment extends Model
             return $appointment;
         } catch (QueryException $e){
             DB::rollBack();
-            dd($e->getMessage());
+            // dd($e->getMessage());
             return false;
         }
     }
