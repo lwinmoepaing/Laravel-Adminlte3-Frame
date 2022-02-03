@@ -37,7 +37,7 @@ class ClientViewController extends Controller
         $validated["staff_name"] = $staff->name;
 
         $appModel = new Appointment();
-        $appointment = $appModel->creatAppointment($validated, null);
+        $appointment = $appModel->creatAppointment($validated);
 
         if (!$appointment) {
             return back()->with('error', 'Something went wrong. Try Again');

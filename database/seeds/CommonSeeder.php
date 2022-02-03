@@ -184,7 +184,13 @@ class CommonSeeder extends Seeder
                 "seat_count" => 25,
                 "branch_id" => 1,
                 "area" => "",
-            ]
+            ],
+            [
+                "room_name" => "Chin",
+                "seat_count" => 25,
+                "branch_id" => 1,
+                "area" => "",
+            ],
         ];
 
         $roles = [
