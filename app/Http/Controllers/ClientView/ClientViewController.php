@@ -40,10 +40,10 @@ class ClientViewController extends Controller
         $appointment = $appModel->creatAppointment($validated, null);
 
         if (!$appointment) {
-            return view('errors.something-went-wrong');
+            return back()->with('error', 'Something went wrong. Try Again');
         }
 
-        // Mail::to($appointment->staff_email)->send(new InviteAppointmentMail($appointment));
+        Mail::to($appointment->staff_email)->send(new InviteAppointmentMail($appointment));
 
         return back()->with('success', 'Succesfully Created Your Appointment, We\'ll inform later.');
     }
