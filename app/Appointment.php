@@ -71,7 +71,7 @@ class Appointment extends Model
 
 
     // Create Appoint Method
-    public function creatAppointment($data)
+    public function creatAppointment($data, $status = 1, $created_type = 1)
     {
         DB::beginTransaction();
         try {
@@ -82,10 +82,10 @@ class Appointment extends Model
             $appointment->branch_id = $data['branch'];
             $appointment->department_id = $data['department'];
             $appointment->meeting_time = new DateTime($data['date'] . ' ' . $data['time']);
-            $appointment->status = Appointment::$APPOINTMENT_STATUS_TYPE['PENDING'];
+            $appointment->status = $status;
             $appointment->staff_id = $data["staff_id"];
             $appointment->reason = '';
-            $appointment->create_type = 1;
+            $appointment->create_type = $created_type;
             $appointment->is_approve_by_officer = 0;
             $appointment->is_cancel_by_officer = 0;
             $appointment->save();

@@ -39,14 +39,14 @@
     <div class="container main-wrapper">
         <div class="row">
             <div class="col-md-6 mb-2">
-                <h5 class="mb-0">Upcoming Appointments</h5>
+                <h5 class="mb-2">Upcoming Appointments</h5>
             </div>
             <div class="col-md-6 mb-2">
                 <form class="form-inline mb-2" style="justify-content: flex-end;">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    {{-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-primary btn_min_block my-2 my-sm-0" type="submit">
                         <i class="fa fa-search text-white"></i>
-                    </button>
+                    </button> --}}
                 </form>
             </div>
         </div>

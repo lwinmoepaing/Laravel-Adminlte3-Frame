@@ -34,9 +34,10 @@ class ClientViewController extends Controller
         $staff = Staff::with(['branch'])->where('email', $validated['staff_email'])->first();
         $validated["create_type"] = Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'];
         $validated["staff_id"] = $staff->id;
+        $validated["staff_name"] = $staff->name;
 
         $appModel = new Appointment();
-        $appointment = $appModel->creatAppointment($validated);
+        $appointment = $appModel->creatAppointment($validated, null);
 
         if (!$appointment) {
             return view('errors.something-went-wrong');

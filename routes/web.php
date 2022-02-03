@@ -35,8 +35,10 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
     Route::name('appointment.')->prefix('/appointment')->group(function () {
         // Appointment
         Route::get('/', 'Admin\AdminAppointmentController@showTodayAppointmentList')->name('appointment-view'); // admin.appointment.appointment-view
+        Route::get('/appointment-create', 'Admin\AdminAppointmentController@showCreateForm')->name('appointment-create'); // admin.appointment.appointment-create
+        Route::post('/appointment-create', 'Admin\AdminAppointmentController@submitCreate')->name('appointment-create-submit'); // admin.appointment.appointment-create
         Route::get('/{appointment_id}', 'Admin\AdminAppointmentController@showAppointmentDetail')->name('appointment-detail'); // admin.appointment.appointment-detail
-        Route::post('//appointment_id}', 'Admin\AdminAppointmentController@submitUpdateAppointment')->name('appointment-status-update'); // admin.appointment.appointment-status-update
+        Route::post('/{appointment_id}', 'Admin\AdminAppointmentController@submitUpdateAppointment')->name('appointment-status-update'); // admin.appointment.appointment-status-update
     });
 
 

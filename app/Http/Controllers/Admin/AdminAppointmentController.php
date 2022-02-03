@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Appointment;
+use App\Branch;
+use App\Department;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminAppointmentUpdateRequest;
+use App\Http\Requests\ClientAppointmentRequest;
 use App\Room;
+use App\Staff;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -136,7 +140,6 @@ class AdminAppointmentController extends Controller
         return view('admin.appointment.appointment-view', $responseData);
     }
 
-
     public function showAppointmentDetail(Appointment $appointment_id) {
         $appointment = $appointment_id->load(['branch', 'room', 'visitor', 'staff']);
 
@@ -194,13 +197,31 @@ class AdminAppointmentController extends Controller
         return view('admin.appointment.appointment-detail', $responseData);
     }
 
+    public function showCreateForm(Request $request) {
+        $branches = Branch::with('township')->get();
+        $departments = Department::all();
+
+        $fixedQuery = $request->query('fixed_staff');
+
+        if ($fixedQuery) {
+            $existingStaff = Staff::find($fixedQuery);
+        }
+
+        $responseData = [
+            'branches' => $branches,
+            'departments' => $departments,
+            'existingStaff' => $existingStaff ?? null,
+        ];
+
+        // return response()->json($responseData);
+
+        return view('admin.appointment.appointment-create', $responseData);
+    }
 
     public function submitUpdateAppointment(AdminAppointmentUpdateRequest $request, $appointment_id) {
         $validated = $request->validated();
         $appointmentStatus = Appointment::$APPOINTMENT_STATUS_TYPE;
         $appointment = Appointment::find($appointment_id);
-
-        // return dd(auth()->id());
 
         // Cancel Process
         if ( $validated['status'] == $appointmentStatus["REJECTED"] ) {
@@ -237,6 +258,7 @@ class AdminAppointmentController extends Controller
             try {
                 $appointment->fill([
                     'status' => $validated['status'],
+                    'room_id' => $validated['room_id'],
                     'user_id' => auth()->id(),
                 ]);
                 $appointment->save();
@@ -284,4 +306,25 @@ class AdminAppointmentController extends Controller
         return back()->with('success', 'Hello ' . $appointment_id);
     }
 
+    public function submitCreate(ClientAppointmentRequest $request) {
+        $validated = $request->validated();
+        $staff = Staff::with(['branch'])->where('email', $validated['staff_email'])->first();
+        $validated["create_type"] = Appointment::$APPOINTMENT_CREATE_TYPE['FROM_RECIPIENT'];
+        $validated["staff_id"] = $staff->id;
+        $validated["staff_name"] = $staff->name;
+
+        $appModel = new Appointment();
+        $appointment = $appModel->creatAppointment(
+            $validated,
+            Appointment::$APPOINTMENT_STATUS_TYPE['PENDING'],
+            Appointment::$APPOINTMENT_CREATE_TYPE['FROM_RECIPIENT']
+        );
+
+        if (!$appointment) {
+            return back()->with('error', 'Something Went Wrong');
+        }
+
+        return redirect()->route('admin.appointment.appointment-detail', ['appointment_id' => $appointment->id])
+            ->with('success', 'Successfully Created');
+    }
 }

@@ -41,12 +41,12 @@
         </li>
       </ul>
 
-      <a class="btn btn-primary btn-sm text-white custom-appointment-btn " href="appointment-create.html">Create Appointment</a>
+      <a class="btn btn-primary btn-sm text-white custom-appointment-btn " href="{{ route('admin.appointment.appointment-create') }}">Create Appointment</a>
     </div>
   </div>
 
   <div class="px-3 d-block d-lg-none">
-    <a class="btn btn-primary btn-block my-3 btn-sm text-white " href="appointment-create.html">Create Appointment</a>
+    <a class="btn btn-primary btn-block my-3 btn-sm text-white " href="{{ route('admin.appointment.appointment-create') }}">Create Appointment</a>
   </div>
 
   <div class="container main-wrapper mt-0">
@@ -191,10 +191,12 @@
                                 </b>
                                 <br>
                                 {{ date('A', strtotime($appointment->meeting_time)) }}
-                                <div class="mt-2 d-block py-2 badge badge-primary">
-                                    {{ $appointment->room->room_name}}
-                                </div>
+
                             </span>
+
+                            <div class="mt-2 d-block py-2 badge badge-primary">
+                                {{ $appointment->room->room_name ?? ''}}
+                            </div>
                         </div>
                         <div class="w-100 ml-3">
                             <div class="row">
@@ -258,7 +260,7 @@
                             </span>
 
                             <div class="my-2 d-block py-2 badge badge-primary">
-                                {{ $appointment->room->room_name}}
+                                {{ $appointment->room->room_name ?? '-'}}
                             </div>
 
                             <span class="d-block border p-3 rounded">
