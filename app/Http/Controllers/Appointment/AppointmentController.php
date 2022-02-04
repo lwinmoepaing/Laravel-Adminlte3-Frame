@@ -46,7 +46,7 @@ class AppointmentController extends Controller
         $appointmentId->is_approve_by_officer = 1;
         $appointmentId->save();
         foreach ($appointmentId->visitors as $key => $visitor) {
-            Mail::to($visitor->email)->send(new AcceptInvitationMail($appointmentId));
+            Mail::to($visitor->email)->queue(new AcceptInvitationMail($appointmentId));
         }
         // return response()->json(['message' => 'Successfully Approve this Appointment', 'statusCode' => 200]);
         return redirect()->route('appointment.confirm-view')->with('success', 'Successfully Approve this Appointment');

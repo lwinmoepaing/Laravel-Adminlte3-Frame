@@ -18,6 +18,8 @@ class AcceptInvitationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $appointment;
+
     /**
      * Create a new message instance.
      *
