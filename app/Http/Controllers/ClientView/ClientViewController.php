@@ -7,11 +7,16 @@ use App\Branch;
 use App\Department;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientAppointmentRequest;
+use App\Jobs\SendEmailQueueJob;
 use App\Mail\InviteAppointmentMail;
 use App\Staff;
-use App\User;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Spatie\IcalendarGenerator\Components\Calendar;
+use Spatie\IcalendarGenerator\Components\Event;
 
 class ClientViewController extends Controller
 {
@@ -43,7 +48,12 @@ class ClientViewController extends Controller
             return back()->with('error', 'Something went wrong. Try Again');
         }
 
-        Mail::to($appointment->staff_email)->send(new InviteAppointmentMail($appointment));
+        // $job = new SendEmailQueueJob($appointment, 'inviteMail');
+        // dispatch($job);
+        $mailData = $this->makeEmailContent($appointment);
+        Mail::to($appointment->staff_email)->queue(new InviteAppointmentMail($mailData));
+
+        return response()->json($mailData);
 
         return back()->with('success', 'Succesfully Created Your Appointment, We\'ll inform later.');
     }
@@ -66,5 +76,47 @@ class ClientViewController extends Controller
             'isSuccess' => true,
             'data' => $staff,
         ]);
+    }
+
+    public function showConfirm() {
+        return view('client.appointment-confirm');
+    }
+
+
+    public function makeEmailContent($appointment) {
+        $dateStr = $appointment->meeting_time->format('F d Y H:i');
+        $calendarFormat = Carbon::parse($appointment->meeting_time);
+        // GMT+6:30
+        $calendar = Calendar::create();
+
+        $events = Event::create('Invitation: uab Meeting' . '<A' . str_pad($appointment->id, 6, '0', STR_PAD_LEFT) . '>')
+                    ->startsAt(new DateTime($calendarFormat, new DateTimeZone('Asia/Rangoon')))
+                    ->endsAt(new DateTime($calendarFormat->addHour(1), new DateTimeZone('Asia/Rangoon')))
+                    ->address($appointment->branch->branch_name)
+                    ->organizer('lwinmoepaing.dev@gmail.com', 'uab LwinMoePaing')
+                    ->description($appointment->title . ' - ' . $appointment->visitors[0]->phone . ' <' . $appointment->visitors[0]->email . '> ');
+
+        $ics = $calendar->event($events)->get();
+
+        $extension = '.ics';
+        $file = 'invite';
+
+        file_put_contents($file . $extension,
+            mb_convert_encoding($ics , "UTF-8", "auto")
+        );
+
+        return [
+            'title' => $appointment->title,
+            'start_date' => $dateStr,
+            'end_date' => $dateStr,
+            'request_from' => $appointment->visitors[0]->name . ' (' . $appointment->visitors[0]->email . ')',
+            'to_email' => $appointment->staff_email,
+            'department' => $appointment->department->department_name,
+            'address' => $appointment->branch->branch_address,
+            'id' => $appointment->id,
+            'file' => public_path('/') . $file.$extension,
+            'confirm_url' => route('appointment.client-confirm', ['appointment_id' => $appointment->id, 'is_confirmed' => 'true' ]),
+            'reject_url' => route('appointment.client-confirm', ['appointment_id' => $appointment->id, 'is_confirmed' => 'false' ]),
+        ];
     }
 }

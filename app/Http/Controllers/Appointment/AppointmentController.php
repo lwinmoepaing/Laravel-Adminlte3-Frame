@@ -31,7 +31,12 @@ class AppointmentController extends Controller
             $appointmentId->save();
 
             foreach ($appointmentId->visitors as $key => $visitor) {
-                Mail::to($visitor->email)->send(new RejectInvitationMail($appointmentId));
+
+
+                Mail::to($visitor->email)->queue(new RejectInvitationMail([
+                        'title' => $appointmentId->title,
+                        'id' => $appointmentId->id,
+                    ]));
             }
 
             // return response()->json(['message' => 'Successfully Rejeced this Appointment', 'statusCode' => 200]);
