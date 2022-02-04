@@ -21,11 +21,12 @@ class AppointmentController extends Controller
         $isConfirm = $request->query('is_confirmed') === 'true';
 
         if ($appointmentId->is_approve_by_officer !== 0) {
-            return response()->json(['message' => 'Already Confirm This Appointment', 'statusCode' => 200]);
+            // return response()->json(['message' => 'Already Confirm This Appointment', 'statusCode' => 200]);
+            return redirect()->route('appointment.confirm-view')->with('success', 'Already Confirm This Appointment');
         }
 
         if (!$isConfirm) {
-            $appointmentId->status = Appointment::$APPOINTMENT_STATUS_TYPE['REJECT'];
+            $appointmentId->status = Appointment::$APPOINTMENT_STATUS_TYPE['REJECTED'];
             $appointmentId->is_cancel_by_officer = 1;
             $appointmentId->save();
 
@@ -33,7 +34,8 @@ class AppointmentController extends Controller
                 Mail::to($visitor->email)->send(new RejectInvitationMail($appointmentId));
             }
 
-            return response()->json(['message' => 'Successfully Rejeced this Appointment', 'statusCode' => 200]);
+            // return response()->json(['message' => 'Successfully Rejeced this Appointment', 'statusCode' => 200]);
+            return redirect()->route('appointment.confirm-view')->with('success', 'Successfully Rejeced this Appointment');
         }
 
         $appointmentId->is_approve_by_officer = 1;
@@ -41,6 +43,7 @@ class AppointmentController extends Controller
         foreach ($appointmentId->visitors as $key => $visitor) {
             Mail::to($visitor->email)->send(new AcceptInvitationMail($appointmentId));
         }
-        return response()->json(['message' => 'Successfully Approve this Appointment', 'statusCode' => 200]);
+        // return response()->json(['message' => 'Successfully Approve this Appointment', 'statusCode' => 200]);
+        return redirect()->route('appointment.confirm-view')->with('success', 'Successfully Approve this Appointment');
     }
 }

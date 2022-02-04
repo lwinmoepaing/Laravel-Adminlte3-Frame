@@ -43,8 +43,8 @@
         <span style="display: inline-block; min-width: 120px">Address</span> {{ $address }}
     </p>
 
-    <a style="background-color: #fff; border:solid 1px; border-color:#0078D7;color: #0078D7; text-decoration: none;border-radius:2px; margin-bottom:6px; padding:8px; text-align:center; margin-right:8px; font-size: 12px; margin-top: 8px; display: inline-block;" href="{{route('appointment.checkconfirm', ['appointment_id' => $id, 'is_confirmed' => 'true' ])}}"> Confirm </a>
-    <a style="background-color: #fff; border:solid 1px; border-color:red; color: red; text-decoration: none; border-radius:2px; margin-bottom:6px; padding:8px; text-align:center; margin-right:8px; font-size: 12px; margin-top: 8px; display: inline-block;" href="{{route('appointment.checkconfirm', ['appointment_id' => $id, 'is_confirmed' => 'false' ])}}"> Reject </a>
+    <a style="background-color: #fff; border:solid 1px; border-color:#0078D7;color: #0078D7; text-decoration: none;border-radius:2px; margin-bottom:6px; padding:8px; text-align:center; margin-right:8px; font-size: 12px; margin-top: 8px; display: inline-block;" href="{{route('appointment.client-confirm', ['appointment_id' => $id, 'is_confirmed' => 'true' ])}}"> Confirm </a>
+    <a style="background-color: #fff; border:solid 1px; border-color:red; color: red; text-decoration: none; border-radius:2px; margin-bottom:6px; padding:8px; text-align:center; margin-right:8px; font-size: 12px; margin-top: 8px; display: inline-block;" href="{{route('appointment.client-confirm', ['appointment_id' => $id, 'is_confirmed' => 'false' ])}}"> Reject </a>
 
     @isset($is_back)
         <a href="/"> Back Home </a>

@@ -28,7 +28,6 @@ class AdminAppointmentController extends Controller
 
         $todayRequestAppointmentCount = Appointment::where('status', $pendingStatus)
             ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->where('create_type', Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'])
             ->where('is_approve_by_officer', 0)
             ->count();
 
@@ -78,7 +77,6 @@ class AdminAppointmentController extends Controller
 
         $todayRequestAppointmentCount = Appointment::where('status', $pendingStatus)
             ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->where('create_type', Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'])
             ->where('is_approve_by_officer', 0)
             ->count();
 
@@ -108,7 +106,6 @@ class AdminAppointmentController extends Controller
             ->with(['staff.department', 'branch', 'visitor'])
             ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
             ->where('is_approve_by_officer', 0)
-            ->where('create_type', Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'])
             ->orderBy('id', 'DESC')
             ->get();
 

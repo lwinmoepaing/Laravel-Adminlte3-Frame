@@ -22,6 +22,7 @@ Route::name('appointment.')->prefix('/appointment')->group(function () {
     Route::get('/request', 'ClientView\ClientViewController@index')->name('view');
     Route::post('/request', 'ClientView\ClientViewController@appointSubmit')->name('submit');
     Route::post('/checkemail', 'ClientView\ClientViewController@checkEmail')->name('checkemail');
+    Route::get('/confirm', 'ClientView\ClientViewController@showConfirm')->name('confirm-view');
     Route::get('/confirm/{appointment_id}', 'Appointment\AppointmentController@confirmFromClient')->name('client-confirm');
 });
 
@@ -29,8 +30,6 @@ Route::name('appointment.')->prefix('/appointment')->group(function () {
 Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function () {
     Route::get('/', 'Admin\AdminAppointmentController@showDashboard')->name('index'); // admin.index
     Route::get('/dashboard', 'Admin\AdminController@index')->name('dashboard'); // admin.dashboard
-
-
 
     Route::name('appointment.')->prefix('/appointment')->group(function () {
         // Appointment
