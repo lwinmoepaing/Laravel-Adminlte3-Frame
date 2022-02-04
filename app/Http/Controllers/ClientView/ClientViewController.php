@@ -48,12 +48,8 @@ class ClientViewController extends Controller
             return back()->with('error', 'Something went wrong. Try Again');
         }
 
-        // $job = new SendEmailQueueJob($appointment, 'inviteMail');
-        // dispatch($job);
         $mailData = $this->makeEmailContent($appointment);
         Mail::to($appointment->staff_email)->queue(new InviteAppointmentMail($mailData));
-
-        return response()->json($mailData);
 
         return back()->with('success', 'Succesfully Created Your Appointment, We\'ll inform later.');
     }
