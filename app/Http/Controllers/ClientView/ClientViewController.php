@@ -15,6 +15,7 @@ use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
 
@@ -97,9 +98,10 @@ class ClientViewController extends Controller
         $extension = '.ics';
         $file = 'invite';
 
-        file_put_contents($file . $extension,
-            mb_convert_encoding($ics , "UTF-8", "auto")
-        );
+        Storage::disk('local')->put($file . $extension, mb_convert_encoding($ics , "UTF-8", "auto"));
+
+        // file_put_contents($file . $extension,
+        // );
 
         return [
             'title' => $appointment->title,

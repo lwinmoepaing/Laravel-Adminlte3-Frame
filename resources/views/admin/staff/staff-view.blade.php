@@ -64,6 +64,7 @@
                         <td>{{ $staff->phone }}</td>
                         <td>{{ $staff->branch->branch_name }}</td>
                         <td>
+                            <a href="{{ route('admin.appointment.appointment-create', ['fixed_staff' => $staff->id ]) }}" role="button" type="button" class="btn btn-sm btn-info icon-btn-position"><i class="fa text-white fa-address-book"></i></a>
                             <a href="{{ route('admin.data.staff-detail', ['id' => $staff->id ]) }}" role="button" type="button" class="btn btn-sm btn-primary icon-btn-position"><i class="fa text-white fa-eye"></i></a>
                             <a href="{{ route('admin.data.staff-edit', ['id' => $staff->id ]) }}" role="button" type="button" class="btn btn-sm btn-success icon-btn-position"><i class="fa text-white fa-edit"></i></a>
                             <a href="#!" class="btn btn-sm btn-danger icon-btn-position deleteStaff" data-id="{{$staff->id}}" ><i class="fa text-white fa-trash"></i></a>
