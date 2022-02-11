@@ -25,7 +25,15 @@
             <div class="w-100 p-3">
             <div class="row">
                 <div class="col-md-12">
-                <span class="mb-3">Appointments ID -  {{ $appointment->id }} </span><br>
+                <span class="mb-3">Appointments ID -  {{ $appointment->id }} </span>
+
+                @if ($appointment->status === 1)
+                    <div class="float-right">
+                        <a href="{{ route('admin.appointment.appointment-edit', ["appointment_id" => $appointment->id]) }}"> Edit Appointment </a>
+                    </div>
+                @endif
+
+                <br>
                 <h5 class="my-2">
                     <b>{{ $appointment->title ?? '-'}}</b>
                 </h5>

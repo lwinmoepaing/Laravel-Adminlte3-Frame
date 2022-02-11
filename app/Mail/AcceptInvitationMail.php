@@ -52,7 +52,7 @@ class AcceptInvitationMail extends Mailable
         $ics = $calendar->event($events)->get();
 
         $extension = '.ics';
-        $file = 'invite';
+        $file = public_path() . '/calendars//' . 'invite_accept_' . $this->appointment->id;
 
         file_put_contents($file . $extension,
             mb_convert_encoding($ics , "UTF-8", "auto")
@@ -70,6 +70,6 @@ class AcceptInvitationMail extends Mailable
                 'address' => $this->appointment->branch->branch_address,
                 'id' => $this->appointment->id,
             ])
-            ->attach($file.$extension, ['mime' => 'data:text/calendar;charset=UTF-8;method=REQUEST']);
+            ->attach($file.$extension, ['mime' => 'data:text/calendar;charset=UTF-8;method=REQUEST', 'as' => 'Calendar.ics']);
     }
 }

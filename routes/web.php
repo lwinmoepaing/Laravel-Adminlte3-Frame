@@ -38,6 +38,8 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
         Route::post('/appointment-create', 'Admin\AdminAppointmentController@submitCreate')->name('appointment-create-submit'); // admin.appointment.appointment-create
         Route::get('/{appointment_id}', 'Admin\AdminAppointmentController@showAppointmentDetail')->name('appointment-detail'); // admin.appointment.appointment-detail
         Route::post('/{appointment_id}', 'Admin\AdminAppointmentController@submitUpdateAppointment')->name('appointment-status-update'); // admin.appointment.appointment-status-update
+        Route::get('/appointment-edit/{appointment_id}', 'Admin\AdminAppointmentController@showAppointmentEditDetail')->name('appointment-edit'); // admin.appointment.appointment-edit
+        Route::post('/appointment-edit/{appointment_id}', 'Admin\AdminAppointmentController@submitEdit')->name('appointment-edit-submit'); // admin.appointment.appointment-edit
     });
 
 

@@ -12,7 +12,7 @@
         <nav aria-label="breadcrumb mb-2">
             <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('admin.appointment.appointment-view') }}">Appointments</a></li>
-            <li class="breadcrumb-item active" aria-current="page"> Create </li>
+            <li class="breadcrumb-item active" aria-current="page"> Edit </li>
             </ol>
         </nav>
 
@@ -68,13 +68,13 @@
             <h1> Appointment Request Form </h1>
             <h5> Meeting Information </h5>
 
-            <form action="{{route('admin.appointment.appointment-create-submit')}}" method="POST" id="appoint-form-submit">
+            <form action="{{route('admin.appointment.appointment-edit-submit', ['appointment_id' => $appointment->id])}}" method="POST" id="appoint-form-submit">
                 @csrf
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label for="title">Meeting Title</label>
-                            <input autocomplete="off" type="text" class="form-control @error('title') is-invalid @enderror" id="titleInput" name="title" value="{{ old('title') }}">
+                            <input autocomplete="off" type="text" class="form-control @error('title') is-invalid @enderror" id="titleInput" name="title" value="{{ $appointment->title }}">
                             <div class="invalid-feedback">
                             Required meeting title
                             </div>
@@ -87,7 +87,7 @@
                         <div class="form-group">
                             <label for="title">Select Appointment Date</label>
                             <div class="input-group date"  data-target-input="nearest">
-                                <input readonly name="date" autocomplete="off" type="text" class="form-control datetimepicker-input @error('date') is-invalid @enderror" id="datePicker" data-toggle="datetimepicker" data-target="#datePicker" value="{{ old('date') }}"/>
+                                <input readonly name="date" autocomplete="off" type="text" class="form-control datetimepicker-input @error('date') is-invalid @enderror" id="datePicker" data-toggle="datetimepicker" data-target="#datePicker" value="{{ $appointment->meeting_date }}"/>
                                 <div class="invalid-feedback">
                                     Required appointment date
                                 </div>
@@ -99,7 +99,7 @@
                         <div class="form-group ">
                             <label for="title">Select Time</label>
                             <div class="input-group date "  data-target-input="nearest">
-                                <input readonly name="time" autocomplete="off" type="text" class="form-control datetimepicker-input @error('time') is-invalid @enderror" id="timePicker" data-toggle="datetimepicker" data-target="#timePicker" value="{{ old('time') }}"/>
+                                <input readonly name="time" autocomplete="off" type="text" class="form-control datetimepicker-input @error('time') is-invalid @enderror" id="timePicker" data-toggle="datetimepicker" data-target="#timePicker" value="{{ $appointment->meeting_timer }}"/>
                                 <div class="invalid-feedback">
                                     Required selected time
                                 </div>
@@ -128,7 +128,7 @@
                     <div class="col-sm-12 col-md-4">
                         <div class="form-group">
                             <label for="staff_email">uab Staff Email</label>
-                            <input type="email" class="form-control @error('staff_email') is-invalid @enderror" id="staff_email" name="staff_email" value="{{ $existingStaff && $existingStaff->email ? $existingStaff->email : '' }}">
+                            <input type="email" class="form-control @error('staff_email') is-invalid @enderror" id="staff_email" name="staff_email" value="{{ $appointment->staff_email }}">
                             <div class="invalid-feedback" id="emailError">
                                 Required Staff Email or invalid email or not found
                             </div>
@@ -140,7 +140,7 @@
                             <label for="staff_branch">Branch</label>
                             <select class="custom-select" id="staff_branch" name="branch">
                                 @foreach ($branches as $key => $branch)
-                                <option value="{{ $branch->id }}" {{ old('branch') === $branch->id ? 'selected' : ''}}>{{ $branch->branch_name }} ({{ $branch->township->township_name }})</option>
+                                <option value="{{ $branch->id }}" {{ $appointment->branch_id === $branch->id ? 'selected' : ''}}>{{ $branch->branch_name }} ({{ $branch->township->township_name }})</option>
                                 @endforeach
                             </select>
                             <div class="invalid-feedback">
@@ -154,7 +154,7 @@
                             <label for="staff_department">Department</label>
                             <select class="custom-select" id="staff_department" name="department">
                                 @foreach ($departments as $key => $department)
-                                    <option value="{{ $department->id }}" {{  $existingStaff && $existingStaff->department_id === $department->id ? 'selected' : ''}}>{{ $department->department_name }}</option>
+                                    <option value="{{ $department->id }}">{{ $department->department_name }}</option>
                                 @endforeach
                             </select>
                             <div class="invalid-feedback">
@@ -166,7 +166,7 @@
                     <div class="col-sm-12 col-md-4">
                         <div class="form-group">
                             <label for="staff_name">uab Staff Name</label>
-                            <input autocomplete="off" type="text" class="form-control @error('staff_name') is-invalid @enderror" id="staff_name" name="staff_name" value="{{  $existingStaff && $existingStaff->name ? $existingStaff->name : '' }}">
+                            <input autocomplete="off" type="text" class="form-control @error('staff_name') is-invalid @enderror" id="staff_name" name="staff_name" value="{{ $appointment->staff_name }}">
                             <div class="invalid-feedback">
                                 Required Staff Name
                             </div>
@@ -215,11 +215,17 @@
         $(datePicker).datetimepicker({
             format: 'L',
             minDate: new Date(),
+            viewDate: moment('{{$appointment->meeting_time}}', 'DD/MM/YYYY HH:mm:ss a')
         });
+
         $(timePicker).datetimepicker({
             format: 'LT',
             minDate: new Date(),
         });
+
+        // Set data From laravel
+        $(datePicker).val('{{$appointment->meeting_date}}');
+        $(timePicker).val('{{$appointment->meeting_timer}}');
 
         [datePicker].forEach( function(item) {
             $(item)[0].isContentEditable = false;
@@ -244,8 +250,16 @@
             }
         });
 
+
+
         // Visitor
-        var visitorFormControl = [{
+        var visitorFormControl = [
+        {
+            label: "id",
+            type: "hidden",
+            name: "id",
+        },
+        {
             label: 'Visitor Name',
             type: 'text',
             name: 'name',
@@ -263,10 +277,10 @@
             name: 'email',
         }];
         var defaultVisitor = {id: '', name: '', phone: '', company_name: '', email: '', isTouched: false};
-        var visitorList = [];
+        var visitorList = {!! $appointment->visitors !!};
 
         // Initial Step
-        createVisitor(); // For Default one form
+        buildVisitorList(); // For Default Editing
 
         $(addNewVisitorBtn).click(createVisitor);
 
@@ -354,7 +368,6 @@
             })
         });
 
-
         function createVisitor() {
             var isValid = checkIsValidVisitor();
 
@@ -379,6 +392,12 @@
             var visitorFieldId = 'visitors[' + index +'][' + name + ']';
             var visitorFieldClass = 'visitors_' + index +'_' + name;
             var isIndexZero = index === 0;
+
+            if (name === 'id') {
+                return $('<input>',
+                    {type: type, class: 'form-control d-none' + visitorFieldClass, id: visitorFieldClass, name: visitorFieldId, autocomplete: "off", value: value }
+                );
+            }
 
             var labelHtml = $('<label>', {for: visitorFieldId}).html(isIndexZero ? label : '');
 
@@ -471,12 +490,16 @@
 
         function checkEachValid(key, value) {
             switch (key) {
+                case 'id':
+                    return true;
                 case 'email':
                     return validateEmail(value);
                 case 'isTouched':
                     return true;
                 default:
-                    return value.trim() ? true : false;
+                    return typeof value === 'string' ? (
+                        value && value.trim() ? true : false
+                    ) : true;
             }
         }
 

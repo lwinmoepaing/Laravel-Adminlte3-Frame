@@ -96,12 +96,11 @@ class ClientViewController extends Controller
         $ics = $calendar->event($events)->get();
 
         $extension = '.ics';
-        $file = 'invite';
+        $file = public_path() . '/calendars//' .'invite_' . $appointment->id;
 
-        Storage::disk('local')->put($file . $extension, mb_convert_encoding($ics , "UTF-8", "auto"));
-
-        // file_put_contents($file . $extension,
-        // );
+        file_put_contents($file.$extension,
+            mb_convert_encoding($ics , "UTF-8", "auto")
+        );
 
         return [
             'title' => $appointment->title,
@@ -112,7 +111,7 @@ class ClientViewController extends Controller
             'department' => $appointment->department->department_name,
             'address' => $appointment->branch->branch_address,
             'id' => $appointment->id,
-            'file' => public_path('/') . $file.$extension,
+            'file' => $file.$extension,
             'confirm_url' => route('appointment.client-confirm', ['appointment_id' => $appointment->id, 'is_confirmed' => 'true' ]),
             'reject_url' => route('appointment.client-confirm', ['appointment_id' => $appointment->id, 'is_confirmed' => 'false' ]),
         ];

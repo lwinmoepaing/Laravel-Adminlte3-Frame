@@ -73,7 +73,7 @@
             type: 'email',
             name: 'email',
         }];
-        var defaultVisitor = {id: null, name: '', phone: '', company_name: '', email: '', isTouched: false};
+        var defaultVisitor = {id: '', name: '', phone: '', company_name: '', email: '', isTouched: false};
         var visitorList = [];
 
         // Initial Step
@@ -288,7 +288,8 @@
                 case 'isTouched':
                     return true;
                 default:
-                    return value.trim() ? true : false;
+                    console.log(key, value);
+                    return value && value.trim() ? true : false;
             }
         }
 

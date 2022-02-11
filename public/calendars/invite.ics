@@ -13,7 +13,7 @@ BEGIN:VEVENT
 UID:61fcb6ed14a38
 DTSTAMP;TZID=Asia/Rangoon:20220204T114733
 SUMMARY:Invitation: uab Meeting<A000001>
-DESCRIPTION:TT - 09420059241 <lwinmoepaing.dev@gmail.com> 
+DESCRIPTION:TT - 09420059241 <lwinmoepaing.dev@gmail.com>
 LOCATION:uabTower@ Times City
 ORGANIZER;CN=uab LwinMoePaing:MAILTO:lwinmoepaing.dev@gmail.com
 DTSTART;TZID=Asia/Rangoon:20220204T114700

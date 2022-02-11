@@ -31,6 +31,6 @@ class InviteAppointmentMail extends Mailable
     {
         return $this
             ->view('mails.invitation-email', $this->mailData)
-            ->attach($this->mailData['file'], ['mime' => 'data:text/calendar;charset=UTF-8;method=REQUEST']);
+            ->attach($this->mailData['file'], ['mime' => 'data:text/calendar;charset=UTF-8;method=REQUEST', 'as' => 'Calendar.ics']);
     }
 }

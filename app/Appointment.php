@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
@@ -11,7 +12,10 @@ class Appointment extends Model
 {
     // For Including Json ( For Accerrors)
     protected $appends = [
-        'status_name'
+        'status_name',
+        'create_type_name',
+        'meeting_date',
+        'meeting_timer'
     ];
 
     //
@@ -48,8 +52,10 @@ class Appointment extends Model
         "FROM_ADMIN" => 3,
     ];
 
+
+
     // Custom Attributes For ACCESSORS
-       public function getStatusNameAttribute() {
+    public function getStatusNameAttribute() {
         if ($this->status == $this::$APPOINTMENT_STATUS_TYPE['PENDING']) {
             return "Pending";
         }
@@ -67,6 +73,26 @@ class Appointment extends Model
         }
 
         return "Expired";
+    }
+
+    public function getCreateTypeNameAttribute() {
+        if ($this->create_type == $this::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT']) {
+            return "Client";
+        }
+
+        if ($this->create_type == $this::$APPOINTMENT_CREATE_TYPE['FROM_RECIPIENT']) {
+            return "Staff";
+        }
+
+        return "By Default";
+    }
+
+    public function getMeetingDateAttribute() {
+        return Carbon::parse($this->meeting_time)->format('m/d/Y');
+    }
+
+    public function getMeetingTimerAttribute() {
+        return Carbon::parse($this->meeting_time)->format('g:i A');
     }
 
 
@@ -107,7 +133,6 @@ class Appointment extends Model
             return false;
         }
     }
-
 
     // All Relationships
     public function staff() {
