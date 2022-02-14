@@ -59,7 +59,7 @@ class CommonSeeder extends Seeder
 
         $departments = [
             [
-                "department_name" => "Option",
+                "department_name" => "Unknown",
             ],
             [
                 "department_name" => "Fintech And Digital",
@@ -107,7 +107,7 @@ class CommonSeeder extends Seeder
 
         $staffRoles = [
             [
-                "name" => "Option",
+                "name" => "Unknown",
             ],
             [
                 "name" => "Senior Manager",

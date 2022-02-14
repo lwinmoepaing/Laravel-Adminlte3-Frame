@@ -29,7 +29,7 @@ Route::name('appointment.')->prefix('/appointment')->group(function () {
 // Appoints For AdminDashboard
 Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function () {
     Route::get('/', 'Admin\AdminAppointmentController@showDashboard')->name('index'); // admin.index
-    Route::get('/dashboard', 'Admin\AdminController@index')->name('dashboard'); // admin.dashboard
+    Route::get('/dashboard', 'Admin\AdminAppointmentController@showDashboard')->name('dashboard'); // admin.dashboard
 
     Route::name('appointment.')->prefix('/appointment')->group(function () {
         // Appointment
@@ -54,6 +54,11 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
         Route::delete('/{id}', 'Admin\AdminRoomController@deleteRoom')->name('room-remove');
 
         Route::get('/appointment-view', 'Admin\AdminRoomController@showAppointmentRooms')->name('appointment-view'); // admin.rooms.appointment
+    });
+
+    Route::name('report.')->prefix('/report')->group(function () {
+        // Reports
+        Route::get('/', 'Admin\AdminReportController@showReportDashboard')->name('dashboard');
     });
 
     /**
@@ -99,6 +104,8 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
         Route::get('/city-create', 'Admin\AdminDivisionController@showCreateForm')->name('division-create');
         Route::post('/city-create', 'Admin\AdminDivisionController@submitCreate')->name('division-create-submit');
     });
+
+
 });
 
 

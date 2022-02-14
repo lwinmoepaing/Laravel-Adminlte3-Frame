@@ -41,6 +41,7 @@ class ClientViewController extends Controller
         $validated["create_type"] = Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'];
         $validated["staff_id"] = $staff->id;
         $validated["staff_name"] = $staff->name;
+        $validated["department_id"] = $staff->department_id;
 
         $appModel = new Appointment();
         $appointment = $appModel->creatAppointment($validated);
