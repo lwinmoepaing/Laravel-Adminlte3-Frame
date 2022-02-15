@@ -514,7 +514,7 @@
         function checkIsValidOfficerEmail () {
             var isValid = false;
             var preLoader = $('#officer-loading');
-            var url = "{{ route('appointment.checkemail') }}";
+            var url = "{{ route('appointment.checkStaffEmail') }}";
             var email = $(emailInput).val();
             $(preLoader).removeClass('d-none');
             var csrf = "{{ csrf_token() }}";

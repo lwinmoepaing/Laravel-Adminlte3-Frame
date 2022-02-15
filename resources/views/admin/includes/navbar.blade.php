@@ -49,9 +49,12 @@
                 <li><a href="{{route('admin.data.division')}}"> <i class="fa fa-map-o"></i> City</a></li>
                 </ul>
             </li>
-            {{-- <li>
-                <a><i class="fa fa-bar-chart-o"></i> Reports </a>
-            </li> --}}
+
+
+            <li>
+                <a href="{{route('admin.reports.dashboard')}}"><i class="fa fa-bar-chart-o"></i> Reports </a>
+            </li>
+
             <li>
                 <a
                     href="{{ route('logout') }}"

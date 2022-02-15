@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Appointment;
 use App\Branch;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminRoomFormRequest;
@@ -64,10 +65,19 @@ class AdminRoomController extends Controller
     public function showRoomDetail(Room $id) {
         $room = $id->load(['branch']);
 
-        return view('admin.room.room-detail', [
+        if ($room->status === 2) {
+            $current_appointment = Appointment::where('room_id', $room->id)->latest()->first();
+        }
+
+        $responseData = [
             'navTitle' => 'Room Detail',
             'room' => $room,
-        ]);
+            'current_appointment' => $current_appointment,
+        ];
+
+        // return response()->json($responseData);
+
+        return view('admin.room.room-detail', $responseData);
     }
 
     public function showRoomEditDetail(Room $id) {

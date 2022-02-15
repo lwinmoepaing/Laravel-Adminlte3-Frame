@@ -10,7 +10,7 @@
             <a href="{{ route('admin.index') }}" role="button">Dashboard</a>
           </li>
           <li class="breadcrumb-item active" aria-current="page">
-            <a href="{{ route('admin.rooms.index') }}" role="button">Room</a>
+            <a href="{{ route('admin.rooms.index') }}" role="button">Reports</a>
           </li>
           <li class="breadcrumb-item active" aria-current="page">
             Create

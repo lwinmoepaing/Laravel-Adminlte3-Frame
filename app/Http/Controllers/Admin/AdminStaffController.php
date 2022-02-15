@@ -19,12 +19,20 @@ class AdminStaffController extends Controller
         $staffQuery = Staff::with(['role', 'branch']);
         $queryEmail = $request->query('email');
         $queryPhone = $request->query('phone');
+        $queryName = $request->query('name');
+
         if ($queryEmail) {
             $staffQuery->where('email', $queryEmail);
         }
+
         if ($queryPhone) {
             $staffQuery->where('phone', $queryPhone);
         }
+
+        if ($queryName) {
+            $staffQuery->where('name', 'LIKE', "%{$queryName}%");
+        }
+
         $staffs = $staffQuery->orderBy('id', 'DESC')->paginate(10);
 
         return view('admin.staff.staff-view', [
@@ -32,6 +40,7 @@ class AdminStaffController extends Controller
             'staffs' => $staffs,
             'queryEmail' => $queryEmail,
             'queryPhone' => $queryPhone,
+            'queryName' => $queryName,
         ]);
     }
 

@@ -131,7 +131,9 @@ class AdminAppointmentController extends Controller
             'todayRequestAppointments' => $todayRequestAppointments,
             'todayOccupiedAppointments' => $todayOccupiedAppointments,
             'finishedAppointments' => $finishedAppointments,
-            'showTab' => $request->query('showTab')
+            'showTab' => $request->query('showTab'),
+            'navTitle' => 'Appointments'
+
         ];
 
         // return response()->json($responseData);
@@ -311,7 +313,7 @@ class AdminAppointmentController extends Controller
         $validated["create_type"] = Appointment::$APPOINTMENT_CREATE_TYPE['FROM_RECIPIENT'];
         $validated["staff_id"] = $staff->id;
         $validated["staff_name"] = $staff->name;
-        $validated["department_id"] = $staff->department_id;
+        $validated["department"] = $staff->department_id;
 
         $appModel = new Appointment();
         $appointment = $appModel->creatAppointment(
@@ -361,6 +363,7 @@ class AdminAppointmentController extends Controller
         $allNewVisitorsList = [];
         $exisitingVisitorList = [];
         $removeVisitorList = [];
+
         foreach($validated['visitors'] as $visitor) {
             if (!isset($visitor["id"])) {
                 $allNewVisitorsList[] = $visitor;
@@ -400,11 +403,21 @@ class AdminAppointmentController extends Controller
                 }
             }
 
-
             foreach ($removeVisitorList as $key => $value) {
                 $remVisitor = Visitor::find($value['id']);
                 $remVisitor->delete();
             }
+
+            foreach ($exisitingVisitorList as $key => $item) {
+                $editVisitor = Visitor::find($item['id']);
+                $editVisitor->name = $item['name'] ;
+                $editVisitor->phone = $item['phone'] ;
+                $editVisitor->company_name = $item['company_name'] ;
+                $editVisitor->email = $item['email'];
+                $editVisitor->appointment_id = $appointment->id; // Get Appoint ID after inserted
+                $editVisitor->save();
+            }
+
             DB::commit();
             return redirect()->back()->with('success', 'Successfully Updated');
         } catch (QueryException $e){

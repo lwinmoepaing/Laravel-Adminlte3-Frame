@@ -21,17 +21,22 @@
     <div class="card pt-3 pb-2 px-4 mt-3">
         <form action="" method="GET">
             <div class="row">
-                <div class="col-lg-5 col-sm-12">
+                <div class="col-lg-3 col-sm-12">
                     <div class="form-group">
-                        <input autocomplete="off" placeholder="Search By Email" type="text" class="form-control" id="nameInput" name="email" value="{{ $queryEmail ?? '' }}">
+                        <input autocomplete="off" placeholder="Search By Name" type="text" class="form-control" id="nameInput" name="name" value="{{ $queryName ?? '' }}">
                     </div>
                 </div>
-                <div class="col-lg-5 col-sm-12">
+                <div class="col-lg-3 col-sm-12">
+                    <div class="form-group">
+                        <input autocomplete="off" placeholder="Search By Email" type="text" class="form-control" id="emailInput" name="email" value="{{ $queryEmail ?? '' }}">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-12">
                     <div class="form-group">
                         <input autocomplete="off" placeholder="Search By Phone" type="text" class="form-control" id="phoneInput" name="phone" value="{{ $queryPhone ?? '' }}">
                     </div>
                 </div>
-                <div class="col-lg-2 col-sm-12">
+                <div class="col-lg-3 col-sm-12">
                     <button type="submit" class="btn btn-outline-primary btn-block"> <i class="fa fa-search"></i> Search </button>
                 </div>
             </div>

@@ -10,6 +10,7 @@ use App\Http\Requests\ClientAppointmentRequest;
 use App\Jobs\SendEmailQueueJob;
 use App\Mail\InviteAppointmentMail;
 use App\Staff;
+use App\Visitor;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Http\Request;
@@ -41,7 +42,7 @@ class ClientViewController extends Controller
         $validated["create_type"] = Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'];
         $validated["staff_id"] = $staff->id;
         $validated["staff_name"] = $staff->name;
-        $validated["department_id"] = $staff->department_id;
+        $validated["department"] = $staff->department_id;
 
         $appModel = new Appointment();
         $appointment = $appModel->creatAppointment($validated);
@@ -57,7 +58,7 @@ class ClientViewController extends Controller
     }
 
 
-    public function checkEmail(Request $request) {
+    public function checkStaffEmail(Request $request) {
         $validated = $request->validate([
             'email' => 'email|required'
         ]);
@@ -73,6 +74,30 @@ class ClientViewController extends Controller
         return response()->json([
             'isSuccess' => true,
             'data' => $staff,
+        ]);
+    }
+
+    public function checkVisitor(Request $request) {
+        $validated = $request->validate([
+            'email' => 'string',
+            'phone' => 'string',
+        ]);
+
+        if ($request->email) {
+            $visitor = Visitor::where('email', $request->email)->latest()->first();
+        } else {
+            $visitor = Visitor::where('phone', $request->phone)->latest()->first();
+        }
+
+        if (!$visitor) {
+            return response()->json([
+                'isSuccess' => false
+            ]);
+        }
+
+        return response()->json([
+            'isSuccess' => true,
+            'data' => $visitor,
         ]);
     }
 

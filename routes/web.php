@@ -21,7 +21,8 @@ Route::name('appointment.')->prefix('/appointment')->group(function () {
     Route::get('/', 'ClientView\ClientViewController@index')->name('index');
     Route::get('/request', 'ClientView\ClientViewController@index')->name('view');
     Route::post('/request', 'ClientView\ClientViewController@appointSubmit')->name('submit');
-    Route::post('/checkemail', 'ClientView\ClientViewController@checkEmail')->name('checkemail');
+    Route::post('/check-staff-email', 'ClientView\ClientViewController@checkStaffEmail')->name('checkStaffEmail');
+    Route::post('/check-visitor', 'ClientView\ClientViewController@checkVisitor')->name('checkVisitor');
     Route::get('/confirm', 'ClientView\ClientViewController@showConfirm')->name('confirm-view');
     Route::get('/confirm/{appointment_id}', 'Appointment\AppointmentController@confirmFromClient')->name('client-confirm');
 });
@@ -56,9 +57,10 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
         Route::get('/appointment-view', 'Admin\AdminRoomController@showAppointmentRooms')->name('appointment-view'); // admin.rooms.appointment
     });
 
-    Route::name('report.')->prefix('/report')->group(function () {
+    Route::name('reports.')->prefix('/reports')->group(function () {
         // Reports
         Route::get('/', 'Admin\AdminReportController@showReportDashboard')->name('dashboard');
+        Route::get('/departments', 'Admin\AdminReportController@showDepartmentList')->name('departments');
     });
 
     /**
@@ -90,7 +92,7 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
         Route::get('/branch-create', 'Admin\AdminBranchController@showCreateForm')->name('branch-create');
         Route::post('/branch-create', 'Admin\AdminBranchController@submitCreate')->name('branch-create-submit');
 
-        // Townships
+        // Townships                                                                                                                                                                                                                                                                          
         Route::get('/township', 'Admin\AdminTownshipController@showTownship')->name('township');
         Route::get('/township-edit/{id}', 'Admin\AdminTownshipController@showTownshipEditDetail')->name('township-edit');
         Route::post('/township-edit/{id}', 'Admin\AdminTownshipController@submitEdit')->name('township-edit-submit');

@@ -84,6 +84,16 @@
                     <div> {{ $room->note ?? '-' }} </div>
                 </div>
             </div>
+
+            @isset($current_appointment)
+            <div class="row mb-2">
+                <div class="col-sm-12 col-md-6">
+                    <div>
+                        <a href="{{ route('admin.appointment.appointment-detail', ['appointment_id' => $current_appointment->id]) }}"> Go Current Appointment </a>
+                    </div>
+                </div>
+            </div>
+            @endisset
             <div class="row mb-2">
                 <div class="col-sm-12">
                     <a href="{{ route('admin.rooms.room-edit', ['id' => $room->id ]) }}" role="button" type="button" class="btn btn-block btn-primary icon-btn-position mt-2"><i class="fa text-white fa-edit"></i> Edit Room </a>

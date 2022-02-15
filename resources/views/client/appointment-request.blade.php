@@ -58,12 +58,26 @@
                 </div>
             </div>
         </div>
+
+        <div aria-live="assertive" aria-atomic="true" >
+            <div class="toast" id="visitor_searching_toast" style="position: absolute; top: 10px; right: 10px;" data-autohide="true" data-delay="4000">
+                <div class="toast-header bg-primary text-white">
+                    <strong class="mr-auto text-white">Not Found!!</strong>
+                    <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body" id="warning_text">
+                    Not Found Visitor Search Result
+                </div>
+            </div>
+        </div>
         {{-- Warning Toast For Visitor Informations Finished --}}
 
         <h1> Appointment Request Form </h1>
         <h5> Meeting Information </h5>
 
-        <form action="{{route('appointment.view')}}" method="POST" id="appoint-form-submit">
+        <form  autocomplete="off" action="{{route('appointment.view')}}" method="POST" id="appoint-form-submit">
             @csrf
             <div class="row">
                 <div class="col-sm-12">

@@ -53,7 +53,7 @@
                             card min-130 upcoming-section p-3 border
                             {{ $room->status == 1 ? 'border-success' : ($room->status == 2 ? 'border-danger' : 'border-warning' )}}
                         "
-                    href="#!">
+                    href="{{ route('admin.rooms.room-detail', [ 'id' => $room->id ]) }}">
                         <div class="w-100 ml-3">
                         <div class="row">
                             <div class="col-md-12">
