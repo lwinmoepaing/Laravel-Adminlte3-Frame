@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Appointment;
+use App\Exports\ExportDepartment;
 use App\Http\Controllers\Controller;
 use App\Visitor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminReportController extends Controller
 {
@@ -75,11 +77,14 @@ class AdminReportController extends Controller
 
         $dateQuery = $request->query('date');
         if ($dateQuery) {
-            $appointmentQuery->whereBetween('meeting_time', [$startOfDay, $endOfDay]);
-        } else {
-            $appointmentQuery->whereBetween('meeting_time', [$startOfDay, $endOfDay]);
+            $date = explode(' - ', $dateQuery);
+            if (count($date) > 1) {
+                $startOfDay = Carbon::parse($date[0])->format('Y-m-d H:i:s');
+                $endOfDay = Carbon::parse($date[1])->endOfDay()->format('Y-m-d H:i:s');
+            }
         }
 
+        $appointmentQuery->whereBetween('meeting_time', [$startOfDay, $endOfDay]);
         $appointments = $appointmentQuery->get();
 
         $total_appointments = 0;
@@ -90,13 +95,33 @@ class AdminReportController extends Controller
         $responseData = [
             'appointments' => $appointments,
             'total_appiontments' => $total_appointments,
-            'startOfDay' => $startDayQuery->format('Y-m-d'),
-            'endOfDay' => $endDayQuery->format('Y-m-d'),
+            'startOfDay' => Carbon::parse($startOfDay)->format('Y-m-d'),
+            'endOfDay' => Carbon::parse($endOfDay)->format('Y-m-d'),
             'navTitle' => 'Reports'
         ];
 
         // return response()->json($responseData);
 
         return view('admin.reports.report-department-view', $responseData);
+    }
+
+    public function exportDepartment(Request $request) {
+        $startDayQuery = Carbon::now()->subDays(30)->startOfDay();
+        $endDayQuery = Carbon::now()->endOfDay();
+        $startOfDay = $startDayQuery->format('Y-m-d H:i:s');
+        $endOfDay = $endDayQuery->format('Y-m-d H:i:s');
+
+        $dateQuery = $request->date;
+        if ($dateQuery) {
+            $date = explode(' - ', $dateQuery);
+            if (count($date) > 1) {
+                $startOfDay = Carbon::parse($date[0])->format('Y-m-d H:i:s');
+                $endOfDay = Carbon::parse($date[1])->endOfDay()->format('Y-m-d H:i:s');
+            }
+        }
+
+        $department = new ExportDepartment($startOfDay, $endOfDay);
+        $excelName = 'departments_from_' . Carbon::parse($startOfDay)->format('Y_m_d') . '_to_' . Carbon::parse($endOfDay)->format('Y_m_d') .'.xlsx';
+        return Excel::download($department, $excelName);
     }
 }

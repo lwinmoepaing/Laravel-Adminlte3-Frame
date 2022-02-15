@@ -26,29 +26,36 @@
 
 
         <div class="card pt-3 pb-2 px-4 mt-3">
-            <form action="" method="GET">
-                <div class="row">
+            <div class="row">
+
                     <div class="col-lg-6 col-sm-12">
-                        <div class="form-group">
-                            <input readonly name="date" autocomplete="off" type="text" class="form-control" id="dateRangePicker" value="" placeholder="{{$startOfDay . ' - ' . $endOfDay}}"/>
-                        </div>
+                        <form action="" method="GET" id="SearchForm">
+                            <div class="form-group">
+                                <input readonly name="date" autocomplete="off" type="text" class="form-control" id="dateRangePicker" value="" placeholder="{{$startOfDay . ' - ' . $endOfDay}}"/>
+                            </div>
+                        </form>
                     </div>
+
                     <div class="col-lg-3 col-sm-12">
-                        <button type="submit" class="btn btn-outline-primary btn-block"> <i class="fa fa-search"></i> Search </button>
+                        <button class="btn btn-outline-primary btn-block" id="search-form-btn"> <i class="fa fa-search"></i> Search </button>
                     </div>
+
                     <div class="col-lg-3 col-sm-12">
                         <div class="dropdown">
-                            <button class="btn btn-secondary btn-block dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              Export As
-                            </button>
+                                <button class="btn btn-secondary btn-block dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Export As
+                                </button>
                             <div class="dropdown-menu btn-block" aria-labelledby="dropdownMenu2">
-                                <button class="dropdown-item" type="button">Excel</button>
+                                <form action="{{ route('admin.reports.export-departments') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="date" class="d-none" value="{{$startOfDay . ' - ' . $endOfDay}}">
+                                    <button class="dropdown-item" type="submit">Excel</button>
+                                </form>
                                 <button class="dropdown-item" type="button" id="export-pdf">PDF</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
         </div>
 
         <div class="row">
@@ -95,6 +102,12 @@
                 endDate: moment("{{$endOfDay}}", 'YYYY-MM-DD').endOf('hour'),
                 minDate: moment().subtract(3, 'months').startOf('month'),
                 maxDate: moment().add(1, 'day').endOf('day')
+            });
+
+            var searchFormBtn = $('#search-form-btn');
+            var searchForm = $('#SearchForm');
+            $(searchFormBtn).click(function() {
+                $(searchForm).submit();
             });
         });
     </script>

@@ -61,6 +61,7 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
         // Reports
         Route::get('/', 'Admin\AdminReportController@showReportDashboard')->name('dashboard');
         Route::get('/departments', 'Admin\AdminReportController@showDepartmentList')->name('departments');
+        Route::post('/export-departments', 'Admin\AdminReportController@exportDepartment')->name('export-departments');
     });
 
     /**
