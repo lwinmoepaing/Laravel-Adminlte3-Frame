@@ -71,7 +71,7 @@
                 <div class="card p-3 mt-2 ">
                     <h6 class="mt-2 mb-3">
                         Visitor History List
-                        <a  href="#!" class="float-right">See All</a>
+                        <a  href="{{ route('admin.reports.visitors') }}" class="float-right">See All</a>
                     </h6>
 
                     <table class="table table-striped">

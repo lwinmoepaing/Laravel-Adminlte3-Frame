@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Appointment;
 use App\Exports\ExportDepartment;
+use App\Exports\ExportVisitor;
 use App\Http\Controllers\Controller;
 use App\Visitor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\PDF;
 
 class AdminReportController extends Controller
 {
@@ -79,7 +80,7 @@ class AdminReportController extends Controller
         if ($dateQuery) {
             $date = explode(' - ', $dateQuery);
             if (count($date) > 1) {
-                $startOfDay = Carbon::parse($date[0])->format('Y-m-d H:i:s');
+                $startOfDay = Carbon::parse($date[0])->startOfDay()->format('Y-m-d H:i:s');
                 $endOfDay = Carbon::parse($date[1])->endOfDay()->format('Y-m-d H:i:s');
             }
         }
@@ -115,7 +116,7 @@ class AdminReportController extends Controller
         if ($dateQuery) {
             $date = explode(' - ', $dateQuery);
             if (count($date) > 1) {
-                $startOfDay = Carbon::parse($date[0])->format('Y-m-d H:i:s');
+                $startOfDay = Carbon::parse($date[0])->startOfDay()->format('Y-m-d H:i:s');
                 $endOfDay = Carbon::parse($date[1])->endOfDay()->format('Y-m-d H:i:s');
             }
         }
@@ -123,5 +124,158 @@ class AdminReportController extends Controller
         $department = new ExportDepartment($startOfDay, $endOfDay);
         $excelName = 'departments_from_' . Carbon::parse($startOfDay)->format('Y_m_d') . '_to_' . Carbon::parse($endOfDay)->format('Y_m_d') .'.xlsx';
         return Excel::download($department, $excelName);
+    }
+
+    public function exportDepartmentPDF(Request $request) {
+        $startDayQuery = Carbon::now()->subDays(30)->startOfDay();
+        $endDayQuery = Carbon::now()->endOfDay();
+        $startOfDay = $startDayQuery->format('Y-m-d H:i:s');
+        $endOfDay = $endDayQuery->format('Y-m-d H:i:s');
+
+
+        $appointmentQuery = Appointment::getQuery()
+            ->selectRaw('department_id, department_name, count(appointments.id) as total_appointment_count')
+            ->join('departments', 'departments.id', '=', 'appointments.department_id')
+            ->groupBy('department_id')
+            ->orderByRaw('count(appointments.id) DESC');
+
+        $dateQuery = $request->date;
+        if ($dateQuery) {
+            $date = explode(' - ', $dateQuery);
+            if (count($date) > 1) {
+                $startOfDay = Carbon::parse($date[0])->startOfDay()->format('Y-m-d H:i:s');
+                $endOfDay = Carbon::parse($date[1])->endOfDay()->format('Y-m-d H:i:s');
+            }
+        }
+
+        $appointmentQuery->whereBetween('meeting_time', [$startOfDay, $endOfDay]);
+        $appointments = $appointmentQuery->get();
+
+        $total_appointments = 0;
+        foreach ($appointments as $key => $value) {
+           $total_appointments += $value->total_appointment_count;
+        }
+
+        $responseData = [
+            'appointments' => $appointments,
+            'total_appiontments' => $total_appointments,
+            'startOfDay' => Carbon::parse($startOfDay)->format('Y-m-d'),
+            'endOfDay' => Carbon::parse($endOfDay)->format('Y-m-d'),
+            'navTitle' => 'Reports'
+        ];
+
+        // return response()->json($responseData);
+
+        $pdf = PDF::loadView('admin.reports.pdf-department-view', $responseData);
+        $pdfName = 'departments_from_' . Carbon::parse($startOfDay)->format('Y_m_d') . '_to_' . Carbon::parse($endOfDay)->format('Y_m_d') .'.pdf';
+        return $pdf->download($pdfName);
+    }
+
+    public function showVisitorList(Request $request) {
+
+        $startDayQuery = Carbon::now()->subDays(30)->startOfDay();
+        $endDayQuery = Carbon::now()->endOfDay();
+        $startOfDay = $startDayQuery->format('Y-m-d H:i:s');
+        $endOfDay = $endDayQuery->format('Y-m-d H:i:s');
+
+        $visitorQuery = Visitor::getQuery()
+            ->selectRaw('email, count(visitors.id) as total_appointment_count')
+            ->groupBy('email')
+            ->orderByRaw('count(visitors.id) DESC');
+
+        $dateQuery = $request->query('date');
+        if ($dateQuery) {
+            $date = explode(' - ', $dateQuery);
+            if (count($date) > 1) {
+                $startOfDay = Carbon::parse($date[0])->startOfDay()->format('Y-m-d H:i:s');
+                $endOfDay = Carbon::parse($date[1])->endOfDay()->format('Y-m-d H:i:s');
+            }
+        }
+
+        $visitorQuery->whereBetween('created_at', [$startOfDay, $endOfDay]);
+        $visitors = $visitorQuery->get();
+
+        foreach ($visitors as $key => $value) {
+            $visitor = Visitor::where('email', $value->email)->latest('created_at')->first();
+            $value->company_name = $visitor->company_name;
+            $value->name = $visitor->name;
+            $value->phone = $visitor->phone;
+        };
+
+        $responseData = [
+            'visitors' => $visitors,
+            'startOfDay' => Carbon::parse($startOfDay)->format('Y-m-d'),
+            'endOfDay' => Carbon::parse($endOfDay)->format('Y-m-d'),
+            'navTitle' => 'Reports'
+        ];
+
+        // return response()->json($responseData);
+
+        return view('admin.reports.report-visitor-view', $responseData);
+    }
+
+    public function exportVisitorPDF(Request $request) {
+
+        $startDayQuery = Carbon::now()->subDays(30)->startOfDay();
+        $endDayQuery = Carbon::now()->endOfDay();
+        $startOfDay = $startDayQuery->format('Y-m-d H:i:s');
+        $endOfDay = $endDayQuery->format('Y-m-d H:i:s');
+
+        $visitorQuery = Visitor::getQuery()
+            ->selectRaw('email, count(visitors.id) as total_appointment_count')
+            ->groupBy('email')
+            ->orderByRaw('count(visitors.id) DESC');
+
+        $dateQuery = $request->query('date');
+        if ($dateQuery) {
+            $date = explode(' - ', $dateQuery);
+            if (count($date) > 1) {
+                $startOfDay = Carbon::parse($date[0])->startOfDay()->format('Y-m-d H:i:s');
+                $endOfDay = Carbon::parse($date[1])->endOfDay()->format('Y-m-d H:i:s');
+            }
+        }
+
+        $visitorQuery->whereBetween('created_at', [$startOfDay, $endOfDay]);
+        $visitors = $visitorQuery->get();
+
+        foreach ($visitors as $key => $value) {
+            $visitor = Visitor::where('email', $value->email)->latest('created_at')->first();
+            $value->company_name = $visitor->company_name;
+            $value->name = $visitor->name;
+            $value->phone = $visitor->phone;
+        };
+
+        $responseData = [
+            'visitors' => $visitors,
+            'startOfDay' => Carbon::parse($startOfDay)->format('Y-m-d'),
+            'endOfDay' => Carbon::parse($endOfDay)->format('Y-m-d'),
+            'navTitle' => 'Reports'
+        ];
+
+        // return response()->json($responseData);
+
+        $pdf = PDF::loadView('admin.reports.pdf-visitor-view', $responseData);
+        $pdfName = 'visitors_from_' . Carbon::parse($startOfDay)->format('Y_m_d') . '_to_' . Carbon::parse($endOfDay)->format('Y_m_d') .'.pdf';
+        return $pdf->download($pdfName);
+    }
+
+    public function exportVisitor(Request $request) {
+        $startDayQuery = Carbon::now()->subDays(30)->startOfDay();
+        $endDayQuery = Carbon::now()->endOfDay();
+        $startOfDay = $startDayQuery->format('Y-m-d H:i:s');
+        $endOfDay = $endDayQuery->format('Y-m-d H:i:s');
+
+        $dateQuery = $request->date;
+        if ($dateQuery) {
+            $date = explode(' - ', $dateQuery);
+            if (count($date) > 1) {
+                $startOfDay = Carbon::parse($date[0])->startOfDay()->format('Y-m-d H:i:s');
+                $endOfDay = Carbon::parse($date[1])->endOfDay()->format('Y-m-d H:i:s');
+            }
+        }
+
+        $visitor = new ExportVisitor($startOfDay, $endOfDay);
+        $excelName = 'visitors_from_' . Carbon::parse($startOfDay)->format('Y_m_d') . '_to_' . Carbon::parse($endOfDay)->format('Y_m_d') .'.xlsx';
+        return Excel::download($visitor, $excelName);
     }
 }

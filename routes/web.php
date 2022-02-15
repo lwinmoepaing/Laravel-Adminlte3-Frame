@@ -60,8 +60,16 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
     Route::name('reports.')->prefix('/reports')->group(function () {
         // Reports
         Route::get('/', 'Admin\AdminReportController@showReportDashboard')->name('dashboard');
+
+        // Reports Departments
         Route::get('/departments', 'Admin\AdminReportController@showDepartmentList')->name('departments');
         Route::post('/export-departments', 'Admin\AdminReportController@exportDepartment')->name('export-departments');
+        Route::post('/export-departments-pdf', 'Admin\AdminReportController@exportDepartmentPDF')->name('export-departments-pdf');
+
+        // Reports Visitors
+        Route::get('/visitors', 'Admin\AdminReportController@showVisitorList')->name('visitors');
+        Route::post('/export-visitors', 'Admin\AdminReportController@exportVisitor')->name('export-visitors');
+        Route::post('/export-visitors-pdf', 'Admin\AdminReportController@exportVisitorPDF')->name('export-visitors-pdf');
     });
 
     /**
