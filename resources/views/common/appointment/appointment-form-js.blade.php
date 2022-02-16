@@ -56,14 +56,15 @@
         });
 
         // Visitor
-        var visitorFormControl = [{
-            label: 'Visitor Name',
-            type: 'text',
-            name: 'name',
-        }, {
+        var visitorFormControl = [
+        {
             label: 'Visitor Phone',
             type: 'tel',
             name: 'phone',
+        },{
+            label: 'Visitor Name',
+            type: 'text',
+            name: 'name',
         }, {
             label: 'Company Name',
             type: 'text',
@@ -226,7 +227,7 @@
 
 
             var delHtml = $('<div>', {class: 'input-group-append'}).append(
-                $('<button>', { class: 'btn btn-outline-secondary ', type: 'button', disabled: isIndexZero})
+                $('<button>', { class: 'btn btn-secondary right-radius', type: 'button', disabled: isIndexZero})
                     .html('<i class="fa fa-close"></i>')
                     .click(function () {
                         visitorList = visitorList.filter((data, i) => i !== index );
@@ -236,8 +237,8 @@
             );
 
             var phoneSearchHtml = $('<div>', {class: 'input-group-append'}).append(
-                $('<button>', { class: 'btn btn-outline-secondary ', type: 'button'})
-                    .html('<i class="fa fa-search"></i>')
+                $('<button>', { class: 'btn btn-info right-radius', type: 'button'})
+                    .html('<i class="fa fa-search text-white"></i>')
                     .click(function () {
                         // visitorList = visitorList.filter((data, i) => i !== index );
                         // buildVisitorList();

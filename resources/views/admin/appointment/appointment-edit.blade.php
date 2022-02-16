@@ -260,13 +260,14 @@
             name: "id",
         },
         {
-            label: 'Visitor Name',
-            type: 'text',
-            name: 'name',
-        }, {
             label: 'Visitor Phone',
             type: 'tel',
             name: 'phone',
+        },
+        {
+            label: 'Visitor Name',
+            type: 'text',
+            name: 'name',
         }, {
             label: 'Company Name',
             type: 'text',
@@ -402,7 +403,7 @@
             var labelHtml = $('<label>', {for: visitorFieldId}).html(isIndexZero ? label : '');
 
             var inputHtml = $('<input>',
-                    {type: type, class: 'form-control ' + visitorFieldClass, id: visitorFieldClass, name: visitorFieldId, autocomplete: "off"}
+                    {type: type, class: 'form-control ' + visitorFieldClass, id: visitorFieldClass, name: visitorFieldId, autocomplete: "chrome-off"}
                 )
                 .val(value)
                 .on('keyup', function (event) {
@@ -433,7 +434,7 @@
 
 
             var delHtml = $('<div>', {class: 'input-group-append'}).append(
-                $('<button>', { class: 'btn btn-outline-secondary ', type: 'button', disabled: isIndexZero})
+                $('<button>', { class: 'btn btn-secondary right-radius', type: 'button', disabled: isIndexZero})
                     .html('<i class="fa fa-close"></i>')
                     .click(function () {
                         visitorList = visitorList.filter((data, i) => i !== index );
@@ -442,11 +443,50 @@
 
             );
 
-            var groupList = $('<div>', {class: name === 'email' ? 'input-group' : ''})
+            var groupList = $('<div>', {class: name === 'email' || name === 'phone' ? 'input-group' : ''})
                 .append(inputHtml)
-            if (name === 'email') {groupList.append(delHtml);}
-            groupList.append(invalidHtml);
 
+            var phoneSearchHtml = $('<div>', {class: 'input-group-append'}).append(
+                $('<button>', { class: 'btn btn-info right-radius', type: 'button'})
+                    .html('<i class="fa fa-search text-white"></i>')
+                    .click(function () {
+                        // visitorList = visitorList.filter((data, i) => i !== index );
+                        // buildVisitorList();
+                        var phoneNo = $('#' + visitorFieldClass).val();
+                        if (phoneNo) {
+
+                            $('#visitor-search-loading').removeClass('d-none');
+                            setTimeout( function () {
+                                getVisitorBy({by: 'phone', phone_no: phoneNo }).then(function (res) {
+                                    if (res.isSuccess === true) {
+                                        visitorList[index] = {
+                                            id: visitorList[index].id || '',
+                                            name: res.data.name,
+                                            phone: res.data.phone,
+                                            company_name: res.data.company_name,
+                                            email: res.data.email,
+                                            isTouched: true
+                                        }
+                                        buildVisitorList();
+                                    } else {
+                                        $('#visitor_searching_toast').toast('show');
+                                    }
+                                });
+                            }, 500);
+                        }
+                    })
+
+            );
+
+            if (name === 'phone') {
+                groupList.append(phoneSearchHtml);
+            }
+
+            if (name === 'email') {
+                groupList.append(delHtml);
+            }
+
+            groupList.append(invalidHtml);
 
             var visitorField = $('<div>', {class: "col-sm-6 col-md-3"})
                 .append(
@@ -540,6 +580,47 @@
                 console.log(err);
 
                 return false;
+            });
+        }
+
+        function getVisitorBy (params) {
+            var byPhone = params.by === 'phone' ? true : false;
+            var searchWith = byPhone ? params.phone_no : params.email;
+            var isValid = false;
+            var preLoader = $('#visitor-search-loading');
+            var url = "{{ route('appointment.checkVisitor') }}";
+            $(preLoader).removeClass('d-none');
+            var csrf = "{{ csrf_token() }}";
+            var body = {
+                _token: csrf,
+            };
+
+            if (byPhone) {
+                body.phone = searchWith;
+            } else {
+                body.email = searchWith;
+            }
+
+            console.log('Body', body);
+
+            return axios.post(url, body, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then(function(res) {
+                $(preLoader).addClass('d-none');
+                console.log('Finished Fetching');
+                var response = res.status === 200 ? res.data : null;
+                if (response && response.isSuccess === true) {
+                    return response;
+                } else {
+                    return {isSuccess: false}
+                }
+            }).catch(function(err) {
+                $(preLoader).addClass('d-none');
+                console.log('Finished Fetching');
+                console.log(err);
+                return {isSuccess: false};
             });
 
 

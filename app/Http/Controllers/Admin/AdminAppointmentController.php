@@ -8,6 +8,8 @@ use App\Department;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminAppointmentUpdateRequest;
 use App\Http\Requests\ClientAppointmentRequest;
+use App\Mail\ArriveForClientMail;
+use App\Mail\ArriveForOfficerMail;
 use App\Room;
 use App\Staff;
 use App\Visitor;
@@ -16,6 +18,7 @@ use DateTime;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class AdminAppointmentController extends Controller
 {
@@ -222,7 +225,7 @@ class AdminAppointmentController extends Controller
     public function submitUpdateAppointment(AdminAppointmentUpdateRequest $request, $appointment_id) {
         $validated = $request->validated();
         $appointmentStatus = Appointment::$APPOINTMENT_STATUS_TYPE;
-        $appointment = Appointment::find($appointment_id);
+        $appointment = Appointment::with(['visitors', 'visitor'])->find($appointment_id);
 
         // Cancel Process
         if ( $validated['status'] == $appointmentStatus["REJECTED"] ) {
@@ -269,6 +272,21 @@ class AdminAppointmentController extends Controller
                 DB::commit();
 
                 // SMS send to Officer
+                // Now We change SMS to Mail Service
+                Mail::to($appointment->staff_email)->queue(new ArriveForOfficerMail([
+                    'title' => $appointment->title,
+                    'id' => $appointment->id,
+                    'room' => $room,
+                    'visitor' => $appointment->visitor
+                ]));
+
+                foreach ($appointment->visitors as $key => $visitor) {
+                    Mail::to($visitor->email)->queue(new ArriveForClientMail([
+                        'title' => $appointment->title,
+                        'id' => $appointment->id,
+                        'room' => $room,
+                    ]));
+                }
 
                 return back()
                         ->with('success', 'Successfully Update Arrived Status');
