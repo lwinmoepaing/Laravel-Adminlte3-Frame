@@ -19,7 +19,10 @@
                     <a href="{{ route('admin.reports.dashboard') }}" role="button">Reports</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    <a href="{{ route('admin.reports.departments') }}" role="button">Department List</a>
+                    <a href="{{ route('admin.reports.departments') }}" role="button">Departments</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="#!" role="button">{{ $department->department_name }} </a>
                 </li>
             </ol>
         </nav>
@@ -46,13 +49,13 @@
                                     Export As
                                 </button>
                             <div class="dropdown-menu btn-block" aria-labelledby="dropdownMenu2">
-                                <form action="{{ route('admin.reports.export-departments') }}" method="POST">
+                                <form action="{{ route('admin.reports.export-departments-detail', ['department_id' => $department->id ]) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="date" class="d-none" value="{{$startOfDay . ' - ' . $endOfDay}}">
                                     <button class="dropdown-item" type="submit" id="export-excel">Excel</button>
                                 </form>
 
-                                <form action="{{ route('admin.reports.export-departments-pdf') }}" method="POST">
+                                <form action="{{ route('admin.reports.export-departments-detail-pdf', ['department_id' => $department->id ]) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="date" class="d-none" value="{{$startOfDay . ' - ' . $endOfDay}}">
                                     <button class="dropdown-item" type="submit" id="export-pdf">PDF</button>
@@ -73,20 +76,31 @@
                 <thead>
                     <tr>
                     <th scope="col">No</th>
-                    <th scope="col">Department</th>
-                    <th scope="col" class="text-right">Appointments</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Staff</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Date Time</th>
+                    <th scope="col" class="text-right">Room</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($appointments as $key => $appointment )
                         <tr>
                             <th scope="row">{{ $key + 1 }}</th>
+                            <td>{{ $appointment->title }}</td>
+
                             <td>
-                                <a href="{{ route('admin.reports.departments-detail', ['department_id' => $appointment->department_id]) }}">{{$appointment->department_name}}</a>
+                                {{ $appointment->staff->name }}
+                                <br>
+                                {{ $appointment->staff->phone}}, {{ $appointment->staff->email}}
                             </td>
-                            <td class="text-right">
-                                <b>{{ $appointment->total_appointment_count }}</b>
+                            <td>
+                                {{ $appointment->visitor->name }}   <br>
+                                {{ $appointment->visitor->phone}}, {{ $appointment->visitor->email}}
                             </td>
+
+                            <td>{{ $appointment->request_time }}</td>
+                            <td class="text-right">{{ $appointment->room ? $appointment->room->room_name : '-' }}</td>
                         </tr>
                     @endforeach
                 </tbody>

@@ -24,12 +24,24 @@ class AdminAppointmentController extends Controller
 {
 
     public function showDashboard(Request $request) {
+        $expiredParseDate = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');;
         $startOfDay = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
         $endOfDay = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 
         $pendingStatus = Appointment::$APPOINTMENT_STATUS_TYPE['PENDING'];
         $expiredStatus = Appointment::$APPOINTMENT_STATUS_TYPE['EXPIRED'];
         $arrivedStatus = Appointment::$APPOINTMENT_STATUS_TYPE['OCCUPIED'];
+
+        $searchDate = Carbon::now()->startOfDay()->format('Y/m/d');
+
+        if ($request->query('search_date')) {
+            $requestDate = $request->query('search_date');
+            $parseDate = Carbon::createFromFormat('m/d/Y', $requestDate, 'Asia/Rangoon');
+            $searchDate = $parseDate->format('Y-m-d');
+
+            $startOfDay =  $parseDate->startOfDay()->format('Y-m-d H:i:s');
+            $endOfDay =  $parseDate->endOfDay()->format('Y-m-d H:i:s');
+        }
 
         $todayRequestAppointmentCount = Appointment::where('status', $pendingStatus)
             ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
@@ -47,15 +59,23 @@ class AdminAppointmentController extends Controller
             ->count();
 
         // If Expired Meeting We'll Set Expired Appointment
-        $expiredAppointmentCount = Appointment::where('status', $pendingStatus)->where('meeting_time', '<', $startOfDay)->count();
+        $expiredAppointmentCount = Appointment::where('status', $pendingStatus)->where('meeting_time', '<', $expiredParseDate)->count();
         if ($expiredAppointmentCount >= 1) {
-            Appointment::where('status', $pendingStatus)->where('meeting_time', '<', $startOfDay)->update(['status' => $expiredStatus]);
+            Appointment::where('status', $pendingStatus)->where('meeting_time', '<', $expiredParseDate)->update(['status' => $expiredStatus]);
         }
 
-        $todayUpcomingAppointments = Appointment::where('status', $pendingStatus)
+        $upcomingQuery = Appointment::where('status', $pendingStatus)
             ->with(['staff.department', 'branch', 'visitor'])
             ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->where('is_approve_by_officer', 1)
+            ->where('is_approve_by_officer', 1);
+
+        $queryName = '';
+        if ($request->query('search_name')) {
+            $queryName = $request->query('search_name');
+            $upcomingQuery->where('staff_name', 'LIKE', "%{$queryName}%");
+        }
+
+        $todayUpcomingAppointments = $upcomingQuery
             ->orderBy('id', 'DESC')
             ->get();
 
@@ -65,6 +85,8 @@ class AdminAppointmentController extends Controller
             'expiredAppointmentCount' => $expiredAppointmentCount,
             'occupiedAppointmentCount' => $occupiedAppointmentCount,
             'todayUpcomingAppointments' => $todayUpcomingAppointments,
+            'searchDate' => $searchDate,
+            'queryName' => $queryName
         ];
 
         // return response()->json($responseData);

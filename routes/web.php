@@ -65,6 +65,9 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
         Route::get('/departments', 'Admin\AdminReportController@showDepartmentList')->name('departments');
         Route::post('/export-departments', 'Admin\AdminReportController@exportDepartment')->name('export-departments');
         Route::post('/export-departments-pdf', 'Admin\AdminReportController@exportDepartmentPDF')->name('export-departments-pdf');
+        Route::get('/departments/{department_id}', 'Admin\AdminReportController@showDepartmentDetail')->name('departments-detail');
+        Route::post('/departments/{department_id}', 'Admin\AdminReportController@exportDepartmentDetail')->name('export-departments-detail');
+        Route::post('/departments-pdf/{department_id}', 'Admin\AdminReportController@exportDepartmentDetailPDF')->name('export-departments-detail-pdf');
 
         // Reports Visitors
         Route::get('/visitors', 'Admin\AdminReportController@showVisitorList')->name('visitors');

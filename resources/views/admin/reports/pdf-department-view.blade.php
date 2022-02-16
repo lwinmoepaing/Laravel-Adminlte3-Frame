@@ -14,24 +14,22 @@
 
             <table class="table table-striped">
                 <thead>
-                  <tr>
+                    <tr>
                     <th scope="col">No</th>
-                    <th scope="col">Customer</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Company</th>
+                    <th scope="col">Department</th>
                     <th scope="col" class="text-right">Appointments</th>
-                  </tr>
+                    </tr>
                 </thead>
                 <tbody>
-                    @foreach ($visitors as $key => $visitor )
+                    @foreach ($appointments as $key => $appointment )
                         <tr>
                             <th scope="row">{{ $key + 1 }}</th>
-                            <td>{{ $visitor->name }}</td>
-                            <td>{{ $visitor->phone }}</td>
-                            <td>{{ $visitor->email }}</td>
-                            <td>{{ $visitor->company_name }}</td>
-                            <td class="text-right">{{ $visitor->total_appointment_count }}</td>
+                            <td>
+                                {{$appointment->department_name}}
+                            </td>
+                            <td class="text-right">
+                                <b>{{ $appointment->total_appointment_count }}</b>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

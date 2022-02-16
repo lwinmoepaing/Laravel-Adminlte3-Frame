@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Appointment;
+use App\Department;
 use App\Exports\ExportDepartment;
+use App\Exports\ExportDepartmentDetail;
 use App\Exports\ExportVisitor;
 use App\Http\Controllers\Controller;
 use App\Visitor;
@@ -277,5 +279,101 @@ class AdminReportController extends Controller
         $visitor = new ExportVisitor($startOfDay, $endOfDay);
         $excelName = 'visitors_from_' . Carbon::parse($startOfDay)->format('Y_m_d') . '_to_' . Carbon::parse($endOfDay)->format('Y_m_d') .'.xlsx';
         return Excel::download($visitor, $excelName);
+    }
+
+    public function showDepartmentDetail(Request $request) {
+
+        $startDayQuery = Carbon::now()->subDays(30)->startOfDay();
+        $endDayQuery = Carbon::now()->endOfDay();
+        $startOfDay = $startDayQuery->format('Y-m-d H:i:s');
+        $endOfDay = $endDayQuery->format('Y-m-d H:i:s');
+
+        $dateQuery = $request->query('date');
+        if ($dateQuery) {
+            $date = explode(' - ', $dateQuery);
+            if (count($date) > 1) {
+                $startOfDay = Carbon::parse($date[0])->startOfDay()->format('Y-m-d H:i:s');
+                $endOfDay = Carbon::parse($date[1])->endOfDay()->format('Y-m-d H:i:s');
+            }
+        }
+
+        $department = Department::find($request->department_id);
+
+        $appointments = Appointment::where('department_id', $request->department_id)
+            ->with(['visitor', 'staff', 'room'])
+            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
+            ->get();
+
+        $responseData = [
+            'startOfDay' => Carbon::parse($startOfDay)->format('Y-m-d'),
+            'endOfDay' => Carbon::parse($endOfDay)->format('Y-m-d'),
+            'navTitle' => 'Reports',
+            'appointments' => $appointments,
+            'department' => $department,
+        ];
+
+        // return response()->json($responseData);
+
+        return view('admin.reports.report-department-detail', $responseData);
+    }
+
+    public function exportDepartmentDetail(Request $request) {
+        $startDayQuery = Carbon::now()->subDays(30)->startOfDay();
+        $endDayQuery = Carbon::now()->endOfDay();
+        $startOfDay = $startDayQuery->format('Y-m-d H:i:s');
+        $endOfDay = $endDayQuery->format('Y-m-d H:i:s');
+
+        $dateQuery = $request->date;
+        if ($dateQuery) {
+            $date = explode(' - ', $dateQuery);
+            if (count($date) > 1) {
+                $startOfDay = Carbon::parse($date[0])->startOfDay()->format('Y-m-d H:i:s');
+                $endOfDay = Carbon::parse($date[1])->endOfDay()->format('Y-m-d H:i:s');
+            }
+        }
+
+        $department = Department::find($request->department_id);
+
+        $visitor = new ExportDepartmentDetail($startOfDay, $endOfDay, $department);
+
+        $excelName = $department->department_name . '_from_' . Carbon::parse($startOfDay)->format('Y_m_d') . '_to_' . Carbon::parse($endOfDay)->format('Y_m_d') .'.xlsx';
+        return Excel::download($visitor, $excelName);
+    }
+
+    public function exportDepartmentDetailPDF(Request $request) {
+        $startDayQuery = Carbon::now()->subDays(30)->startOfDay();
+        $endDayQuery = Carbon::now()->endOfDay();
+        $startOfDay = $startDayQuery->format('Y-m-d H:i:s');
+        $endOfDay = $endDayQuery->format('Y-m-d H:i:s');
+
+        $dateQuery = $request->query('date');
+        if ($dateQuery) {
+            $date = explode(' - ', $dateQuery);
+            if (count($date) > 1) {
+                $startOfDay = Carbon::parse($date[0])->startOfDay()->format('Y-m-d H:i:s');
+                $endOfDay = Carbon::parse($date[1])->endOfDay()->format('Y-m-d H:i:s');
+            }
+        }
+
+        $department = Department::find($request->department_id);
+
+        $appointments = Appointment::where('department_id', $request->department_id)
+            ->with(['visitor', 'staff', 'room'])
+            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
+            ->get();
+
+        $responseData = [
+            'startOfDay' => Carbon::parse($startOfDay)->format('Y-m-d'),
+            'endOfDay' => Carbon::parse($endOfDay)->format('Y-m-d'),
+            'navTitle' => 'Reports',
+            'appointments' => $appointments,
+            'department' => $department,
+        ];
+
+        // return response()->json($responseData);
+
+        $pdf = PDF::loadView('admin.reports.pdf-department-detail', $responseData);
+        $pdfName =  $department->department_name . '_from_' . Carbon::parse($startOfDay)->format('Y_m_d') . '_to_' . Carbon::parse($endOfDay)->format('Y_m_d') .'.pdf';
+        return $pdf->download($pdfName);
     }
 }

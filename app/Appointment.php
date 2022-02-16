@@ -15,7 +15,8 @@ class Appointment extends Model
         'status_name',
         'create_type_name',
         'meeting_date',
-        'meeting_timer'
+        'meeting_timer',
+        'request_time',
     ];
 
     //
@@ -93,6 +94,10 @@ class Appointment extends Model
 
     public function getMeetingTimerAttribute() {
         return Carbon::parse($this->meeting_time)->format('g:i A');
+    }
+
+    public function getRequestTimeAttribute() {
+        return Carbon::parse($this->meeting_time)->format('d M Y - g : i A');
     }
 
 

@@ -37,16 +37,17 @@
     </div>
 
     <div class="container main-wrapper">
-        <div class="row">
-            <div class="col-md-6 mb-2">
+        <div class="row justify-content-between">
+            <div class="col-12 col-xl-6 mb-2">
                 <h5 class="mb-2">Upcoming Appointments</h5>
             </div>
-            <div class="col-md-6 mb-2">
-                <form class="form-inline mb-2" style="justify-content: flex-end;">
-                    {{-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-primary btn_min_block my-2 my-sm-0" type="submit">
+            <div class="col-12 col-xl-6 mb-2">
+                <form method="GET" action="" class="mb-2 d-flex">
+                    <input class="form-control datetimepicker-input d-inline-block mr-2" type="text" name="search_date" placeholder="Date" aria-label="Date" data-toggle="datetimepicker" data-target="#datePicker" id="datePicker">
+                    <input class="form-control d-inline-block mr-2" type="text" name="search_name" placeholder="Search" aria-label="Search" value="{{$queryName}}">
+                    <button class="btn btn-primary d-md-block" type="submit">
                         <i class="fa fa-search text-white"></i>
-                    </button> --}}
+                    </button>
                 </form>
             </div>
         </div>
@@ -110,3 +111,17 @@
     </div>
     <!-- /top tiles -->
 @endsection
+
+@push('body-scripts')
+    <script>
+            $(document).ready(function() {
+                var datePicker = $('#datePicker');
+
+                $(datePicker).datetimepicker({
+                    format: 'L',
+                });
+
+                $(datePicker).val(moment('{{$searchDate}}', 'YYYY/MM/DD').format('MM/DD/YYYY'));
+            });
+    </script>
+@endpush
