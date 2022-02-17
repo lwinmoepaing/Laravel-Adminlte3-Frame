@@ -21252,3 +21252,7 @@ body {
   border-bottom-right-radius: 10px !important;
 }
 
+#nprogress {
+  display: none !important;
+}
+

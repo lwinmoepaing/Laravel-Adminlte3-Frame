@@ -376,4 +376,37 @@ class AdminReportController extends Controller
         $pdfName =  $department->department_name . '_from_' . Carbon::parse($startOfDay)->format('Y_m_d') . '_to_' . Carbon::parse($endOfDay)->format('Y_m_d') .'.pdf';
         return $pdf->download($pdfName);
     }
+
+    public function showVisitorDetail(Request $request) {
+
+        $startDayQuery = Carbon::now()->subDays(30)->startOfDay();
+        $endDayQuery = Carbon::now()->endOfDay();
+        $startOfDay = $startDayQuery->format('Y-m-d H:i:s');
+        $endOfDay = $endDayQuery->format('Y-m-d H:i:s');
+
+        $dateQuery = $request->query('date');
+        if ($dateQuery) {
+            $date = explode(' - ', $dateQuery);
+            if (count($date) > 1) {
+                $startOfDay = Carbon::parse($date[0])->startOfDay()->format('Y-m-d H:i:s');
+                $endOfDay = Carbon::parse($date[1])->endOfDay()->format('Y-m-d H:i:s');
+            }
+        }
+
+        $appointments = Visitor::where('email', $request->visitor_email)
+            ->with(['appointment'])
+            ->whereBetween('created_at', [$startOfDay, $endOfDay])
+            ->get();
+
+        $responseData = [
+            'startOfDay' => Carbon::parse($startOfDay)->format('Y-m-d'),
+            'endOfDay' => Carbon::parse($endOfDay)->format('Y-m-d'),
+            'navTitle' => 'Reports',
+            'appointments' => $appointments,
+        ];
+
+        return response()->json($responseData);
+
+        // return view('admin.reports.report-department-detail', $responseData);
+    }
 }

@@ -239,7 +239,7 @@
     min-width: 90px;
 }
 
-.min-w-85{
+.min-w-85 {
     min-width: 85px;
 }
 
@@ -397,4 +397,8 @@
 .right-radius {
     border-top-right-radius: 10px !important;
     border-bottom-right-radius: 10px !important;
+}
+
+#nprogress {
+    display: none !important;
 }

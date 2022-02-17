@@ -73,6 +73,7 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
         Route::get('/visitors', 'Admin\AdminReportController@showVisitorList')->name('visitors');
         Route::post('/export-visitors', 'Admin\AdminReportController@exportVisitor')->name('export-visitors');
         Route::post('/export-visitors-pdf', 'Admin\AdminReportController@exportVisitorPDF')->name('export-visitors-pdf');
+        Route::get('/visitors/{visitor_email}', 'Admin\AdminReportController@showVisitorDetail')->name('visitors-detail');
     });
 
     /**

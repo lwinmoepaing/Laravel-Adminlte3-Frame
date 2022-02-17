@@ -73,6 +73,7 @@ class AdminAppointmentController extends Controller
         if ($request->query('search_name')) {
             $queryName = $request->query('search_name');
             $upcomingQuery->where('staff_name', 'LIKE', "%{$queryName}%");
+            $upcomingQuery->orWhere('visitor_name', 'LIKE', "%{$queryName}%");
         }
 
         $todayUpcomingAppointments = $upcomingQuery
@@ -167,7 +168,7 @@ class AdminAppointmentController extends Controller
     }
 
     public function showAppointmentDetail(Appointment $appointment_id) {
-        $appointment = $appointment_id->load(['branch', 'room', 'visitor', 'staff']);
+        $appointment = $appointment_id->load(['branch', 'room', 'visitor', 'staff', 'create_by_user', 'create_by_officer']);
 
         $roomQuery = Room::where('branch_id', $appointment->branch_id);
 
@@ -285,7 +286,6 @@ class AdminAppointmentController extends Controller
                 $appointment->fill([
                     'status' => $validated['status'],
                     'room_id' => $validated['room_id'],
-                    'user_id' => auth()->id(),
                 ]);
                 $appointment->save();
                 $room = Room::find($validated['room_id']);
@@ -326,8 +326,7 @@ class AdminAppointmentController extends Controller
             try {
                 $appointment->fill([
                     'status' => $validated['status'],
-                    'meeting_leave_time' => Carbon::now(),
-                    'user_id' => auth()->id(),
+                    'meeting_leave_time' => Carbon::now()
                 ]);
                 $appointment->save();
                 $room = Room::find($appointment->room_id);
@@ -354,6 +353,7 @@ class AdminAppointmentController extends Controller
         $validated["staff_id"] = $staff->id;
         $validated["staff_name"] = $staff->name;
         $validated["department"] = $staff->department_id;
+        $validated["create_by_user_id"] = auth()->id();
 
         $appModel = new Appointment();
         $appointment = $appModel->creatAppointment(
@@ -456,6 +456,11 @@ class AdminAppointmentController extends Controller
                 $editVisitor->email = $item['email'];
                 $editVisitor->appointment_id = $appointment->id; // Get Appoint ID after inserted
                 $editVisitor->save();
+
+                if ($key == 0) {
+                    // Index 0 Name To Update Appointment Visitor Name
+                    Appointment::where('id', $appointment->id)->update(['visitor_name'=> $item['name']]);
+                }
             }
 
             DB::commit();

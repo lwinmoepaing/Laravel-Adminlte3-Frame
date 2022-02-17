@@ -666,9 +666,5 @@
             $(timePicker).val('');
         }
     });
-
-    // console.log('AXIOS');
-    // console.log(axios);
-
 </script>
 @endpush

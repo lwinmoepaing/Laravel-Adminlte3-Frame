@@ -50,7 +50,8 @@ class Appointment extends Model
     public static $APPOINTMENT_CREATE_TYPE = [
         "FROM_CLIENT" => 1,
         "FROM_RECIPIENT" => 2,
-        "FROM_ADMIN" => 3,
+        "FROM_OFFICER" => 3,
+        "FROM_ADMIN" => 4,
     ];
 
 
@@ -78,14 +79,18 @@ class Appointment extends Model
 
     public function getCreateTypeNameAttribute() {
         if ($this->create_type == $this::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT']) {
-            return "Client";
+            return "Visitor";
         }
 
         if ($this->create_type == $this::$APPOINTMENT_CREATE_TYPE['FROM_RECIPIENT']) {
             return "Staff";
         }
 
-        return "By Default";
+        if ($this->create_type == $this::$APPOINTMENT_CREATE_TYPE['FROM_OFFICER']) {
+            return "Officer";
+        }
+
+        return "Unknown";
     }
 
     public function getMeetingDateAttribute() {
@@ -113,12 +118,21 @@ class Appointment extends Model
             $appointment->branch_id = $data['branch'];
             $appointment->department_id = $data['department'];
             $appointment->meeting_time = new DateTime($data['date'] . ' ' . $data['time']);
-            $appointment->status = $status;
+            $appointment->status = $status; // Status 1 Pending Appointment
             $appointment->staff_id = $data["staff_id"];
             $appointment->reason = '';
             $appointment->create_type = $created_type;
             $appointment->is_approve_by_officer = 0;
             $appointment->is_cancel_by_officer = 0;
+
+            if (isset($data['create_by_user_id'])) {
+                $appointment->create_by_user_id = $data['create_by_user_id'];
+            }
+
+            if (isset($data['create_by_officer_id'])) {
+                $appointment->create_by_officer_id = $data['create_by_officer_id'];
+            }
+
             $appointment->save();
 
             foreach ($data['visitors'] as $item) {
@@ -130,6 +144,9 @@ class Appointment extends Model
                 $visitor->appointment_id = $appointment->id; // Get Appoint ID after inserted
                 $visitor->save();
             }
+
+            Appointment::where('id', $appointment->id)->update(['visitor_name'=> $data['visitors'][0]['name']]);
+
             DB::commit();
             return $appointment;
         } catch (QueryException $e){
@@ -169,4 +186,13 @@ class Appointment extends Model
         return $this->belongsTo(Room::class);
     }
 
+    public function create_by_officer()
+    {
+        return $this->belongsTo(Staff::class, 'create_by_officer_id', 'id');
+    }
+
+    public function create_by_user()
+    {
+        return $this->belongsTo(User::class, 'create_by_user_id', 'id');
+    }
 }

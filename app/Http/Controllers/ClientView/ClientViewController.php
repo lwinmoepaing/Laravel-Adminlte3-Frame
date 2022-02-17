@@ -45,7 +45,39 @@ class ClientViewController extends Controller
         $validated["department"] = $staff->department_id;
 
         $appModel = new Appointment();
-        $appointment = $appModel->creatAppointment($validated);
+        $appointment = $appModel->creatAppointment(
+            $validated,
+            Appointment::$APPOINTMENT_STATUS_TYPE['PENDING'],
+            Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT']
+        );
+
+        if (!$appointment) {
+            return back()->with('error', 'Something went wrong. Try Again');
+        }
+
+        $mailData = $this->makeEmailContent($appointment);
+        Mail::to($appointment->staff_email)->queue(new InviteAppointmentMail($mailData));
+
+        return back()->with('success', 'Succesfully Created Your Appointment, We\'ll inform later.');
+    }
+
+
+    public function appointSubmitByOfficer(ClientAppointmentRequest $request) {
+
+        $validated = $request->validated();
+        $staff = Staff::with(['branch'])->where('email', $validated['staff_email'])->first();
+        $validated["create_type"] = Appointment::$APPOINTMENT_CREATE_TYPE['FROM_OFFICER'];
+        $validated["staff_id"] = $staff->id;
+        $validated["staff_name"] = $staff->name;
+        $validated["department"] = $staff->department_id;
+        $validated["created_by_officer"] = $staff->id;
+
+        $appModel = new Appointment();
+        $appointment = $appModel->creatAppointment(
+            $validated,
+            Appointment::$APPOINTMENT_STATUS_TYPE['PENDING'],
+            Appointment::$APPOINTMENT_CREATE_TYPE['FROM_OFFICER']
+        );
 
         if (!$appointment) {
             return back()->with('error', 'Something went wrong. Try Again');
