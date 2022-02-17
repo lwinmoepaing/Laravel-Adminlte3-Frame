@@ -50,7 +50,6 @@ class AdminAppointmentController extends Controller
 
         $upcommingAppointmentCount = Appointment::where('status', $pendingStatus)
             ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->where('create_type', Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'])
             ->where('is_approve_by_officer', 1)
             ->count();
 
@@ -103,6 +102,18 @@ class AdminAppointmentController extends Controller
         $arrivedStatus = Appointment::$APPOINTMENT_STATUS_TYPE['OCCUPIED'];
         $finishedStatus = Appointment::$APPOINTMENT_STATUS_TYPE['FINISHED'];
 
+
+        $searchDate = Carbon::now()->startOfDay()->format('Y/m/d');
+
+        if ($request->query('search_date')) {
+            $requestDate = $request->query('search_date');
+            $parseDate = Carbon::createFromFormat('m/d/Y', $requestDate, 'Asia/Rangoon');
+            $searchDate = $parseDate->format('Y-m-d');
+
+            $startOfDay =  $parseDate->startOfDay()->format('Y-m-d H:i:s');
+            $endOfDay =  $parseDate->endOfDay()->format('Y-m-d H:i:s');
+        }
+
         $todayRequestAppointmentCount = Appointment::where('status', $pendingStatus)
             ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
             ->where('is_approve_by_officer', 0)
@@ -110,7 +121,6 @@ class AdminAppointmentController extends Controller
 
         $upcommingAppointmentCount = Appointment::where('status', $pendingStatus)
             ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->where('create_type', Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'])
             ->where('is_approve_by_officer', 1)
             ->count();
 
@@ -126,7 +136,6 @@ class AdminAppointmentController extends Controller
             ->with(['staff.department', 'branch', 'visitor'])
             ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
             ->where('is_approve_by_officer', 1)
-            ->where('create_type', Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'])
             ->orderBy('id', 'DESC')
             ->get();
 
@@ -158,8 +167,8 @@ class AdminAppointmentController extends Controller
             'todayOccupiedAppointments' => $todayOccupiedAppointments,
             'finishedAppointments' => $finishedAppointments,
             'showTab' => $request->query('showTab'),
+            'searchDate' => $searchDate,
             'navTitle' => 'Appointments'
-
         ];
 
         // return response()->json($responseData);

@@ -50,6 +50,17 @@
   </div>
 
   <div class="container main-wrapper mt-0">
+    <div class="row justify-content-end">
+        <div class="col-12 col-md-4 mt-3 mb-0">
+            <form method="GET" action="" class="d-flex">
+                <input class="form-control datetimepicker-input d-inline-block mr-2" type="text" name="search_date" placeholder="Date" aria-label="Date" data-toggle="datetimepicker" data-target="#datePicker" id="datePicker">
+                <button class="btn btn-primary d-md-block" type="submit">
+                    <i class="fa fa-search text-white"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <div class="row">
       <div class="col-12">
         <div class="tab-content" id="myTabContent">
@@ -321,3 +332,17 @@
     </div>
   </div>
 @endsection
+
+@push('body-scripts')
+    <script>
+            $(document).ready(function() {
+                var datePicker = $('#datePicker');
+
+                $(datePicker).datetimepicker({
+                    format: 'L',
+                });
+
+                $(datePicker).val(moment('{{$searchDate}}', 'YYYY/MM/DD').format('MM/DD/YYYY'));
+            });
+    </script>
+@endpush
