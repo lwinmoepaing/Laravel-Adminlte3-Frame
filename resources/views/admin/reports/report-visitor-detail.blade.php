@@ -19,7 +19,10 @@
                     <a href="{{ route('admin.reports.dashboard') }}" role="button">Reports</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    <a href="{{ route('admin.reports.visitors') }}" role="button">Visitor History List</a>
+                    <a href="{{ route('admin.reports.visitors') }}" role="button">Visitors</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="#!" role="button">{{ $visitor_email }} </a>
                 </li>
             </ol>
         </nav>
@@ -46,13 +49,14 @@
                                     Export As
                                 </button>
                             <div class="dropdown-menu btn-block" aria-labelledby="dropdownMenu2">
-                                <form action="{{ route('admin.reports.export-visitors') }}" method="POST">
+                                <form action="{{ route('admin.reports.export-visitors-detail', ['visitor_email' => $visitor_email ]) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="date" class="d-none" value="{{$startOfDay . ' - ' . $endOfDay}}">
                                     <button class="dropdown-item" type="submit" id="export-excel">Excel</button>
                                 </form>
 
-                                <form action="{{ route('admin.reports.export-visitors-pdf') }}" method="POST">
+
+                                <form action="{{ route('admin.reports.export-visitors-detail-pdf', ['visitor_email' => $visitor_email ]) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="date" class="d-none" value="{{$startOfDay . ' - ' . $endOfDay}}">
                                     <button class="dropdown-item" type="submit" id="export-pdf">PDF</button>
@@ -66,32 +70,41 @@
 
         <div class="card p-3 mt-2 ">
             <h6 class="mt-2 mb-3">
-                Visitor History List
+                Visitor History Report
             </h6>
 
             <table class="table table-striped">
                 <thead>
-                  <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Customer</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Company</th>
-                    <th scope="col" class="text-right">Appointments</th>
-                  </tr>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Staff</th>
+                        <th scope="col">Date Time</th>
+                        <th scope="col" class="text-right">Room</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach ($visitors as $key => $visitor )
-                        <a href="">
-                            <tr onclick='window.location="{{ route("admin.reports.visitors-detail", ["visitor_email" => $visitor->email])}}"'>
-                                <th scope="row">{{ $key + 1 }}</th>
-                                <td>{{ $visitor->name }}</td>
-                                <td>{{ $visitor->phone }}</td>
-                                <td>{{ $visitor->email }}</td>
-                                <td>{{ $visitor->company_name }}</td>
-                                <td class="text-right">{{ $visitor->total_appointment_count }}</td>
-                            </tr>
-                        </a>
+                        <tr>
+                            <th scope="row">{{ $key + 1 }}</th>
+                            <td>{{ $visitor->appointment->title }}</td>
+                            <td>
+                                {{ $visitor->name }}
+                                <br />
+                                {{ $visitor->phone}}, {{ $visitor->email}}
+
+                            </td>
+                            <td>
+                                {{ $visitor->appointment->staff->name }}
+                                <br>
+                                {{ $visitor->appointment->staff->phone}}, {{ $visitor->appointment->staff->email}}
+                            </td>
+                            <td>
+                                {{ $visitor->appointment->request_time }}
+                            </td>
+                            <td class="text-right">{{ $visitor->appointment->room ? $visitor->appointment->room->room_name : '-' }}</td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>

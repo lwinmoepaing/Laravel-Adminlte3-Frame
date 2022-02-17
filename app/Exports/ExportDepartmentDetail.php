@@ -55,6 +55,6 @@ class ExportDepartmentDetail implements FromCollection, WithHeadings, Responsabl
 
     public function headings(): array
     {
-        return ["No", "Tilte", "Staff", "Customer", "Date Time", "Room"];
+        return ["No", "Title", "Staff", "Customer", "Date Time", "Room"];
     }
 }

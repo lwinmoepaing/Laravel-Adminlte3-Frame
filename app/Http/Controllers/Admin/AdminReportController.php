@@ -7,6 +7,7 @@ use App\Department;
 use App\Exports\ExportDepartment;
 use App\Exports\ExportDepartmentDetail;
 use App\Exports\ExportVisitor;
+use App\Exports\ExportVisitorDetail;
 use App\Http\Controllers\Controller;
 use App\Visitor;
 use Carbon\Carbon;
@@ -393,8 +394,8 @@ class AdminReportController extends Controller
             }
         }
 
-        $appointments = Visitor::where('email', $request->visitor_email)
-            ->with(['appointment'])
+        $visitors = Visitor::where('email', $request->visitor_email)
+            ->with(['appointment.staff', 'appointment.room'])
             ->whereBetween('created_at', [$startOfDay, $endOfDay])
             ->get();
 
@@ -402,11 +403,68 @@ class AdminReportController extends Controller
             'startOfDay' => Carbon::parse($startOfDay)->format('Y-m-d'),
             'endOfDay' => Carbon::parse($endOfDay)->format('Y-m-d'),
             'navTitle' => 'Reports',
-            'appointments' => $appointments,
+            'visitors' => $visitors,
+            'visitor_email' => $request->visitor_email,
         ];
 
-        return response()->json($responseData);
+        // return response()->json($responseData);
 
-        // return view('admin.reports.report-department-detail', $responseData);
+        return view('admin.reports.report-visitor-detail', $responseData);
     }
+
+    public function exportVisitorDetail(Request $request) {
+        $startDayQuery = Carbon::now()->subDays(30)->startOfDay();
+        $endDayQuery = Carbon::now()->endOfDay();
+        $startOfDay = $startDayQuery->format('Y-m-d H:i:s');
+        $endOfDay = $endDayQuery->format('Y-m-d H:i:s');
+
+        $dateQuery = $request->date;
+        if ($dateQuery) {
+            $date = explode(' - ', $dateQuery);
+            if (count($date) > 1) {
+                $startOfDay = Carbon::parse($date[0])->startOfDay()->format('Y-m-d H:i:s');
+                $endOfDay = Carbon::parse($date[1])->endOfDay()->format('Y-m-d H:i:s');
+            }
+        }
+
+        $visitor = new ExportVisitorDetail($startOfDay, $endOfDay, $request->visitor_email);
+
+        $excelName = $request->visitor_email . '_from_' . Carbon::parse($startOfDay)->format('Y_m_d') . '_to_' . Carbon::parse($endOfDay)->format('Y_m_d') .'.xlsx';
+
+        return Excel::download($visitor, $excelName);
+    }
+
+    public function exportVisitorDetailPDF(Request $request) {
+        $startDayQuery = Carbon::now()->subDays(30)->startOfDay();
+        $endDayQuery = Carbon::now()->endOfDay();
+        $startOfDay = $startDayQuery->format('Y-m-d H:i:s');
+        $endOfDay = $endDayQuery->format('Y-m-d H:i:s');
+
+        $dateQuery = $request->query('date');
+        if ($dateQuery) {
+            $date = explode(' - ', $dateQuery);
+            if (count($date) > 1) {
+                $startOfDay = Carbon::parse($date[0])->startOfDay()->format('Y-m-d H:i:s');
+                $endOfDay = Carbon::parse($date[1])->endOfDay()->format('Y-m-d H:i:s');
+            }
+        }
+
+        $visitors = Visitor::where('email', $request->visitor_email)
+            ->with(['appointment.staff', 'appointment.room'])
+            ->whereBetween('created_at', [$startOfDay, $endOfDay])
+            ->get();
+
+        $responseData = [
+            'startOfDay' => Carbon::parse($startOfDay)->format('Y-m-d'),
+            'endOfDay' => Carbon::parse($endOfDay)->format('Y-m-d'),
+            'navTitle' => 'Reports',
+            'visitors' => $visitors,
+            'visitor_email' => $request->visitor_email,
+        ];
+
+        $pdf = PDF::loadView('admin.reports.pdf-visitor-detail', $responseData);
+        $pdfName =  $request->visitor_email . '_from_' . Carbon::parse($startOfDay)->format('Y_m_d') . '_to_' . Carbon::parse($endOfDay)->format('Y_m_d') .'.pdf';
+        return $pdf->download($pdfName);
+    }
+
 }
