@@ -16,6 +16,7 @@
         var addNewVisitor = $('#addNewVisitorBtn');
         var formSubmit = $('#appoint-form-submit');
         var submitBtn = $('#submitButton');
+        var checkOfficerEmailToFillBtn = $('#checkOfficerEmailToFill');
         var yesterday = moment().subtract(1, "days").format("YYYY-MM-DD");
 
         //  Global Touched
@@ -345,7 +346,7 @@
                 );
         };
 
-        function checkIsValidOfficerEmail () {
+        function checkIsValidOfficerEmail (isShowDetail = false) {
             var isValid = false;
             var preLoader = $('#officer-loading');
             var url = "{{ route('appointment.checkStaffEmail') }}";
@@ -365,7 +366,7 @@
                 console.log('Finished Fetching');
                 var response = res.status === 200 ? res.data : null;
                 if (response && response.isSuccess === true) {
-                    return true;
+                    return isShowDetail ? response : true;
                 }
                 return false;
             }).catch(function(err) {
@@ -460,6 +461,55 @@
         function resetTimepicker() {
             $(timePicker).datetimepicker('destroy');
             $(timePicker).val('');
+        }
+
+        if ($(checkOfficerEmailToFillBtn)) {
+            $(checkOfficerEmailToFillBtn).click(function () {
+
+                var email = $(emailInput).val();
+                if (!email) { return }
+                checkIsValidOfficerEmail(true).then(isValidOfficerEmail => {
+                    if (!isValidOfficerEmail) {
+                        $('#officer_warning_toast').toast('show');
+                        $(emailInput).focus();
+                        $(emailInput).addClass('is-invalid');
+                        return;
+                    }
+
+                    $(staffNameInput).val(isValidOfficerEmail.data.name);
+                    var options = $('#staff_branch ' + ' option');
+                    options
+                        .removeAttr('selected')
+                        .filter('[value=' + isValidOfficerEmail.data.branch_id + ']')
+                        .attr('selected', true)
+                    console.log(options);
+
+                    [staffNameInput, emailInput, departInput].forEach(function (parent) {
+                        var value = $(parent).val().trim();
+                        if (value) {
+                            if ($(parent).hasClass('is-invalid')) {
+                                $(parent).removeClass('is-invalid');
+                            };
+
+                            var isEmail = $(parent).is('input[type="email"]');
+                            if (isEmail) {
+                                if(validateEmail(value)) {
+                                    $(parent).removeClass('is-invalid');
+                                } else {
+                                    if (isTouched) {
+                                        $(parent).addClass('is-invalid');
+                                    }
+                                }
+                            }
+                        } else {
+                            if (isTouched) {
+                                $(parent).addClass('is-invalid');
+                            }
+                        }
+                    });
+
+                });
+            })
         }
     });
 </script>

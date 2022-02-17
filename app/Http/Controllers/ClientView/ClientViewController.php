@@ -8,6 +8,7 @@ use App\Department;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientAppointmentRequest;
 use App\Jobs\SendEmailQueueJob;
+use App\Mail\AcceptInvitationMail;
 use App\Mail\InviteAppointmentMail;
 use App\Staff;
 use App\Visitor;
@@ -34,10 +35,21 @@ class ClientViewController extends Controller
         ]);
     }
 
+    public function showInviteVisitor() {
+        $branches = Branch::with('township')->get();
+        $departments = Department::all();
+
+        return view('client.appointment-request-by-officer', [
+            'branches' => $branches,
+            'departments' => $departments
+        ]);
+    }
+
 
     public function appointSubmit(ClientAppointmentRequest $request) {
 
         $validated = $request->validated();
+
         $staff = Staff::with(['branch'])->where('email', $validated['staff_email'])->first();
         $validated["create_type"] = Appointment::$APPOINTMENT_CREATE_TYPE['FROM_CLIENT'];
         $validated["staff_id"] = $staff->id;
@@ -63,14 +75,15 @@ class ClientViewController extends Controller
 
 
     public function appointSubmitByOfficer(ClientAppointmentRequest $request) {
-
         $validated = $request->validated();
+
         $staff = Staff::with(['branch'])->where('email', $validated['staff_email'])->first();
         $validated["create_type"] = Appointment::$APPOINTMENT_CREATE_TYPE['FROM_OFFICER'];
         $validated["staff_id"] = $staff->id;
         $validated["staff_name"] = $staff->name;
         $validated["department"] = $staff->department_id;
         $validated["created_by_officer"] = $staff->id;
+        $validated["is_approve_by_officer"] = 1;
 
         $appModel = new Appointment();
         $appointment = $appModel->creatAppointment(
@@ -83,8 +96,9 @@ class ClientViewController extends Controller
             return back()->with('error', 'Something went wrong. Try Again');
         }
 
-        $mailData = $this->makeEmailContent($appointment);
-        Mail::to($appointment->staff_email)->queue(new InviteAppointmentMail($mailData));
+        foreach ($validated['visitors'] as $key => $visitor) {
+            Mail::to($visitor['email'])->queue(new AcceptInvitationMail($appointment, true));
+        }
 
         return back()->with('success', 'Succesfully Created Your Appointment, We\'ll inform later.');
     }

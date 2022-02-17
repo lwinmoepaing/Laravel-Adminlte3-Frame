@@ -72,7 +72,7 @@ class AdminRoomController extends Controller
         $responseData = [
             'navTitle' => 'Room Detail',
             'room' => $room,
-            'current_appointment' => $current_appointment,
+            'current_appointment' => $current_appointment ?? null,
         ];
 
         // return response()->json($responseData);

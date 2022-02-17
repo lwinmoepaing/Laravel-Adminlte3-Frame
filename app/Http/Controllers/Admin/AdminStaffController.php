@@ -48,6 +48,8 @@ class AdminStaffController extends Controller
 
         $staffs = $id->load(['role', 'branch', 'department']);
 
+        // return response()->json($staffs);
+
         return view('admin.staff.staff-detail', [
             'navTitle' => 'Staff',
             'staff' => $staffs

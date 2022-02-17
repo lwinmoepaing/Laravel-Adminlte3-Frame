@@ -16,31 +16,31 @@
 <body style="border: 1px solid #dfdfdf; box-sizing: border-box; padding: 10px; margin: 0">
 
     <p style="margin: .5rem 0; color: #090">
-        Invitation Meeting Acceptance. <{{ $to_email }}>
+        Invitation Meeting {{ $isInvite == true ? '' : 'Acceptance' }}. <{{ $to_email }}>
     </p>
 
     <p style="margin: .5rem 0; font-size: 13px;">
-        {{ $title }}
+       <span style="display: inline-block; min-width: 120px">Meeting Title: </span> {{ $title }}
     </p>
 
     <p style="margin: .5rem 0; font-size: 13px;">
-        <span style="display: inline-block; min-width: 120px">Appointment ID</span>  A{{ str_pad($id, 6, '0', STR_PAD_LEFT) }}
+        <span style="display: inline-block; min-width: 120px">Appointment ID: </span>  A{{ str_pad($id, 6, '0', STR_PAD_LEFT) }}
     </p>
 
     <p style="margin: .5rem 0; font-size: 13px;">
-        <span style="display: inline-block; min-width: 120px">When</span>  {{ $start_date }} MM-Time
+        <span style="display: inline-block; min-width: 120px">When: </span>  {{ $start_date }} MM-Time
     </p>
 
     <p style="margin: .5rem 0; font-size: 13px;">
-        <span style="display: inline-block; min-width: 120px">From</span> {{ $request_from }}
+        <span style="display: inline-block; min-width: 120px">{{ $isInvite == true ? 'To' : 'From' }}: </span> {{ $request_from }}
     </p>
 
     <p style="margin: .5rem 0; font-size: 13px;">
-        <span style="display: inline-block; min-width: 120px">Description</span> {{ $title }}
+        <span style="display: inline-block; min-width: 120px">Description: </span> {{ $title }}
     </p>
 
     <p style="margin: .5rem 0; font-size: 13px;">
-        <span style="display: inline-block; min-width: 120px">Address</span> {{ $address }}
+        <span style="display: inline-block; min-width: 120px">Address: </span> {{ $address }}
     </p>
 
     <p style="margin: .5rem 0; font-size: 13px;">

@@ -41,7 +41,10 @@
                 </div>
 
                 <div class="my-3">
-                    <a class="text-primary" href="{{route('appointment.view')}}">Request Appointment</a>
+                    <a class="text-primary" href="{{route('appointment.view')}}">Request Appointment By Visitor</a>
+                </div>
+                <div class="my-3">
+                    <a class="text-primary" href="{{route('appointment.invite-visitor')}}">Invite Appointment to Visitors</a>
                 </div>
 
                 <div class="clearfix"></div>

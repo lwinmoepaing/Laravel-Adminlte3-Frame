@@ -18,16 +18,18 @@ class AcceptInvitationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $appointment;
+    public $appointment, $appointment_title, $isInvite;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Appointment $appointment)
+    public function __construct(Appointment $appointment, $isInvite = false, $appointment_title = 'Acceptance Meeting of your invitation')
     {
         $this->appointment = $appointment;
+        $this->isInvite = $isInvite;
+        $this->appointment_title = $isInvite ? 'uab Invitation' : $appointment_title;
     }
 
     /**
@@ -42,11 +44,11 @@ class AcceptInvitationMail extends Mailable
         // GMT+6:30
         $calendar = Calendar::create();
 
-        $events = Event::create('Acceptance Meeting of your invitation' . '<A' . str_pad($this->appointment->id, 6, '0', STR_PAD_LEFT) . '>')
+        $events = Event::create($this->appointment_title . '<A' . str_pad($this->appointment->id, 6, '0', STR_PAD_LEFT) . '>')
                 ->startsAt(new DateTime($calendarFormat, new DateTimeZone('Asia/Rangoon')))
                 ->endsAt(new DateTime($calendarFormat->addHour(1), new DateTimeZone('Asia/Rangoon')))
                 ->address($this->appointment->branch->branch_name)
-                ->organizer('lwinmoepaing.dev@gmail.com', 'uab LwinMoePaing')
+                ->organizer('lwinmoepaing.dev@gmail.com', 'uab Fintech Organizer')
                 ->description($this->appointment->title . ' - ' . $this->appointment->visitors[0]->phone . ' <' . $this->appointment->visitors[0]->email . '> ');
 
         $ics = $calendar->event($events)->get();
@@ -59,6 +61,8 @@ class AcceptInvitationMail extends Mailable
         );
 
         return $this
+            ->subject($this->appointment_title)
+            ->from(env('MAIL_FROM_ADDRESS', 'admin@uab.com.mm'), 'uab Invitation Appointment')
             ->view('mails.accept-email')
             ->with([
                 'title' => $this->appointment->title,
@@ -69,6 +73,7 @@ class AcceptInvitationMail extends Mailable
                 'department' => $this->appointment->department->department_name,
                 'address' => $this->appointment->branch->branch_address,
                 'id' => $this->appointment->id,
+                'isInvite' => $this->isInvite,
             ])
             ->attach($file.$extension, ['mime' => 'data:text/calendar;charset=UTF-8;method=REQUEST', 'as' => 'Calendar.ics']);
     }

@@ -20,6 +20,8 @@ Route::get('/', 'Auth\LoginController@showloginForm')->name('index');
 Route::name('appointment.')->prefix('/appointment')->group(function () {
     Route::get('/', 'ClientView\ClientViewController@index')->name('index');
     Route::get('/request', 'ClientView\ClientViewController@index')->name('view');
+    Route::get('/invite-visitor', 'ClientView\ClientViewController@showInviteVisitor')->name('invite-visitor');
+    Route::post('/invite-visitor', 'ClientView\ClientViewController@appointSubmitByOfficer')->name('invite-visitor-submit');
     Route::post('/request', 'ClientView\ClientViewController@appointSubmit')->name('submit');
     Route::post('/check-staff-email', 'ClientView\ClientViewController@checkStaffEmail')->name('checkStaffEmail');
     Route::post('/check-visitor', 'ClientView\ClientViewController@checkVisitor')->name('checkVisitor');

@@ -133,6 +133,10 @@ class Appointment extends Model
                 $appointment->create_by_officer_id = $data['create_by_officer_id'];
             }
 
+            if (isset($data['is_approve_by_officer'])) {
+                $appointment->is_approve_by_officer = $data['is_approve_by_officer'];
+            }
+
             $appointment->save();
 
             foreach ($data['visitors'] as $item) {
