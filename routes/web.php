@@ -16,6 +16,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'Auth\LoginController@showloginForm')->name('index');
 
+// Appointment For Uabpay
+Route::name('client.')->prefix('/client')->group(function () {
+    Route::get('dashboard', 'ClientView\ClientMobileController@showDashboard')->name('dashboard');
+    Route::get('join-appointment', 'ClientView\ClientMobileController@showJoinAppointment')->name('join-appointment');
+    Route::get('make-appointment', 'ClientView\ClientMobileController@showMakeAppointment')->name('make-appointment');
+    Route::get('appointments-by-status/{status}', 'ClientView\ClientMobileController@showAppointmentByStatus')->name('appointmens-by-status');
+    Route::get('appointment-detail/{appointment_id}', 'ClientView\ClientMobileController@showAppointmentDetail')->name('appointmen-detail');
+    Route::get('appointment-detail/{appointment_id}/snooze', 'ClientView\ClientMobileController@showSnoozeAppointment')->name('appointmen-snooze');
+});
+
 // Appointment for Client View
 Route::name('appointment.')->prefix('/appointment')->group(function () {
     Route::get('/', 'ClientView\ClientViewController@index')->name('index');

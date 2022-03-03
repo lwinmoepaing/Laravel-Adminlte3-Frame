@@ -376,6 +376,17 @@
     z-index: 9999999;
 }
 
+.uab-headbar-mobile-icon {
+    height: 47px;
+    -o-object-fit: contain;
+    display: block;
+    object-fit: contain;
+    margin-left: 20px;
+    /* padding-top: 12px; */
+    position: relative;
+    top: 26px;
+}
+
 .uab-headbar-icon {
     width: 349px;
     height: 89px;
@@ -394,6 +405,12 @@
     margin-bottom: 20px;
 }
 
+.uab-headbar-mobile-nav {
+    height: 103px;
+    background-color: #6868ac;
+    margin-bottom: 20px;
+}
+
 .right-radius {
     border-top-right-radius: 10px !important;
     border-bottom-right-radius: 10px !important;
@@ -401,4 +418,71 @@
 
 #nprogress {
     display: none !important;
+}
+
+.count-mobile-text {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.left-border-line {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.left-border-line:before {
+    content: "";
+    width: 6px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.left-border-line.line-success:before {
+    background-color: #198754;
+}
+.left-border-line.line-warning:before {
+    background-color: #ffc107;
+}
+.left-border-line.line-secondary:before {
+    background-color: #707070;
+}
+
+.text-default {
+    color: rgba(51, 51, 51, 0.5);
+}
+
+.fontsize-12 {
+    font-size: 12px !important;
+}
+
+.uab-icon-small {
+    width: auto;
+    height: 21px;
+    image-rendering: -webkit-optimize-contrast;
+}
+
+.card.active {
+    border: 1px solid #6868ac;
+}
+
+.card.isLink {
+    cursor: pointer;
+}
+
+.border-none {
+    border: none !important;
+}
+
+.h-50-helper {
+    height: 50px !important;
+}
+
+.placehoder-color::placeholder {
+    color: rgba(51, 51, 51, 0.2);
 }

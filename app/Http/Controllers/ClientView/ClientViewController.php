@@ -151,7 +151,6 @@ class ClientViewController extends Controller
         return view('client.appointment-confirm');
     }
 
-
     public function makeEmailContent($appointment) {
         $dateStr = $appointment->meeting_time->format('F d Y H:i');
         $calendarFormat = Carbon::parse($appointment->meeting_time);
