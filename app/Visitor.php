@@ -8,15 +8,13 @@ class Visitor extends Model
 {
     //
     protected $fillable = [
-        'appointment_id',
         'name',
         'phone',
         'company_name',
         'email',
     ];
 
-    public function appointment()
-    {
-        return $this->belongsTo(Appointment::class);
+    public function appointments() {
+        return $this->morphToMany(Appointment::class, 'appointmentable')->withPivot(['is_organizer']);
     }
 }

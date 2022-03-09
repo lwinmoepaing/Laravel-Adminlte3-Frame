@@ -31,4 +31,8 @@ class Staff extends Model
     public function role() {
         return $this->belongsTo(StaffRole::class, 'staff_role_id');
     }
+
+    public function appointments() {
+        return $this->morphToMany(Appointment::class, 'appointmentable')->withPivot(['is_organizer']);
+    }
 }

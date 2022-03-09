@@ -113,43 +113,24 @@ class Appointment extends Model
         try {
             $appointment = new Appointment();
             $appointment->title = $data['title'];
-            $appointment->staff_name = $data['staff_name'];
-            $appointment->staff_email = $data['staff_email'];
+            $appointment->organizer_name = $data['organizer_name'];
+            $appointment->readable_id = $data['organizer_name'];
             $appointment->branch_id = $data['branch'];
             $appointment->department_id = $data['department'];
-            $appointment->meeting_time = new DateTime($data['date'] . ' ' . $data['time']);
+            $appointment->meeting_request_time = new DateTime($data['date'] . ' ' . $data['time']);
             $appointment->status = $status; // Status 1 Pending Appointment
-            $appointment->staff_id = $data["staff_id"];
-            $appointment->reason = '';
             $appointment->create_type = $created_type;
-            $appointment->is_approve_by_officer = 0;
-            $appointment->is_cancel_by_officer = 0;
-
-            if (isset($data['create_by_user_id'])) {
-                $appointment->create_by_user_id = $data['create_by_user_id'];
-            }
-
-            if (isset($data['create_by_officer_id'])) {
-                $appointment->create_by_officer_id = $data['create_by_officer_id'];
-            }
-
-            if (isset($data['is_approve_by_officer'])) {
-                $appointment->is_approve_by_officer = $data['is_approve_by_officer'];
-            }
-
             $appointment->save();
 
-            foreach ($data['visitors'] as $item) {
-                $visitor = new Visitor();
-                $visitor->name = $item['name'] ;
-                $visitor->phone = $item['phone'] ;
-                $visitor->company_name = $item['company_name'] ;
-                $visitor->email = $item['email'];
-                $visitor->appointment_id = $appointment->id; // Get Appoint ID after inserted
-                $visitor->save();
-            }
-
-            Appointment::where('id', $appointment->id)->update(['visitor_name'=> $data['visitors'][0]['name']]);
+            // foreach ($data['visitors'] as $item) {
+            //     $visitor = new Visitor();
+            //     $visitor->name = $item['name'] ;
+            //     $visitor->phone = $item['phone'] ;
+            //     $visitor->company_name = $item['company_name'] ;
+            //     $visitor->email = $item['email'];
+            //     $visitor->appointment_id = $appointment->id; // Get Appoint ID after inserted
+            //     $visitor->save();
+            // }
 
             DB::commit();
             return $appointment;
@@ -161,13 +142,14 @@ class Appointment extends Model
     }
 
     // All Relationships
-    public function staff() {
-        return $this->belongsTo(Staff::class);
+    public function staffs()
+    {
+        return $this->morphedByMany(Staff::class, 'appointmentable');
     }
 
     public function visitors()
     {
-        return $this->hasMany(Visitor::class);
+        return $this->morphedByMany(Visitor::class, 'appointmentable');
     }
 
     public function department()
@@ -188,15 +170,5 @@ class Appointment extends Model
     public function room()
     {
         return $this->belongsTo(Room::class);
-    }
-
-    public function create_by_officer()
-    {
-        return $this->belongsTo(Staff::class, 'create_by_officer_id', 'id');
-    }
-
-    public function create_by_user()
-    {
-        return $this->belongsTo(User::class, 'create_by_user_id', 'id');
     }
 }

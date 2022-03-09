@@ -6,6 +6,7 @@ use App\Appointment;
 use App\Http\Controllers\Controller;
 use App\Mail\AcceptInvitationMail;
 use App\Mail\RejectInvitationMail;
+use App\Services\AppointmentService;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -16,12 +17,16 @@ class AppointmentController extends Controller
 {
     //
 
+    public function __construct()
+    {
+        $this->appointmentService = new AppointmentService();
+    }
+
     public function confirmFromClient(Request $request, Appointment $appointmentId)
     {
         $isConfirm = $request->query('is_confirmed') === 'true';
 
         if ($appointmentId->is_approve_by_officer !== 0) {
-            // return response()->json(['message' => 'Already Confirm This Appointment', 'statusCode' => 200]);
             return redirect()->route('appointment.confirm-view')->with('success', 'Already Confirm This Appointment');
         }
 
@@ -37,7 +42,6 @@ class AppointmentController extends Controller
                 ]));
             }
 
-            // return response()->json(['message' => 'Successfully Rejeced this Appointment', 'statusCode' => 200]);
             return redirect()->route('appointment.confirm-view')->with('success', 'Successfully Rejeced this Appointment');
         }
 

@@ -16,10 +16,10 @@ class CreateVisitorsTable extends Migration
         Schema::create('visitors', function (Blueprint $table) {
             $table->id();
             $table->text('name');
+            $table->text('email');
             $table->string('phone', 100)->index('visitor_phone_index');
             $table->text('company_name');
-            $table->text('email');
-            $table->foreignId('appointment_id')->constrained();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
