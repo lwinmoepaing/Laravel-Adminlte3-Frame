@@ -14,10 +14,13 @@ class CreateAppointmentablesTable extends Migration
     public function up()
     {
         Schema::create('appointmentables', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->foreignId('appointment_id')->constrained();
             $table->integer('appointmentable_id')->unsigned();
-            $table->text('appointmentable_type')->unsigned();
-            $table->boolean('is_organizer')->default(0);
+            $table->text('appointmentable_type');
+            $table->tinyInteger('is_organizer');
+            $table->foreignId('department_id')->nullable()->constrained();
+            $table->integer('status')->default(1); // 1 => Pending, 2 => Going, 3 => Snooze
             $table->timestamps();
         });
     }

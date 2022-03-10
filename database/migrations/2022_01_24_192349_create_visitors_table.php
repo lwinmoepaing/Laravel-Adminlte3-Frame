@@ -18,7 +18,7 @@ class CreateVisitorsTable extends Migration
             $table->text('name');
             $table->text('email');
             $table->string('phone', 100)->index('visitor_phone_index');
-            $table->text('company_name');
+            $table->text('company_name')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

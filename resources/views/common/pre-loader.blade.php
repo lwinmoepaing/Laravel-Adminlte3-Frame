@@ -15,3 +15,21 @@
         </div>
     </div>
 </div>
+
+<div class="pre-loading d-none" id="search-loading">
+    <div class="wrap-loading">
+        <div class="loading">
+            <div class="bounceball"></div>
+            <div class="text">Searching</div>
+        </div>
+    </div>
+</div>
+
+<div class="pre-loading d-none" id="loading">
+    <div class="wrap-loading">
+        <div class="loading">
+            <div class="bounceball"></div>
+            <div class="text">Loading</div>
+        </div>
+    </div>
+</div>

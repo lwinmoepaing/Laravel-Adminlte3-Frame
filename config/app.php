@@ -232,6 +232,7 @@ return [
         // Custom Aliases
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Helper' => App\Helper\Helper::class
     ],
 
 ];

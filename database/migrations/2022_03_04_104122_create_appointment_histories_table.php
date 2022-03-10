@@ -25,7 +25,7 @@ class CreateAppointmentHistoriesTable extends Migration
             $table->id();
             $table->foreignId('appointment_id')->constrained();
             $table->text('message');
-            $table->text('appoint_history_type')->default($this->HistoryTypes[0]);
+            $table->text('appointment_history_type')->nullable(false);
             $table->longText('history_data');
             $table->timestamps();
         });

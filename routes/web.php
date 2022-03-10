@@ -20,9 +20,13 @@ Route::get('/', 'Auth\LoginController@showloginForm')->name('index');
 Route::name('client.')->prefix('/client')->group(function () {
     Route::get('dashboard', 'ClientView\ClientMobileController@showDashboard')->name('dashboard');
     Route::get('join-appointment', 'ClientView\ClientMobileController@showJoinAppointment')->name('join-appointment');
+
     Route::get('make-appointment', 'ClientView\ClientMobileController@showMakeAppointment')->name('make-appointment');
+    Route::post('make-appointment', 'ClientView\ClientMobileController@appointmentSubmitFromUabpay')->name('make-appointment-submit');
+
     Route::get('appointments-by-status/{status}', 'ClientView\ClientMobileController@showAppointmentByStatus')->name('appointmens-by-status');
     Route::get('appointment-detail/{appointment_id}', 'ClientView\ClientMobileController@showAppointmentDetail')->name('appointmen-detail');
+    Route::post('appointment-detail/{appointment_id}', 'ClientView\ClientMobileController@updateAttendanceStatus')->name('appointmen-detail-update-status');
     Route::get('appointment-detail/{appointment_id}/snooze', 'ClientView\ClientMobileController@showSnoozeAppointment')->name('appointmen-snooze');
 });
 
@@ -137,5 +141,8 @@ Route::name('admin.')->middleware(['auth'])->prefix('/admin')->group(function ()
 
 });
 
+Route::name('common.')->prefix('/common')->group(function () {
+    Route::post('/check-invite-member', 'ClientView\ClientMobileController@checkInvitorWithPhone')->name('check-invite-member');
+});
 
 Auth::routes();

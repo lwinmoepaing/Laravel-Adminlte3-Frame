@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Service\AppointmentService;
 
 class Staff extends Model
 {
@@ -20,6 +21,27 @@ class Staff extends Model
         'deleted_at',
     ];
 
+    protected $appends = [
+        'type',
+        'status_name',
+    ];
+
+    // All Accessors
+    public function getTypeAttribute() {
+        return "staff";
+    }
+
+    public function getStatusNameAttribute() {
+        $appointmentService = new AppointmentService();
+
+        if (isset($this->pivot->status)) {
+            return $appointmentService->getAppointmentStatusName($this->pivot->status);
+        }
+        return '';
+    }
+
+
+    // All Relationships
     public function branch() {
         return $this->belongsTo(Branch::class);
     }
@@ -33,6 +55,8 @@ class Staff extends Model
     }
 
     public function appointments() {
-        return $this->morphToMany(Appointment::class, 'appointmentable')->withPivot(['is_organizer']);
+        return $this
+        ->morphToMany(Appointment::class, 'appointmentable')
+        ->withPivot(['is_organizer', 'status', 'department_id', 'status_name']);
     }
 }

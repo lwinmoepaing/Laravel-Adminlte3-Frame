@@ -144,12 +144,12 @@ class Appointment extends Model
     // All Relationships
     public function staffs()
     {
-        return $this->morphedByMany(Staff::class, 'appointmentable');
+        return $this->morphedByMany(Staff::class, 'appointmentable')->withPivot(['is_organizer', 'status']);
     }
 
     public function visitors()
     {
-        return $this->morphedByMany(Visitor::class, 'appointmentable');
+        return $this->morphedByMany(Visitor::class, 'appointmentable')->withPivot(['is_organizer', 'status']);
     }
 
     public function department()

@@ -6,7 +6,7 @@ use App\Appointment;
 use App\Http\Controllers\Controller;
 use App\Mail\AcceptInvitationMail;
 use App\Mail\RejectInvitationMail;
-use App\Services\AppointmentService;
+use App\Service\AppointmentService;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;

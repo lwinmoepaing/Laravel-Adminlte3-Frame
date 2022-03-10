@@ -48,7 +48,7 @@
         <h5 class="my-3 "> Today Appointments </h5 >
 
         <div>
-            <a class="card upcoming-section p-3 mb-2" href="{{ route('client.appointmen-detail', ['appointment_id' => 1]) }}">
+            <a class="card upcoming-section p-3 mb-2" href="{{ route('client.appointmen-detail', array_merge(['appointment_id' => 1], $generalParams)) }}">
                 <div class="text-center min-w-85 appointment-time">
                     <span class="d-block border p-3 rounded">
                         <b>
@@ -86,13 +86,13 @@
         <div class="my-3">
             <a
                 class="card upcoming-section p-3 mb-2 text-center d-block"
-                href="{{ route('client.join-appointment') }}">
+                href="{{ route('client.join-appointment', $generalParams) }}">
                 <img src="{{URL('images/auth/join_appointment.png')}}" class="uab-icon-small mr-1">
                 Join Appiontment
             </a>
             <a
                 class="card upcoming-section p-3 mb-2 text-center d-block"
-                href="{{ route('client.make-appointment') }}">
+                href="{{ route('client.make-appointment', $generalParams) }}">
                 <img src="{{URL('images/auth/make_appointment.png')}}" class="uab-icon-small mr-1">
                 Make Appiontment
             </a>
