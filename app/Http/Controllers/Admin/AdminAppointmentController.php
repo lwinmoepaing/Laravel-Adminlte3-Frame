@@ -11,6 +11,7 @@ use App\Http\Requests\ClientAppointmentRequest;
 use App\Mail\ArriveForClientMail;
 use App\Mail\ArriveForOfficerMail;
 use App\Room;
+use App\Service\AppointmentService;
 use App\Staff;
 use App\Visitor;
 use Carbon\Carbon;
@@ -22,14 +23,18 @@ use Illuminate\Support\Facades\Mail;
 
 class AdminAppointmentController extends Controller
 {
+    private $appointmentService;
+
+    public function __construct()
+    {
+        $this->appointmentService = new AppointmentService();
+    }
 
     public function showDashboard(Request $request) {
-        $expiredParseDate = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');;
         $startOfDay = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
         $endOfDay = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 
         $pendingStatus = Appointment::$APPOINTMENT_STATUS_TYPE['PENDING'];
-        $expiredStatus = Appointment::$APPOINTMENT_STATUS_TYPE['EXPIRED'];
         $arrivedStatus = Appointment::$APPOINTMENT_STATUS_TYPE['OCCUPIED'];
 
         $searchDate = Carbon::now()->startOfDay()->format('Y/m/d');
@@ -38,58 +43,36 @@ class AdminAppointmentController extends Controller
             $requestDate = $request->query('search_date');
             $parseDate = Carbon::createFromFormat('m/d/Y', $requestDate, 'Asia/Rangoon');
             $searchDate = $parseDate->format('Y-m-d');
-
             $startOfDay =  $parseDate->startOfDay()->format('Y-m-d H:i:s');
             $endOfDay =  $parseDate->endOfDay()->format('Y-m-d H:i:s');
         }
 
-        $todayRequestAppointmentCount = Appointment::where('status', $pendingStatus)
-            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->where('is_approve_by_officer', 0)
-            ->count();
-
-        $upcommingAppointmentCount = Appointment::where('status', $pendingStatus)
-            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->where('is_approve_by_officer', 1)
-            ->count();
-
-        $occupiedAppointmentCount = Appointment::where('status', $arrivedStatus)
-            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->count();
+        $todayRequestAppointmentCount = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay);
+        $occupiedAppointmentCount = $this->appointmentService->getAppointmentList($arrivedStatus, $startOfDay, $endOfDay);
 
         // If Expired Meeting We'll Set Expired Appointment
-        $expiredAppointmentCount = Appointment::where('status', $pendingStatus)->where('meeting_time', '<', $expiredParseDate)->count();
-        if ($expiredAppointmentCount >= 1) {
-            Appointment::where('status', $pendingStatus)->where('meeting_time', '<', $expiredParseDate)->update(['status' => $expiredStatus]);
-        }
+        $this->appointmentService->expiredDateCheckAndCalculate();
 
-        $upcomingQuery = Appointment::where('status', $pendingStatus)
-            ->with(['staff.department', 'branch', 'visitor'])
-            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->where('is_approve_by_officer', 1);
 
         $queryName = '';
-        if ($request->query('search_name')) {
-            $queryName = $request->query('search_name');
-            $upcomingQuery->where('staff_name', 'LIKE', "%{$queryName}%");
-            $upcomingQuery->orWhere('visitor_name', 'LIKE', "%{$queryName}%");
-        }
+        // if ($request->query('search_name')) {
+        //     $queryName = $request->query('search_name');
+        //     $upcomingQuery->where('staff_name', 'LIKE', "%{$queryName}%");
+        //     $upcomingQuery->orWhere('visitor_name', 'LIKE', "%{$queryName}%");
+        // }
 
-        $todayUpcomingAppointments = $upcomingQuery
-            ->orderBy('id', 'DESC')
-            ->get();
+        // $todayUpcomingAppointments = $upcomingQuery
+        //     ->orderBy('id', 'DESC')
+        //     ->get();
 
         $responseData = [
             'todayRequestAppointmentCount' => $todayRequestAppointmentCount,
-            'upcommingAppointmentCount' => $upcommingAppointmentCount,
-            'expiredAppointmentCount' => $expiredAppointmentCount,
             'occupiedAppointmentCount' => $occupiedAppointmentCount,
-            'todayUpcomingAppointments' => $todayUpcomingAppointments,
             'searchDate' => $searchDate,
             'queryName' => $queryName
         ];
 
-        // return response()->json($responseData);
+        return response()->json($responseData);
 
         return view('admin.dashboard', $responseData);
     }

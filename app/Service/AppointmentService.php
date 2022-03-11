@@ -5,6 +5,7 @@ use App\Appointment;
 use App\Appointmentable;
 use App\Staff;
 use App\Visitor;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -303,5 +304,26 @@ class AppointmentService {
                 ]
             ]
         );
+    }
+
+    public function getAppointmentList($appointmentStatus, $startDate, $endDate) {
+        $appointments = Appointment::
+            whereBetween('meeting_request_time', [$startDate, $endDate])
+            ->with(['branch'])
+            ->where('status', $appointmentStatus)
+            ->orderBy('id', 'DESC')
+            ->get();
+        return $appointments;
+    }
+
+    public function expiredDateCheckAndCalculate() {
+        $expiredParseDate = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');;
+        $expiredStatus = Appointment::$APPOINTMENT_STATUS_TYPE['EXPIRED'];
+        $pendingStatus = Appointment::$APPOINTMENT_STATUS_TYPE['PENDING'];
+
+        $expiredAppointmentCount = Appointment::where('status', $pendingStatus)->where('meeting_request_time', '<', $expiredParseDate)->count();
+        if ($expiredAppointmentCount >= 1) {
+            Appointment::where('status', $pendingStatus)->where('meeting_request_time', '<', $expiredParseDate)->update(['status' => $expiredStatus]);
+        }
     }
 }
