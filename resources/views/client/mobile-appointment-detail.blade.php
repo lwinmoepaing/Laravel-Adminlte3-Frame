@@ -34,7 +34,7 @@
                         </h6>
                         <h6 class="mb-0">
                             <i class="fa fa-map-marker mr-2" style="font-size: 16px;"></i>
-                            {{ $appointment->branch_name}}
+                            {{ $appointment->branch->branch_name}}
                         </h6>
                         <hr>
                     </div>

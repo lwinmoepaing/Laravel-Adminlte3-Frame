@@ -244,6 +244,7 @@ class AppointmentService {
         $data = Appointmentable::where('appointmentable_type', $userModelType)
             ->where('appointment_id', $appointment_id)
             ->where('appointmentable_id', $user->id)
+            ->orderBy('id', 'DESC')
             ->first();
         $data->status = $status;
         $data->save();
@@ -256,6 +257,7 @@ class AppointmentService {
             whereBetween('meeting_request_time', [$startDate, $endDate])
             ->with([$invitePersonRelation, 'branch'])
             ->where('status', $appointmentStatus)
+            ->orderBy('id', 'DESC')
             ->whereHas($invitePersonRelation, function ($query) use ($uabpayUser) {
                     // Staff Model Query
                     $query->where('phone', $uabpayUser->phone);
@@ -286,6 +288,7 @@ class AppointmentService {
         $data = Appointmentable::where('appointmentable_type', $userModelType)
             ->where('appointment_id', $appointment_id)
             ->where('appointmentable_id', $user->id)
+            ->orderBy('id', 'DESC')
             ->first();
 
         return $data ? true : false;

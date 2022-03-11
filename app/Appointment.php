@@ -26,8 +26,9 @@ class Appointment extends Model
         'staff_email',
         'branch_id',
         'department_id',
-        'meeting_time',
+        'request_meeting_time',
         'meeting_leave_time',
+        'meeting_start_time',
         'status',
         'reason',
         'description',
@@ -100,15 +101,15 @@ class Appointment extends Model
     }
 
     public function getMeetingDateAttribute() {
-        return Carbon::parse($this->meeting_time)->format('m/d/Y');
+        return Carbon::parse($this->meeting_request_time)->format('m/d/Y');
     }
 
     public function getMeetingTimerAttribute() {
-        return Carbon::parse($this->meeting_time)->format('g:i A');
+        return Carbon::parse($this->meeting_request_time)->format('g:i A');
     }
 
     public function getRequestTimeAttribute() {
-        return Carbon::parse($this->meeting_time)->format('d M Y - g : i A');
+        return Carbon::parse($this->meeting_request_time)->format('d M Y - g : i A');
     }
 
 
