@@ -20,6 +20,7 @@ Route::get('/', 'Auth\LoginController@showloginForm')->name('index');
 Route::name('client.')->prefix('/client')->group(function () {
     Route::get('dashboard', 'ClientView\ClientMobileController@showDashboard')->name('dashboard');
     Route::get('join-appointment', 'ClientView\ClientMobileController@showJoinAppointment')->name('join-appointment');
+    Route::post('join-appointment', 'ClientView\ClientMobileController@submitJoinAppointment')->name('join-appointment-submit');
 
     Route::get('make-appointment', 'ClientView\ClientMobileController@showMakeAppointment')->name('make-appointment');
     Route::post('make-appointment', 'ClientView\ClientMobileController@appointmentSubmitFromUabpay')->name('make-appointment-submit');

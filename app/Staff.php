@@ -57,6 +57,7 @@ class Staff extends Model
     public function appointments() {
         return $this
         ->morphToMany(Appointment::class, 'appointmentable')
-        ->withPivot(['is_organizer', 'status', 'department_id', 'status_name']);
+        ->withPivot(['is_organizer', 'status', 'department_id', 'status_name'])
+        ->withTimestamps();
     }
 }

@@ -9,6 +9,8 @@ use DateTime;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client as GuzzleClient;
 
 class AppointmentService {
 
@@ -64,6 +66,8 @@ class AppointmentService {
 
     public function checkIsUabpayUser($phone)
     {
+        // $client = new GuzzleClient();
+
         return true;
     }
 
@@ -244,5 +248,57 @@ class AppointmentService {
         $data->status = $status;
         $data->save();
         return $data;
+    }
+
+    public function getAppointmentListForuabPay($uabpayUser, $appointmentStatus, $startDate, $endDate) {
+        $invitePersonRelation = $uabpayUser->type === 'staff' ? 'staffs' : 'visitors';
+        $appointments = Appointment::
+            whereBetween('meeting_request_time', [$startDate, $endDate])
+            ->with([$invitePersonRelation, 'branch'])
+            ->where('status', $appointmentStatus)
+            ->whereHas($invitePersonRelation, function ($query) use ($uabpayUser) {
+                    // Staff Model Query
+                    $query->where('phone', $uabpayUser->phone);
+            })->get();
+        return $appointments;
+    }
+
+    public function getUserAppointmentWithStatusForPay($uabpayUser, $appointments, $userAppointmentStatus) {
+        $filterList = [];
+
+        foreach ($appointments as $key => $appointment) {
+            $inviteList = $uabpayUser->type === 'staff' ? $appointment->staffs : $appointment->visitors;
+
+            $user = $inviteList->filter(function ($person) use($uabpayUser) {
+                return $person->id === $uabpayUser->id;
+            })->first();
+
+            if ($user->pivot->status == $userAppointmentStatus) {
+                $filterList[] = $appointment;
+            }
+        }
+
+        return $filterList;
+    }
+
+    public function checkUserIsAlreadyAttachForJoin($user, $appointment_id) {
+        $userModelType = $user->type == 'staff' ? "App\Staff" : "App\Visitor";
+        $data = Appointmentable::where('appointmentable_type', $userModelType)
+            ->where('appointment_id', $appointment_id)
+            ->where('appointmentable_id', $user->id)
+            ->first();
+
+        return $data ? true : false;
+    }
+
+    public function attachJoinAppointmentWithGoing($user, $appointmentID) {
+        $user->appointments()->attach([
+            $appointmentID =>
+                [
+                    'is_organizer' => 0,
+                    'status' => 2,
+                ]
+            ]
+        );
     }
 }

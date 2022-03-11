@@ -11,7 +11,7 @@ class Appointmentable extends Model
 
     protected $fillable = [
         'is_organizer',
-        'status'
+        'status',
     ];
 
 

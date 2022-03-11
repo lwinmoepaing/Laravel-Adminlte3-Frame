@@ -46,6 +46,12 @@ class Appointment extends Model
         "EXPIRED" => 5,
     ];
 
+    public static $USER_STATUS = [
+        "REQUEST" => 1,
+        "GOING" => 2,
+        "CANTGO" => 3,
+    ];
+
 
     public static $APPOINTMENT_CREATE_TYPE = [
         "FROM_CLIENT" => 1,

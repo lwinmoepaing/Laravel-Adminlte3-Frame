@@ -7,6 +7,7 @@ use App\Appointmentable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MobileAppointmentRequest;
 use App\Service\AppointmentService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -25,13 +26,47 @@ class ClientMobileController extends Controller
             return redirect()->back();
         }
 
+        $startOfDay = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+        $endOfDay = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
+        $next30Days = Carbon::now()->addDays(30)->endOfDay()->format('Y-m-d H:i:s');
+        $last30Days = Carbon::today()->startOfMonth()->subMonth(3)->format('Y-m-d H:i:s');
+        $pendingStatus = Appointment::$APPOINTMENT_STATUS_TYPE['PENDING'];
+        $finishedStatus = Appointment::$APPOINTMENT_STATUS_TYPE['FINISHED'];
+        $userRequestStatus = Appointment::$USER_STATUS['REQUEST'];
+        $userActiveStatus = Appointment::$USER_STATUS['GOING'];
+
         $uabpayUser = $this->appointmentService->checkExistUserAndCreate($request);
         if(!$uabpayUser) {
             return redirect()->back();
         }
 
+        // 1.First Get Pending Appointments and Filter Rquest, And Acites
+        $pendingAppointments = $this->appointmentService->getAppointmentListForuabPay($uabpayUser, $pendingStatus, $startOfDay, $next30Days);
+        $requestAppointments = $this->appointmentService->getUserAppointmentWithStatusForPay($uabpayUser, $pendingAppointments, $userRequestStatus);
+        $activeAppointments = $this->appointmentService->getUserAppointmentWithStatusForPay($uabpayUser, $pendingAppointments, $userActiveStatus);
+        // 2. Get Finished Appointments
+        $finishedAppointment = $this->appointmentService->getAppointmentListForuabPay($uabpayUser, $finishedStatus, $last30Days, $endOfDay);
+        // 3. Get Today Pending Appointments
+        $todayAppointments = $this->appointmentService->getAppointmentListForuabPay($uabpayUser, $pendingStatus, $startOfDay, $endOfDay);
+
+        $data = [
+            'date' => $startOfDay,
+            'last30Days' => $last30Days,
+            'user' => $uabpayUser,
+            'todayAppointments' => $todayAppointments,
+            'todayAppointmentsCount' => count($todayAppointments),
+            'requestAppointments' => $requestAppointments,
+            'requestAppointmentsCount' => count($requestAppointments),
+            'activeAppointments' => $activeAppointments,
+            'activeAppointmentsCount' => count($activeAppointments),
+            'finishedAppointment' => $finishedAppointment,
+            'finishedAppointmentCount' => count($finishedAppointment),
+        ];
+
+        // return response()->json($data);
+
         return view('client.mobile-dashboard')
-            ->with($this->withGeneralParams($request));
+            ->with($this->withGeneralParams($request, $data));
     }
 
     public function showAppointmentByStatus(Request $request, $status) {
@@ -41,11 +76,50 @@ class ClientMobileController extends Controller
             return redirect()->back();
         }
 
-        return view('client.mobile-appointments-by-status', [
-            'status' => ucfirst($status),
-        ]);
-    }
+        if (!$this->appointmentService->checkIsValidMobileQueryRequest($request)) {
+            return redirect()->back();
+        }
 
+        $startOfDay = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+        $endOfDay = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
+        $next60Days = Carbon::now()->addDays(60)->endOfDay()->format('Y-m-d H:i:s');
+        $last30Days = Carbon::today()->startOfMonth()->subMonth(3)->format('Y-m-d H:i:s');
+        $pendingStatus = Appointment::$APPOINTMENT_STATUS_TYPE['PENDING'];
+        $finishedStatus = Appointment::$APPOINTMENT_STATUS_TYPE['FINISHED'];
+        $userRequestStatus = Appointment::$USER_STATUS['REQUEST'];
+        $userActiveStatus = Appointment::$USER_STATUS['GOING'];
+
+        $uabpayUser = $this->appointmentService->checkExistUserAndCreate($request);
+        if(!$uabpayUser) {
+            return redirect()->back();
+        }
+        $appointmentData = [];
+
+        if ($status === 'finished') {
+            // 1. Get Finished Appointments
+            $appointmentData = $this->appointmentService->getAppointmentListForuabPay($uabpayUser, $finishedStatus, $last30Days, $endOfDay);
+        } else {
+            // 1.First Get Pending Appointments and Filter Rquest, And Acites
+            $pendingAppointments = $this->appointmentService->getAppointmentListForuabPay($uabpayUser, $pendingStatus, $startOfDay, $next60Days);
+                  if ($status === 'request') {
+                $appointmentData = $this->appointmentService->getUserAppointmentWithStatusForPay($uabpayUser, $pendingAppointments, $userRequestStatus);
+            } else {
+                $appointmentData = $this->appointmentService->getUserAppointmentWithStatusForPay($uabpayUser, $pendingAppointments, $userActiveStatus);
+            }
+        }
+
+        $data = [
+            'date' => $startOfDay,
+            'last30Days' => $last30Days,
+            'appointmentData' => $appointmentData,
+            'appointmentDataCount' => count($appointmentData),
+            'status' => ucfirst($status),
+        ];
+
+        // return response()->json($this->withGeneralParams($request, $data));
+
+        return view('client.mobile-appointments-by-status', $this->withGeneralParams($request, $data));
+    }
 
     public function updateAttendanceStatus(Appointment $appointment_id, Request $request) {
         if (!$this->appointmentService->checkIsValidMobileQueryRequest($request)) {
@@ -59,15 +133,7 @@ class ClientMobileController extends Controller
 
         $status = $validated["status"] == "2" ? 2 : 3;
 
-        $udpateUser = $this->appointmentService->updateUserStatusOfAppointment($user, $appointmentID, $status);
-
-        $data = [
-            'appointment_id' => $appointmentID,
-            'status' => $validated['status'],
-            'request_user' => $udpateUser,
-        ];
-
-        // return response()->json($this->withGeneralParams($request, $data));
+        $this->appointmentService->updateUserStatusOfAppointment($user, $appointmentID, $status);
 
         return redirect()->back()->with($this->withGeneralParams($request));
     }
@@ -106,8 +172,47 @@ class ClientMobileController extends Controller
         ]);
     }
 
-    public function showJoinAppointment() {
-        return view('client.mobile-join-appointment', []);
+    public function showJoinAppointment(Request $request) {
+        if (!$this->appointmentService->checkIsValidMobileQueryRequest($request)) {
+            return redirect()->back();
+        }
+
+        return view('client.mobile-join-appointment', $this->withGeneralParams($request));
+    }
+
+    public function submitJoinAppointment(Request $request) {
+        $validated = $request->validate([
+            'appointment_id' => 'string|required'
+        ]);
+
+        $uabpayUser = $this->appointmentService->checkExistUserAndCreate($request);
+        if(!$uabpayUser) {
+            return redirect()->back()->with('error', 'User is not found.');
+        }
+
+        $appointmentID = $validated['appointment_id'];
+        $appointment = Appointment::with(['staffs', 'visitors'])->find($appointmentID);
+        if (!$appointment) {
+            return redirect()->back()->with('error', 'Your appointment was not found.');
+        }
+
+        $isOccupied = $appointment->status === Appointment::$APPOINTMENT_STATUS_TYPE['OCCUPIED'];
+        $isPending = $appointment->status === Appointment::$APPOINTMENT_STATUS_TYPE['PENDING'];
+
+        if ( !($isOccupied || $isPending) ) {
+            return redirect()->back()->with('error', 'Your appointment was Finished.');
+        }
+
+        $currentAccount = $this->appointmentService->getCurrentAccount($request);
+        $isAlreadyAttach = $this->appointmentService->checkUserIsAlreadyAttachForJoin($currentAccount, $appointmentID);
+
+        if ($isAlreadyAttach) {
+            return redirect()->route('client.appointmen-detail', $this->withGeneralParamsExtract($request, ['appointment_id' => $appointmentID]));
+        }
+
+        $this->appointmentService->attachJoinAppointmentWithGoing($currentAccount, $appointmentID);
+
+        return redirect()->route('client.appointmen-detail', $this->withGeneralParamsExtract($request, ['appointment_id' => $appointmentID]));
     }
 
     public function showMakeAppointment(Request $request) {
@@ -120,9 +225,11 @@ class ClientMobileController extends Controller
             return redirect()->back();
         }
 
-        return view('client.mobile-make-appointment')->with(
-            $this->withGeneralParams($request, ['user' => $user])
-        );
+        $data = [
+            'user' => $user,
+        ];
+
+        return view('client.mobile-make-appointment')->with($this->withGeneralParams($request, $data));
     }
 
     public function withGeneralParams(Request $request, $mergeArray = []) {
@@ -132,6 +239,15 @@ class ClientMobileController extends Controller
                 'name' => $request->query('name'),
                 'phone' => $request->query('phone')
             ]
+        ];
+
+        return array_merge($mergeArray, $generalParams);
+    }
+
+    public function withGeneralParamsExtract(Request $request, $mergeArray = []) {
+        $generalParams = [
+            'name' => $request->query('name'),
+            'phone' => $request->query('phone')
         ];
 
         return array_merge($mergeArray, $generalParams);
@@ -162,7 +278,7 @@ class ClientMobileController extends Controller
         }
 
         // There is not both staff and visitor , we make new visitor
-        // $newVisitor = $this->appointmentService->createVisitorForVisitor($name, $phoneNo);
+        // $newVisitor = $this->appointmentService->creaetVisitor($name, $phoneNo);
 
         return response()->json(['isSuccess' => false, 'data' => null]);
     }
@@ -177,6 +293,7 @@ class ClientMobileController extends Controller
 
         return response()->json(['isSuccess' => true, 'data' => $appointment]);
     }
+
 
 
 }

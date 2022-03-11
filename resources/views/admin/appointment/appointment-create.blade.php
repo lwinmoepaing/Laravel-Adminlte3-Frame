@@ -76,7 +76,7 @@
                             <label for="title">Meeting Title</label>
                             <input autocomplete="off" type="text" class="form-control @error('title') is-invalid @enderror" id="titleInput" name="title" value="{{ old('title') }}">
                             <div class="invalid-feedback">
-                            Required meeting title
+                                Required meeting title
                             </div>
                         </div>
                     </div>
