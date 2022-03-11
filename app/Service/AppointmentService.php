@@ -306,13 +306,17 @@ class AppointmentService {
         );
     }
 
-    public function getAppointmentList($appointmentStatus, $startDate, $endDate) {
-        $appointments = Appointment::
+    public function getAppointmentList($appointmentStatus, $startDate, $endDate, $searchQuery = []) {
+        $appointmentQuery = Appointment::
             whereBetween('meeting_request_time', [$startDate, $endDate])
             ->with(['branch'])
-            ->where('status', $appointmentStatus)
-            ->orderBy('id', 'DESC')
-            ->get();
+            ->where('status', $appointmentStatus);
+
+        if (isset($searchQuery['search_name'])) {
+            $appointmentQuery->where('organizer_name', 'LIKE', "%{$searchQuery['search_name']}%");
+        }
+
+        $appointments = $appointmentQuery->orderBy('id', 'DESC')->get();
         return $appointments;
     }
 

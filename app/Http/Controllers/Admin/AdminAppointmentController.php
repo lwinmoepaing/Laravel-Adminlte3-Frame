@@ -47,32 +47,27 @@ class AdminAppointmentController extends Controller
             $endOfDay =  $parseDate->endOfDay()->format('Y-m-d H:i:s');
         }
 
-        $todayRequestAppointmentCount = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay);
-        $occupiedAppointmentCount = $this->appointmentService->getAppointmentList($arrivedStatus, $startOfDay, $endOfDay);
-
         // If Expired Meeting We'll Set Expired Appointment
         $this->appointmentService->expiredDateCheckAndCalculate();
 
+        $todayAppointments = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay, $request->query());
+        $pendingAppointments = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay);
+        $occupiedAppointments = $this->appointmentService->getAppointmentList($arrivedStatus, $startOfDay, $endOfDay);
 
         $queryName = '';
-        // if ($request->query('search_name')) {
-        //     $queryName = $request->query('search_name');
-        //     $upcomingQuery->where('staff_name', 'LIKE', "%{$queryName}%");
-        //     $upcomingQuery->orWhere('visitor_name', 'LIKE', "%{$queryName}%");
-        // }
-
-        // $todayUpcomingAppointments = $upcomingQuery
-        //     ->orderBy('id', 'DESC')
-        //     ->get();
 
         $responseData = [
-            'todayRequestAppointmentCount' => $todayRequestAppointmentCount,
-            'occupiedAppointmentCount' => $occupiedAppointmentCount,
+            'todayUpcomingAppointments' => $pendingAppointments,
+            'todayRequestAppointmentCount' => $pendingAppointments->count(),
+            'occupiedAppointments' => $occupiedAppointments,
+            'occupiedAppointmentCount' => $occupiedAppointments->count(),
+            'todayAppointments' => $todayAppointments,
             'searchDate' => $searchDate,
-            'queryName' => $queryName
+            'queryName' => $queryName,
+            'request' => $request->query()
         ];
 
-        return response()->json($responseData);
+        // return response()->json($responseData);
 
         return view('admin.dashboard', $responseData);
     }

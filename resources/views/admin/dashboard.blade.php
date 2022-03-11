@@ -28,7 +28,7 @@
             <a href="{{ route('admin.appointment.appointment-view', ['showTab' => 'upcoming']) }}">
                     <div class="card p-3">
                         <span class="count_top"><img src="{{URL('/images/auth/upcoming.png')}}" alt="upcoming"></span>
-                        <div class="count text-right">{{ $upcommingAppointmentCount }}</div>
+                        <div class="count text-right">{{ $upcommingAppointmentCount ?? 0}}</div>
                         <span class="count_bottom text-right">Upcoming Appointments</span>
                     </div>
             </a>
@@ -69,7 +69,7 @@
 
                     <div class="w-100 ml-3">
                         <div class="row">
-                        <div class="col-md-12 mb-2">
+                        <div class="col-md-12 ">
                             <span class="mb-3">Appointments ID - {{ $appointment->id }}</span>
                             <span style="justify-content: flex-end;">
                                 ({{ date('d M Y', strtotime($appointment->meeting_time)) }})
@@ -79,7 +79,7 @@
                             </h5>
                         </div>
 
-                        @if($appointment->visitor)
+                        {{-- @if($appointment->visitor)
                             <div class="col-md-6 mb-2">
                                 <h6>
                                     <i class="fa fa-user mr-2" style="font-size: 16px;"></i>
@@ -91,15 +91,15 @@
                                     {{ $appointment->visitor->email }}
                                 </span>
                             </div>
-                        @endif
+                        @endif --}}
 
                         <div class="col-md-6 mb-2">
-                            <h6>
+                            {{-- <h6>
                                 <i class="fa fa-user mr-2" style="font-size: 16px;"></i>
-                                {{ $appointment->staff->name }}
-                            </h6>
+                                {{ $appointment->organizer_name }}
+                            </h6> --}}
                             <span>
-                                {{ $appointment->staff->department->id != 1 ? $appointment->staff->department->department_name : '' }}
+                                {{ $appointment->branch->branch_name }}
                             </span>
                         </div>
                         </div>
