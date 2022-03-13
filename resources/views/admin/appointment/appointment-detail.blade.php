@@ -40,29 +40,38 @@
                 </div>
                 <div class="col-md-12 my-3">
                 <span>Client</span>
-                <h6 class="mt-2">
-                    <i class="fa fa-user mr-2" style="font-size: 16px;"></i>
-                    {{ $appointment->visitor->name }}
-                </h6>
-                <span>
-                    {{ $appointment->visitor->phone }},
-                    {{ $appointment->visitor->company_name }},
-                    {{ $appointment->visitor->email }}
-                </span>
+                @foreach ($appointment->visitors as $visitor)
+                    <h6 class="mt-2">
+                        <i class="fa fa-user mr-2" style="font-size: 16px;"></i>
+                        {{ $visitor->name }}
+                    </h6>
+                    <span>
+                        {{ $visitor->phone }}
+                        {{ $visitor->company_name ? ',' . $visitor->company_name : ''}}
+                        {{ $visitor->email ? ',' . $visitor->email : ''}}
+                    </span>
+                @endforeach
+
                 </div>
 
                 <div class="col-md-12 my-3">
-                <span>uab officer</span>
-                <h6 class="mt-2"><i class="fa fa-user mr-2" style="font-size: 16px;"></i>{{ $appointment->staff->name }}</h6>
-                <span>
-                    {{ $appointment->staff->department->id != 1 ? $appointment->staff->department->department_name : '' }}
-                </span>
+                    <span>uab officer</span>
+                    @foreach ($appointment->staffs as $staff)
+                        <h6 class="mt-2">
+                            <i class="fa fa-user mr-2" style="font-size: 16px;"></i>
+                            {{ $staff->name }}
+                        </h6>
+                        <span>
+                            {{ $staff->department->id != 1 ? $staff->department->department_name : '' }}
+                        </span>
+                    @endforeach
+
                 </div>
 
                 <div class="col-md-12 my-3">
                     <span>Request Time</span>
                     <h6 class="mt-2">
-                        <i class="fa fa-calendar mr-2" style="font-size: 16px;"></i>{{ date('d M Y - g : i A', strtotime($appointment->meeting_time)) }}
+                        <i class="fa fa-calendar mr-2" style="font-size: 16px;"></i>{{ date('d M Y - g : i A', strtotime($appointment->meeting_request_time)) }}
                     </h6>
                 </div>
 

@@ -431,8 +431,8 @@
                     console.log(response)
                     var redirectUrl = "{{ url('/client/appointment-detail') }}";
                     var id = response.data.id;
-                    var urlWithParams = redirectUrl + '/' + id + '?phone={{ $generalParams["phone"]}}&name={{$generalParams["name"]}}'
-                    // window.location.href = urlWithParams;
+                    var urlWithParams = redirectUrl + '/' + id + '?phone={{$generalParams["phone"]}}&name={{$generalParams["name"]}}'
+                    window.location.href = urlWithParams;
                     console.log(urlWithParams)
                 } else {
                     $('#err_message').toast('show');

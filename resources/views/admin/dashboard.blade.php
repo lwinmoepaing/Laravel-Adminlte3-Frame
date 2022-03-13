@@ -28,7 +28,7 @@
             <a href="{{ route('admin.appointment.appointment-view', ['showTab' => 'upcoming']) }}">
                     <div class="card p-3">
                         <span class="count_top"><img src="{{URL('/images/auth/upcoming.png')}}" alt="upcoming"></span>
-                        <div class="count text-right">{{ $upcommingAppointmentCount ?? 0}}</div>
+                        <div class="count text-right">{{ $upcomingAppointmentCount ?? 0}}</div>
                         <span class="count_bottom text-right">Upcoming Appointments</span>
                     </div>
             </a>
@@ -54,16 +54,16 @@
 
         <!-- appointments -->
         <div class="row">
-            @foreach ($todayUpcomingAppointments as $appointment)
+            @foreach ($upcomingAppointments as $appointment)
                 <div class="col-md-12 mb-2">
                     <a class="card upcoming-section p-3" href="{{ route('admin.appointment.appointment-detail', ["appointment_id" => $appointment->id]) }}">
                     <div class="text-center min-w-85 appointment-time">
                         <span class="d-block border p-3 rounded">
                             <b>
-                                {{ date('g : i', strtotime($appointment->meeting_time)) }}
+                                {{ date('g : i', strtotime($appointment->meeting_request_time)) }}
                             </b>
                             <br>
-                            {{ date('A', strtotime($appointment->meeting_time)) }}
+                            {{ date('A', strtotime($appointment->meeting_request_time)) }}
                         </span>
                     </div>
 
@@ -72,7 +72,7 @@
                         <div class="col-md-12 ">
                             <span class="mb-3">Appointments ID - {{ $appointment->id }}</span>
                             <span style="justify-content: flex-end;">
-                                ({{ date('d M Y', strtotime($appointment->meeting_time)) }})
+                                ({{ date('d M Y', strtotime($appointment->meeting_request_time)) }})
                             </span><br>
                             <h5 class="my-2">
                                 <b>{{ $appointment->title }}</b>

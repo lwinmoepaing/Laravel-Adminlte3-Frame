@@ -50,20 +50,20 @@ class AdminAppointmentController extends Controller
         // If Expired Meeting We'll Set Expired Appointment
         $this->appointmentService->expiredDateCheckAndCalculate();
 
-        $todayAppointments = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay, $request->query());
+        $todayRequestAppointments = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay, $request->query(), ['visitors', 'staffs']);
         $pendingAppointments = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay);
         $occupiedAppointments = $this->appointmentService->getAppointmentList($arrivedStatus, $startOfDay, $endOfDay);
-
-        $queryName = '';
+        $upcomingAppointments = $this->appointmentService->getUpcomingAppointmentFromPendingList($todayRequestAppointments);
 
         $responseData = [
-            'todayUpcomingAppointments' => $pendingAppointments,
-            'todayRequestAppointmentCount' => $pendingAppointments->count(),
+            'todayRequestAppointments' => $todayRequestAppointments,
+            'todayRequestAppointmentCount' => $pendingAppointments->count() - $upcomingAppointments->count(),
             'occupiedAppointments' => $occupiedAppointments,
             'occupiedAppointmentCount' => $occupiedAppointments->count(),
-            'todayAppointments' => $todayAppointments,
+            'upcomingAppointments' => $upcomingAppointments,
+            'upcomingAppointmentCount' => $upcomingAppointments->count(),
             'searchDate' => $searchDate,
-            'queryName' => $queryName,
+            'queryName' => $request->query('search_name'),
             'request' => $request->query()
         ];
 
@@ -92,57 +92,20 @@ class AdminAppointmentController extends Controller
             $endOfDay =  $parseDate->endOfDay()->format('Y-m-d H:i:s');
         }
 
-        $todayRequestAppointmentCount = Appointment::where('status', $pendingStatus)
-            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->where('is_approve_by_officer', 0)
-            ->count();
-
-        $upcommingAppointmentCount = Appointment::where('status', $pendingStatus)
-            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->where('is_approve_by_officer', 1)
-            ->count();
-
-        $occupiedAppointmentCount = Appointment::where('status', $arrivedStatus)
-            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->count();
-
-        $finishedAppointmentCount = Appointment::where('status', $finishedStatus)
-            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->count();
-
-        $todayUpcomingAppointments = Appointment::where('status', $pendingStatus)
-            ->with(['staff.department', 'branch', 'visitor'])
-            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->where('is_approve_by_officer', 1)
-            ->orderBy('id', 'DESC')
-            ->get();
-
-        $todayRequestAppointments = Appointment::where('status', $pendingStatus)
-            ->with(['staff.department', 'branch', 'visitor'])
-            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->where('is_approve_by_officer', 0)
-            ->orderBy('id', 'DESC')
-            ->get();
-
-        $todayOccupiedAppointments = Appointment::where('status', $arrivedStatus)
-            ->with(['staff.department', 'branch', 'visitor'])
-            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->orderBy('id', 'DESC')
-            ->get();
-
-        $finishedAppointments = Appointment::where('status', $finishedStatus)
-            ->whereBetween('meeting_time', [$startOfDay, $endOfDay])
-            ->orderBy('id', 'DESC')
-            ->get();
+        $todayRequestAppointments = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay, $request->query(), ['visitors', 'staffs']);
+        $pendingAppointments = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay);
+        $occupiedAppointments = $this->appointmentService->getAppointmentList($arrivedStatus, $startOfDay, $endOfDay);
+        $upcomingAppointments = $this->appointmentService->getUpcomingAppointmentFromPendingList($todayRequestAppointments);
+        $finishedAppointments = $this->appointmentService->getAppointmentList($finishedStatus, $startOfDay, $endOfDay);
 
         $responseData = [
-            'todayRequestAppointmentCount' => $todayRequestAppointmentCount,
-            'upcommingAppointmentCount' => $upcommingAppointmentCount,
-            'occupiedAppointmentCount' => $occupiedAppointmentCount,
-            'finishedAppointmentCount' => $finishedAppointmentCount,
-            'todayUpcomingAppointments' => $todayUpcomingAppointments,
+            'todayRequestAppointmentCount' => $pendingAppointments->count() - $upcomingAppointments->count(),
+            'upcommingAppointmentCount' => $upcomingAppointments->count(),
+            'occupiedAppointmentCount' => $occupiedAppointments->count(),
+            'finishedAppointmentCount' => $finishedAppointments->count(),
+            'todayUpcomingAppointments' => $upcomingAppointments,
             'todayRequestAppointments' => $todayRequestAppointments,
-            'todayOccupiedAppointments' => $todayOccupiedAppointments,
+            'todayOccupiedAppointments' => $occupiedAppointments,
             'finishedAppointments' => $finishedAppointments,
             'showTab' => $request->query('showTab'),
             'searchDate' => $searchDate,
@@ -155,7 +118,7 @@ class AdminAppointmentController extends Controller
     }
 
     public function showAppointmentDetail(Appointment $appointment_id) {
-        $appointment = $appointment_id->load(['branch', 'room', 'visitor', 'staff', 'create_by_user', 'create_by_officer']);
+        $appointment = $appointment_id->load(['branch', 'room', 'visitors', 'staffs.department']);
 
         $roomQuery = Room::where('branch_id', $appointment->branch_id);
 

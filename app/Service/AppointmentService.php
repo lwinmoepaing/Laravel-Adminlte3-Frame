@@ -306,17 +306,19 @@ class AppointmentService {
         );
     }
 
-    public function getAppointmentList($appointmentStatus, $startDate, $endDate, $searchQuery = []) {
+    public function getAppointmentList($appointmentStatus, $startDate, $endDate, $searchQuery = null, $withRelations = []) {
         $appointmentQuery = Appointment::
             whereBetween('meeting_request_time', [$startDate, $endDate])
-            ->with(['branch'])
+            ->with(array_merge(['branch'], $withRelations))
             ->where('status', $appointmentStatus);
 
         if (isset($searchQuery['search_name'])) {
-            $appointmentQuery->where('organizer_name', 'LIKE', "%{$searchQuery['search_name']}%");
+            $appointmentQuery->where('organizer_name', 'LIKE', "%${searchQuery['search_name']}%");
         }
 
         $appointments = $appointmentQuery->orderBy('id', 'DESC')->get();
+
+        // dd($appointments->toArray());
         return $appointments;
     }
 
@@ -329,5 +331,61 @@ class AppointmentService {
         if ($expiredAppointmentCount >= 1) {
             Appointment::where('status', $pendingStatus)->where('meeting_request_time', '<', $expiredParseDate)->update(['status' => $expiredStatus]);
         }
+    }
+
+    public function getUpcomingAppointmentFromPendingList($pendingAppointments) {
+        $upcomingAppointments = collect([]);
+
+        foreach ($pendingAppointments as $key => $appointment) {
+            $staffs = $appointment->staffs;
+            $visitors = $appointment->visitors;
+
+            if ($this->helperAtLeastTwoStaffAttendance($staffs)) {
+                $upcomingAppointments->push($appointment);
+            } else if ($this->helperOneStaffAndOneVisitorAttendance($staffs, $visitors)) {
+                $upcomingAppointments->push($appointment);
+            }
+        }
+
+
+        $upcomingAppointments->count = function () use ($upcomingAppointments) {
+            return count($upcomingAppointments);
+        };
+
+        // dd($upcomingAppointments);
+
+
+        return $upcomingAppointments;
+    }
+
+    public function helperAtLeastTwoStaffAttendance($staffs) {
+        $attendance = collect([]);
+        foreach ($staffs as $staff) {
+            if ($staff->pivot->status === Appointment::$USER_STATUS['GOING']) {
+                $attendance->push($staff);
+            }
+        }
+        return count($attendance) >= 2 ? true : false;
+    }
+
+    public function helperOneStaffAndOneVisitorAttendance($staffs, $visitors) {
+        $staffAttendance = collect([]);
+        $visitorAttendance = collect([]);
+
+        foreach ($staffs as $staff) {
+            if ($staff->pivot->status === Appointment::$USER_STATUS['GOING']) {
+                $staffAttendance->push($staff);
+            }
+        }
+
+        foreach ($visitors as $visitor) {
+            if ($visitor->pivot->status === Appointment::$USER_STATUS['GOING']) {
+                $visitorAttendance->push($visitor);
+            }
+        }
+
+        $isUpcoming = count($staffAttendance) >= 1 && count($visitorAttendance) >= 1;
+
+        return $isUpcoming;
     }
 }

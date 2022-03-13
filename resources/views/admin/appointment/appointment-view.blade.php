@@ -74,49 +74,32 @@
                             <span class="d-block border p-3 rounded">
 
                                 <b>
-                                    {{ date('g : i', strtotime($appointment->meeting_time)) }}
+                                    {{ date('g : i', strtotime($appointment->meeting_request_time)) }}
                                 </b>
                                 <br>
-                                {{ date('A', strtotime($appointment->meeting_time)) }}
+                                {{ date('A', strtotime($appointment->meeting_request_time)) }}
 
                             </span>
                         </div>
                         <div class="w-100 ml-3">
                             <div class="row">
-                            <div class="col-md-12">
-                                <h5 class="my-2">
-                                <b>{{ $appointment->title ?? '-' }}</b>
-                                <div class="badge badge-secondary float-right">{{ $appointment->status_name }}</div>
-                                </h5>
-                            </div>
-                            <div class="col-md-12 my-3">
-                                <span>Client</span>
-                                <h6 class="mt-2"><i class="fa fa-user mr-2" style="font-size: 16px;"></i>{{ $appointment->visitor->name }}</h6>
-                                <span>
-                                    {{ $appointment->visitor->phone }},
-                                    {{ $appointment->visitor->company_name }},
-                                    {{ $appointment->visitor->email }}
-                                </span>
-                            </div>
-
-                            <div class="col-md-12 my-3">
-                                <span>uab officer</span>
-                                <h6 class="mt-2">
-                                    <i class="fa fa-user mr-2" style="font-size: 16px;"></i>
-                                    {{ $appointment->staff->name }}
-                                </h6>
-                                <span>
-                                    {{ $appointment->staff->department->id != 1 ? $appointment->staff->department->department_name : '' }}
-                                </span>
-                            </div>
-
-                            <div class="col-md-12 my-3">
-                                <span>Request Time</span>
-                                <h6 class="mt-2">
-                                    <i class="fa fa-calendar mr-2" style="font-size: 16px;"></i>
-                                    {{ date('d M Y - g : i A', strtotime($appointment->meeting_time)) }}
-                                </h6>
-                            </div>
+                                <div class="col-md-12">
+                                    <h5 class="my-2">
+                                    <b>{{ $appointment->title ?? '-' }}</b>
+                                    <div class="badge badge-secondary float-right">{{ $appointment->status_name }}</div>
+                                    </h5>
+                                </div>
+                                <div class="col-md-12 my-1">
+                                    <span>Organizer</span>
+                                    <h6 class="mt-2"><i class="fa fa-user mr-2" style="font-size: 16px;"></i>{{ $appointment->organizer_name }}</h6>
+                                </div>
+                                <div class="col-md-12 my-1">
+                                    <span>Request Time</span>
+                                    <h6 class="mt-2">
+                                        <i class="fa fa-calendar mr-2" style="font-size: 16px;"></i>
+                                        {{ date('d M Y - g : i A', strtotime($appointment->meeting_request_time)) }}
+                                    </h6>
+                                </div>
                             </div>
                         </div>
                         </a>
@@ -135,49 +118,32 @@
                             <span class="d-block border p-3 rounded">
 
                                 <b>
-                                    {{ date('g : i', strtotime($appointment->meeting_time)) }}
+                                    {{ date('g : i', strtotime($appointment->meeting_request_time)) }}
                                 </b>
                                 <br>
-                                {{ date('A', strtotime($appointment->meeting_time)) }}
+                                {{ date('A', strtotime($appointment->meeting_request_time)) }}
 
                             </span>
                         </div>
                         <div class="w-100 ml-3">
                             <div class="row">
-                            <div class="col-md-12">
-                                <h5 class="my-2">
-                                <b>{{ $appointment->title ?? '-' }}</b>
-                                {{-- <div class="badge badge-secondary float-right">{{ $appointment->status_name }}</div> --}}
-                                </h5>
-                            </div>
-                            <div class="col-md-12 my-3">
-                                <span>Client</span>
-                                <h6 class="mt-2"><i class="fa fa-user mr-2" style="font-size: 16px;"></i>{{ $appointment->visitor->name }}</h6>
-                                <span>
-                                    {{ $appointment->visitor->phone }},
-                                    {{ $appointment->visitor->company_name }},
-                                    {{ $appointment->visitor->email }}
-                                </span>
-                            </div>
-
-                            <div class="col-md-12 my-3">
-                                <span>uab officer</span>
-                                <h6 class="mt-2">
-                                    <i class="fa fa-user mr-2" style="font-size: 16px;"></i>
-                                    {{ $appointment->staff->name }}
-                                </h6>
-                                <span>
-                                    {{ $appointment->staff->department->id != 1 ? $appointment->staff->department->department_name : '' }}
-                                </span>
-                            </div>
-
-                            <div class="col-md-12 my-3">
-                                <span>Request Time</span>
-                                <h6 class="mt-2">
-                                    <i class="fa fa-calendar mr-2" style="font-size: 16px;"></i>
-                                    {{ date('d M Y - g : i A', strtotime($appointment->meeting_time)) }}
-                                </h6>
-                            </div>
+                                <div class="col-md-12">
+                                    <h5 class="my-2">
+                                    <b>{{ $appointment->title ?? '-' }}</b>
+                                    {{-- <div class="badge badge-secondary float-right">{{ $appointment->status_name }}</div> --}}
+                                    </h5>
+                                </div>
+                                <div class="col-md-12 my-1">
+                                    <span>Organizer</span>
+                                    <h6 class="mt-2"><i class="fa fa-user mr-2" style="font-size: 16px;"></i>{{ $appointment->organizer_name }}</h6>
+                                </div>
+                                <div class="col-md-12 my-1">
+                                    <span>Request Time</span>
+                                    <h6 class="mt-2">
+                                        <i class="fa fa-calendar mr-2" style="font-size: 16px;"></i>
+                                        {{ date('d M Y - g : i A', strtotime($appointment->meeting_request_time)) }}
+                                    </h6>
+                                </div>
                             </div>
                         </div>
                         </a>
@@ -198,10 +164,10 @@
                             <span class="d-block border p-3 rounded">
 
                                 <b>
-                                    {{ date('g : i', strtotime($appointment->meeting_time)) }}
+                                    {{ date('g : i', strtotime($appointment->meeting_request_time)) }}
                                 </b>
                                 <br>
-                                {{ date('A', strtotime($appointment->meeting_time)) }}
+                                {{ date('A', strtotime($appointment->meeting_request_time)) }}
 
                             </span>
 
@@ -211,40 +177,23 @@
                         </div>
                         <div class="w-100 ml-3">
                             <div class="row">
-                            <div class="col-md-12">
-                                <h5 class="my-2">
-                                <b>{{ $appointment->title ?? '-' }}</b>
-                                <div class="badge badge-secondary float-right">{{ $appointment->status_name }}</div>
-                                </h5>
-                            </div>
-                            <div class="col-md-12 my-3">
-                                <span>Client</span>
-                                <h6 class="mt-2"><i class="fa fa-user mr-2" style="font-size: 16px;"></i>{{ $appointment->visitor->name }}</h6>
-                                <span>
-                                    {{ $appointment->visitor->phone }},
-                                    {{ $appointment->visitor->company_name }},
-                                    {{ $appointment->visitor->email }}
-                                </span>
-                            </div>
-
-                            <div class="col-md-12 my-3">
-                                <span>uab officer</span>
-                                <h6 class="mt-2">
-                                    <i class="fa fa-user mr-2" style="font-size: 16px;"></i>
-                                    {{ $appointment->staff->name }}
-                                </h6>
-                                <span>
-                                    {{ $appointment->staff->department->id != 1 ? $appointment->staff->department->department_name : '' }}
-                                </span>
-                            </div>
-
-                            <div class="col-md-12 my-3">
-                                <span>Request Time</span>
-                                <h6 class="mt-2">
-                                    <i class="fa fa-calendar mr-2" style="font-size: 16px;"></i>
-                                    {{ date('d M Y - g : i A', strtotime($appointment->meeting_time)) }}
-                                </h6>
-                            </div>
+                                <div class="col-md-12">
+                                    <h5 class="my-2">
+                                    <b>{{ $appointment->title ?? '-' }}</b>
+                                    <div class="badge badge-secondary float-right">{{ $appointment->status_name }}</div>
+                                    </h5>
+                                </div>
+                                <div class="col-md-12 my-1">
+                                    <span>Organizer</span>
+                                    <h6 class="mt-2"><i class="fa fa-user mr-2" style="font-size: 16px;"></i>{{ $appointment->organizer_name }}</h6>
+                                </div>
+                                <div class="col-md-12 my-1">
+                                    <span>Request Time</span>
+                                    <h6 class="mt-2">
+                                        <i class="fa fa-calendar mr-2" style="font-size: 16px;"></i>
+                                        {{ date('d M Y - g : i A', strtotime($appointment->meeting_request_time)) }}
+                                    </h6>
+                                </div>
                             </div>
                         </div>
                         </a>
@@ -264,10 +213,10 @@
                             <span class="d-block border p-3 rounded">
 
                                 <b>
-                                    {{ date('g : i', strtotime($appointment->meeting_time)) }}
+                                    {{ date('g : i', strtotime($appointment->meeting_request_time)) }}
                                 </b>
                                 <br>
-                                {{ date('A', strtotime($appointment->meeting_time)) }}
+                                {{ date('A', strtotime($appointment->meeting_request_time)) }}
                             </span>
 
                             <div class="my-2 d-block py-2 badge badge-primary">
@@ -285,40 +234,23 @@
                         </div>
                         <div class="w-100 ml-3">
                             <div class="row">
-                            <div class="col-md-12">
-                                <h5 class="my-2">
-                                <b>{{ $appointment->title ?? '-' }}</b>
-                                <div class="badge badge-secondary float-right">{{ $appointment->status_name }}</div>
-                                </h5>
-                            </div>
-                            <div class="col-md-12 my-3">
-                                <span>Client</span>
-                                <h6 class="mt-2"><i class="fa fa-user mr-2" style="font-size: 16px;"></i>{{ $appointment->visitor->name }}</h6>
-                                <span>
-                                    {{ $appointment->visitor->phone }},
-                                    {{ $appointment->visitor->company_name }},
-                                    {{ $appointment->visitor->email }}
-                                </span>
-                            </div>
-
-                            <div class="col-md-12 my-3">
-                                <span>uab officer</span>
-                                <h6 class="mt-2">
-                                    <i class="fa fa-user mr-2" style="font-size: 16px;"></i>
-                                    {{ $appointment->staff->name }}
-                                </h6>
-                                <span>
-                                    {{ $appointment->staff->department->id != 1 ? $appointment->staff->department->department_name : '' }}
-                                </span>
-                            </div>
-
-                            <div class="col-md-12 my-3">
-                                <span>Request Time</span>
-                                <h6 class="mt-2">
-                                    <i class="fa fa-calendar mr-2" style="font-size: 16px;"></i>
-                                    {{ date('d M Y - g : i A', strtotime($appointment->meeting_time)) }}
-                                </h6>
-                            </div>
+                                <div class="col-md-12">
+                                    <h5 class="my-2">
+                                    <b>{{ $appointment->title ?? '-' }}</b>
+                                    <div class="badge badge-secondary float-right">{{ $appointment->status_name }}</div>
+                                    </h5>
+                                </div>
+                                <div class="col-md-12 my-1">
+                                    <span>Organizer</span>
+                                    <h6 class="mt-2"><i class="fa fa-user mr-2" style="font-size: 16px;"></i>{{ $appointment->organizer_name }}</h6>
+                                </div>
+                                <div class="col-md-12 my-1">
+                                    <span>Request Time</span>
+                                    <h6 class="mt-2">
+                                        <i class="fa fa-calendar mr-2" style="font-size: 16px;"></i>
+                                        {{ date('d M Y - g : i A', strtotime($appointment->meeting_request_time)) }}
+                                    </h6>
+                                </div>
                             </div>
                         </div>
                         </a>
