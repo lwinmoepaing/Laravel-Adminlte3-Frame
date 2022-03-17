@@ -252,6 +252,19 @@ class AppointmentService {
         return $data;
     }
 
+    public function updateEachVisitorStatusOfAppointment($visitors, $appointment_id) {
+        foreach ($visitors as $key => $visitor) {
+            $userModelType = $visitor['type'] == 'staff' ? "App\Staff" : "App\Visitor";
+            $data = Appointmentable::where('appointmentable_type', $userModelType)
+                ->where('appointment_id', $appointment_id)
+                ->where('appointmentable_id', $visitor['id'])
+                ->orderBy('id', 'DESC')
+                ->first();
+            $data->status = $visitor['status'];
+            $data->save();
+        }
+    }
+
     public function getAppointmentListForuabPay($uabpayUser, $appointmentStatus, $startDate, $endDate) {
         $invitePersonRelation = $uabpayUser->type === 'staff' ? 'staffs' : 'visitors';
         $appointments = Appointment::

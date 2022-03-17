@@ -7,6 +7,7 @@ use App\Branch;
 use App\Department;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminAppointmentUpdateRequest;
+use App\Http\Requests\AppointmentDetailEditRequest;
 use App\Http\Requests\ClientAppointmentRequest;
 use App\Mail\ArriveForClientMail;
 use App\Mail\ArriveForOfficerMail;
@@ -321,7 +322,7 @@ class AdminAppointmentController extends Controller
     }
 
     public function showAppointmentEditDetail(Appointment $appointment_id) {
-        $appointment = $appointment_id->load(['visitors', 'department', 'branch']);
+        $appointment = $appointment_id->load(['visitors', 'staffs', 'department', 'branch']);
 
         $branches = Branch::with('township')->get();
         $departments = Department::all();
@@ -335,12 +336,19 @@ class AdminAppointmentController extends Controller
             $appointment->visitors[$key]['isTouched'] = true;
         }
 
+        $allInvitedPersons = array_merge($appointment->staffs->toArray(), $appointment->visitors->toArray());
+        $organizer = $this->appointmentService->getOrganizerWithPivot($appointment->visitors, $appointment->staffs);
+        $showInvitedPerson = $this->appointmentService->organizerFilterList($allInvitedPersons, $organizer);
+
         $responseData = [
             'navTitle' => 'Appointment - ID ' . $appointment_id->id,
             'appointment_id' => $appointment_id->id,
             'appointment' => $appointment,
             'branches' => $branches,
             'departments' => $departments,
+            'showInvitedPerson' => $showInvitedPerson,
+            'organizer' => $organizer,
+            'invited_person_count' => count($showInvitedPerson),
         ];
 
         // return response()->json($responseData);
@@ -348,82 +356,23 @@ class AdminAppointmentController extends Controller
         return view('admin.appointment.appointment-edit', $responseData);
     }
 
-    public function submitEdit(ClientAppointmentRequest $request, Appointment $appointment_id) {
+    public function submitEdit(AppointmentDetailEditRequest $request, Appointment $appointment_id) {
         $validated = $request->validated();
-        $allNewVisitorsList = [];
-        $exisitingVisitorList = [];
-        $removeVisitorList = [];
-
-        foreach($validated['visitors'] as $visitor) {
-            if (!isset($visitor["id"])) {
-                $allNewVisitorsList[] = $visitor;
-            } else {
-                $exisitingVisitorList[] = $visitor;
-            }
-        }
-
-
-        $appointment = $appointment_id->load(['visitors']);
-        $staff = Staff::with(['branch'])->where('email', $validated['staff_email'])->first();
+        $appointment = $appointment_id->load(['visitors', 'staffs']);
 
         DB::beginTransaction();
         try {
             $appointment->title = $validated['title'];
-            $appointment->meeting_time = new DateTime($validated['date'] . ' ' . $validated['time']);
-            $appointment->staff_email = $staff->email;
-            $appointment->staff_id = $staff->id;
-            $appointment->staff_name = $staff->name;
+            $appointment->meeting_request_time = new DateTime($validated['date'] . ' ' . $validated['time']);
             $appointment->save();
 
-            foreach ($allNewVisitorsList as $item) {
-                $visitor = new Visitor();
-                $visitor->name = $item['name'] ;
-                $visitor->phone = $item['phone'] ;
-                $visitor->company_name = $item['company_name'] ;
-                $visitor->email = $item['email'];
-                $visitor->appointment_id = $appointment->id; // Get Appoint ID after inserted
-                $visitor->save();
-            }
-
-            foreach ($appointment->visitors as $visitor) {
-                $isExist = in_array($visitor->id, array_column($exisitingVisitorList, 'id'));
-
-                if (!$isExist) {
-                    $removeVisitorList[] = $visitor;
-                }
-            }
-
-            foreach ($removeVisitorList as $key => $value) {
-                $remVisitor = Visitor::find($value['id']);
-                $remVisitor->delete();
-            }
-
-            foreach ($exisitingVisitorList as $key => $item) {
-                $editVisitor = Visitor::find($item['id']);
-                $editVisitor->name = $item['name'] ;
-                $editVisitor->phone = $item['phone'] ;
-                $editVisitor->company_name = $item['company_name'] ;
-                $editVisitor->email = $item['email'];
-                $editVisitor->appointment_id = $appointment->id; // Get Appoint ID after inserted
-                $editVisitor->save();
-
-                if ($key == 0) {
-                    // Index 0 Name To Update Appointment Visitor Name
-                    Appointment::where('id', $appointment->id)->update(['visitor_name'=> $item['name']]);
-                }
-            }
-
+            $visitors = $validated['visitors'];
+            $this->appointmentService->updateEachVisitorStatusOfAppointment($visitors, $appointment->id);
             DB::commit();
             return redirect()->back()->with('success', 'Successfully Updated');
         } catch (QueryException $e){
             DB::rollBack();
             return redirect()->back()->with('error', 'Something Went wrong.');
         }
-
-        // return response()->json([
-        //     "allNewVisitorList" => $allNewVisitorsList,
-        //     "exisitingVisitorList" => $exisitingVisitorList,
-        //     "removeVisitorList" => $removeVisitorList,
-        // ]);
     }
 }

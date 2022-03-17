@@ -101,7 +101,7 @@ class ClientMobileController extends Controller
         } else {
             // 1.First Get Pending Appointments and Filter Rquest, And Acites
             $pendingAppointments = $this->appointmentService->getAppointmentListForuabPay($uabpayUser, $pendingStatus, $startOfDay, $next60Days);
-                  if ($status === 'request') {
+            if ($status === 'request') {
                 $appointmentData = $this->appointmentService->getUserAppointmentWithStatusForPay($uabpayUser, $pendingAppointments, $userRequestStatus);
             } else {
                 $appointmentData = $this->appointmentService->getUserAppointmentWithStatusForPay($uabpayUser, $pendingAppointments, $userActiveStatus);
@@ -144,7 +144,7 @@ class ClientMobileController extends Controller
         }
 
         $appointment = $appointment_id->load(['visitors', 'staffs', 'branch']);
-        $allInvitedPersons = array_merge($appointment->visitors->toArray(), $appointment->staffs->toArray());
+        $allInvitedPersons = array_merge($appointment->staffs->toArray(), $appointment->visitors->toArray());
         $organizer = $this->appointmentService->getOrganizerWithPivot($appointment->visitors, $appointment->staffs);
         $showInvitedPerson = $this->appointmentService->organizerFilterList($allInvitedPersons, $organizer);
         $currentAccount = $this->appointmentService->getCurrentAccount($request);

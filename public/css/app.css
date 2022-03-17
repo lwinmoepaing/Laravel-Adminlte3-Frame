@@ -418,7 +418,7 @@ body.tempusdominus-bootstrap-datetimepicker-widget-day-click {
   --pink: #f66d9b;
   --red: #EF2649;
   --orange: #f6993f;
-  --yellow: #ffed4a;
+  --yellow: #ebda44;
   --green: #1abb9c;
   --teal: #4dc0b5;
   --cyan: #6cb2eb;
@@ -429,7 +429,7 @@ body.tempusdominus-bootstrap-datetimepicker-widget-day-click {
   --secondary: #e9ecef;
   --success: #1abb9c;
   --info: #6cb2eb;
-  --warning: #ffed4a;
+  --warning: #ebda44;
   --danger: #EF2649;
   --light: #f8f9fa;
   --dark: #343a40;
@@ -2319,23 +2319,23 @@ pre code {
 .table-warning,
 .table-warning > th,
 .table-warning > td {
-  background-color: #fffacc;
+  background-color: #f9f5cb;
 }
 
 .table-warning th,
 .table-warning td,
 .table-warning thead th,
 .table-warning tbody + tbody {
-  border-color: #fff6a1;
+  border-color: #f5ec9e;
 }
 
 .table-hover .table-warning:hover {
-  background-color: #fff8b3;
+  background-color: #f6f1b4;
 }
 
 .table-hover .table-warning:hover > td,
 .table-hover .table-warning:hover > th {
-  background-color: #fff8b3;
+  background-color: #f6f1b4;
 }
 
 .table-danger,
@@ -3257,43 +3257,43 @@ fieldset:disabled a.btn {
 
 .btn-warning {
   color: #212529;
-  background-color: #ffed4a;
-  border-color: #ffed4a;
+  background-color: #ebda44;
+  border-color: #ebda44;
 }
 
 .btn-warning:hover {
   color: #212529;
-  background-color: #ffe924;
-  border-color: #ffe817;
+  background-color: #e7d321;
+  border-color: #e4cf18;
 }
 
 .btn-warning:focus,
 .btn-warning.focus {
   color: #212529;
-  background-color: #ffe924;
-  border-color: #ffe817;
-  box-shadow: 0 0 0 0.2rem rgba(222, 207, 69, 0.5);
+  background-color: #e7d321;
+  border-color: #e4cf18;
+  box-shadow: 0 0 0 0.2rem rgba(205, 191, 64, 0.5);
 }
 
 .btn-warning.disabled,
 .btn-warning:disabled {
   color: #212529;
-  background-color: #ffed4a;
-  border-color: #ffed4a;
+  background-color: #ebda44;
+  border-color: #ebda44;
 }
 
 .btn-warning:not(:disabled):not(.disabled):active,
 .btn-warning:not(:disabled):not(.disabled).active,
 .show > .btn-warning.dropdown-toggle {
   color: #212529;
-  background-color: #ffe817;
-  border-color: #ffe70a;
+  background-color: #e4cf18;
+  border-color: #d8c417;
 }
 
 .btn-warning:not(:disabled):not(.disabled):active:focus,
 .btn-warning:not(:disabled):not(.disabled).active:focus,
 .show > .btn-warning.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(222, 207, 69, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(205, 191, 64, 0.5);
 }
 
 .btn-danger {
@@ -3564,24 +3564,24 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-warning {
-  color: #ffed4a;
-  border-color: #ffed4a;
+  color: #ebda44;
+  border-color: #ebda44;
 }
 
 .btn-outline-warning:hover {
   color: #212529;
-  background-color: #ffed4a;
-  border-color: #ffed4a;
+  background-color: #ebda44;
+  border-color: #ebda44;
 }
 
 .btn-outline-warning:focus,
 .btn-outline-warning.focus {
-  box-shadow: 0 0 0 0.2rem rgba(255, 237, 74, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(235, 218, 68, 0.5);
 }
 
 .btn-outline-warning.disabled,
 .btn-outline-warning:disabled {
-  color: #ffed4a;
+  color: #ebda44;
   background-color: transparent;
 }
 
@@ -3589,14 +3589,14 @@ fieldset:disabled a.btn {
 .btn-outline-warning:not(:disabled):not(.disabled).active,
 .show > .btn-outline-warning.dropdown-toggle {
   color: #212529;
-  background-color: #ffed4a;
-  border-color: #ffed4a;
+  background-color: #ebda44;
+  border-color: #ebda44;
 }
 
 .btn-outline-warning:not(:disabled):not(.disabled):active:focus,
 .btn-outline-warning:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-warning.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(255, 237, 74, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(235, 218, 68, 0.5);
 }
 
 .btn-outline-danger {
@@ -5868,19 +5868,19 @@ a.badge-info.focus {
 
 .badge-warning {
   color: #212529;
-  background-color: #ffed4a;
+  background-color: #ebda44;
 }
 
 a.badge-warning:hover,
 a.badge-warning:focus {
   color: #212529;
-  background-color: #ffe817;
+  background-color: #e4cf18;
 }
 
 a.badge-warning:focus,
 a.badge-warning.focus {
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(255, 237, 74, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(235, 218, 68, 0.5);
 }
 
 .badge-danger {
@@ -6039,17 +6039,17 @@ a.badge-dark.focus {
 }
 
 .alert-warning {
-  color: #857b26;
-  background-color: #fffbdb;
-  border-color: #fffacc;
+  color: #7a7123;
+  background-color: #fbf8da;
+  border-color: #f9f5cb;
 }
 
 .alert-warning hr {
-  border-top-color: #fff8b3;
+  border-top-color: #f6f1b4;
 }
 
 .alert-warning .alert-link {
-  color: #5d561b;
+  color: #524c18;
 }
 
 .alert-danger {
@@ -6465,20 +6465,20 @@ a.badge-dark.focus {
 }
 
 .list-group-item-warning {
-  color: #857b26;
-  background-color: #fffacc;
+  color: #7a7123;
+  background-color: #f9f5cb;
 }
 
 .list-group-item-warning.list-group-item-action:hover,
 .list-group-item-warning.list-group-item-action:focus {
-  color: #857b26;
-  background-color: #fff8b3;
+  color: #7a7123;
+  background-color: #f6f1b4;
 }
 
 .list-group-item-warning.list-group-item-action.active {
   color: #fff;
-  background-color: #857b26;
-  border-color: #857b26;
+  background-color: #7a7123;
+  border-color: #7a7123;
 }
 
 .list-group-item-danger {
@@ -7466,14 +7466,14 @@ button.bg-info:focus {
 }
 
 .bg-warning {
-  background-color: #ffed4a !important;
+  background-color: #ebda44 !important;
 }
 
 a.bg-warning:hover,
 a.bg-warning:focus,
 button.bg-warning:hover,
 button.bg-warning:focus {
-  background-color: #ffe817 !important;
+  background-color: #e4cf18 !important;
 }
 
 .bg-danger {
@@ -7574,7 +7574,7 @@ button.bg-dark:focus {
 }
 
 .border-warning {
-  border-color: #ffed4a !important;
+  border-color: #ebda44 !important;
 }
 
 .border-danger {
@@ -11192,12 +11192,12 @@ a.text-info:focus {
 }
 
 .text-warning {
-  color: #ffed4a !important;
+  color: #ebda44 !important;
 }
 
 a.text-warning:hover,
 a.text-warning:focus {
-  color: #fde300 !important;
+  color: #cdba16 !important;
 }
 
 .text-danger {
@@ -21348,5 +21348,20 @@ body {
 
 .placehoder-color::placeholder {
   color: rgba(51, 51, 51, 0.2);
+}
+
+.btn-outline-success.outline-active {
+  background-color: #1abb9c !important;
+  color: #fff !important;
+}
+
+.btn-outline-danger.outline-active {
+  background-color: #EF2649 !important;
+  color: #fff !important;
+}
+
+.btn-outline-warning.outline-active {
+  background-color: #ebda44 !important;
+  color: #fff !important;
 }
 

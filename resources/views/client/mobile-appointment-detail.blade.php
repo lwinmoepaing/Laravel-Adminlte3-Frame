@@ -78,7 +78,7 @@
                                     <div class="flex-1 text-right d-flex align-items-center justify-content-end ">
                                         <span class="badge badge-{{$user['pivot']['status'] == 1 ? 'warning' : ($user['pivot']['status'] == 2 ? 'primary' : 'danger')}} fontsize-12 px-3">
                                             {{ $user['status_name']}}
-                                        <span>
+                                        </span>
                                     </div>
                                 </div>
                                 <hr class="mt-1">

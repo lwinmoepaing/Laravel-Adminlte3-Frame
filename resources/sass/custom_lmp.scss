@@ -486,3 +486,16 @@
 .placehoder-color::placeholder {
     color: rgba(51, 51, 51, 0.2);
 }
+
+.btn-outline-success.outline-active {
+    background-color: $green !important;
+    color: #fff !important;
+}
+.btn-outline-danger.outline-active {
+    background-color: $red !important;
+    color: #fff !important;
+}
+.btn-outline-warning.outline-active {
+    background-color: $yellow !important;
+    color: #fff !important;
+}
