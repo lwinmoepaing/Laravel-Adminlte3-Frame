@@ -371,6 +371,30 @@ class AppointmentService {
         return $upcomingAppointments;
     }
 
+    public function getRequestAppointmentFromPendingList($pendingAppointments) {
+        $requestAppointments = collect([]);
+
+        foreach ($pendingAppointments as $key => $appointment) {
+            $staffs = $appointment->staffs;
+            $visitors = $appointment->visitors;
+
+            $isUpcoming = $this->helperAtLeastTwoStaffAttendance($staffs) || $this->helperOneStaffAndOneVisitorAttendance($staffs, $visitors);
+            if (!$isUpcoming) {
+                $requestAppointments->push($appointment);
+            }
+        }
+
+
+        $requestAppointments->count = function () use ($requestAppointments) {
+            return count($requestAppointments);
+        };
+
+        // dd($upcomingAppointments);
+
+
+        return $requestAppointments;
+    }
+
     public function helperAtLeastTwoStaffAttendance($staffs) {
         $attendance = collect([]);
         foreach ($staffs as $staff) {

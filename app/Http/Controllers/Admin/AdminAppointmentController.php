@@ -51,14 +51,14 @@ class AdminAppointmentController extends Controller
         // If Expired Meeting We'll Set Expired Appointment
         $this->appointmentService->expiredDateCheckAndCalculate();
 
-        $todayRequestAppointments = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay, $request->query(), ['visitors', 'staffs']);
-        $pendingAppointments = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay);
+        $todayPendingAppointments = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay, $request->query(), ['visitors', 'staffs']);
         $occupiedAppointments = $this->appointmentService->getAppointmentList($arrivedStatus, $startOfDay, $endOfDay);
-        $upcomingAppointments = $this->appointmentService->getUpcomingAppointmentFromPendingList($todayRequestAppointments);
+        $upcomingAppointments = $this->appointmentService->getUpcomingAppointmentFromPendingList($todayPendingAppointments);
+        $requestAppointments = $this->appointmentService->getRequestAppointmentFromPendingList($todayPendingAppointments);
 
         $responseData = [
-            'todayRequestAppointments' => $todayRequestAppointments,
-            'todayRequestAppointmentCount' => $pendingAppointments->count() - $upcomingAppointments->count(),
+            'todayRequestAppointments' => $requestAppointments,
+            'todayRequestAppointmentCount' => $requestAppointments->count(),
             'occupiedAppointments' => $occupiedAppointments,
             'occupiedAppointmentCount' => $occupiedAppointments->count(),
             'upcomingAppointments' => $upcomingAppointments,
@@ -93,19 +93,19 @@ class AdminAppointmentController extends Controller
             $endOfDay =  $parseDate->endOfDay()->format('Y-m-d H:i:s');
         }
 
-        $todayRequestAppointments = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay, $request->query(), ['visitors', 'staffs']);
-        $pendingAppointments = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay);
+        $todayPendingAppointments = $this->appointmentService->getAppointmentList($pendingStatus, $startOfDay, $endOfDay, $request->query(), ['visitors', 'staffs']);
         $occupiedAppointments = $this->appointmentService->getAppointmentList($arrivedStatus, $startOfDay, $endOfDay);
-        $upcomingAppointments = $this->appointmentService->getUpcomingAppointmentFromPendingList($todayRequestAppointments);
         $finishedAppointments = $this->appointmentService->getAppointmentList($finishedStatus, $startOfDay, $endOfDay);
+        $upcomingAppointments = $this->appointmentService->getUpcomingAppointmentFromPendingList($todayPendingAppointments);
+        $requestAppointments = $this->appointmentService->getRequestAppointmentFromPendingList($todayPendingAppointments);
 
         $responseData = [
-            'todayRequestAppointmentCount' => $pendingAppointments->count() - $upcomingAppointments->count(),
+            'todayRequestAppointmentCount' => $requestAppointments->count(),
             'upcommingAppointmentCount' => $upcomingAppointments->count(),
             'occupiedAppointmentCount' => $occupiedAppointments->count(),
             'finishedAppointmentCount' => $finishedAppointments->count(),
             'todayUpcomingAppointments' => $upcomingAppointments,
-            'todayRequestAppointments' => $todayRequestAppointments,
+            'todayRequestAppointments' => $requestAppointments,
             'todayOccupiedAppointments' => $occupiedAppointments,
             'finishedAppointments' => $finishedAppointments,
             'showTab' => $request->query('showTab'),
@@ -199,7 +199,7 @@ class AdminAppointmentController extends Controller
     public function submitUpdateAppointment(AdminAppointmentUpdateRequest $request, $appointment_id) {
         $validated = $request->validated();
         $appointmentStatus = Appointment::$APPOINTMENT_STATUS_TYPE;
-        $appointment = Appointment::with(['visitors', 'visitor'])->find($appointment_id);
+        $appointment = Appointment::with(['visitors', 'staffs'])->find($appointment_id);
 
         // Cancel Process
         if ( $validated['status'] == $appointmentStatus["REJECTED"] ) {
@@ -237,6 +237,8 @@ class AdminAppointmentController extends Controller
                 $appointment->fill([
                     'status' => $validated['status'],
                     'room_id' => $validated['room_id'],
+                    'meeting_start_time' => Carbon::now()
+
                 ]);
                 $appointment->save();
                 $room = Room::find($validated['room_id']);
@@ -246,20 +248,20 @@ class AdminAppointmentController extends Controller
 
                 // SMS send to Officer
                 // Now We change SMS to Mail Service
-                Mail::to($appointment->staff_email)->queue(new ArriveForOfficerMail([
-                    'title' => $appointment->title,
-                    'id' => $appointment->id,
-                    'room' => $room,
-                    'visitor' => $appointment->visitor
-                ]));
+                // Mail::to($appointment->staff_email)->queue(new ArriveForOfficerMail([
+                //     'title' => $appointment->title,
+                //     'id' => $appointment->id,
+                //     'room' => $room,
+                //     'visitor' => $appointment->visitor
+                // ]));
 
-                foreach ($appointment->visitors as $key => $visitor) {
-                    Mail::to($visitor->email)->queue(new ArriveForClientMail([
-                        'title' => $appointment->title,
-                        'id' => $appointment->id,
-                        'room' => $room,
-                    ]));
-                }
+                // foreach ($appointment->visitors as $key => $visitor) {
+                //     Mail::to($visitor->email)->queue(new ArriveForClientMail([
+                //         'title' => $appointment->title,
+                //         'id' => $appointment->id,
+                //         'room' => $room,
+                //     ]));
+                // }
 
                 return back()
                         ->with('success', 'Successfully Update Arrived Status');
@@ -294,7 +296,7 @@ class AdminAppointmentController extends Controller
 
         }
 
-        return back()->with('success', 'Hello ' . $appointment_id);
+        return back()->with('success', 'Successfully Updated ' . $appointment_id);
     }
 
     public function submitCreate(ClientAppointmentRequest $request) {

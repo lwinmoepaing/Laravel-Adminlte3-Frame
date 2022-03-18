@@ -51,9 +51,9 @@
             </li>
 
 
-            <li>
+            {{-- <li>
                 <a href="{{route('admin.reports.dashboard')}}"><i class="fa fa-bar-chart-o"></i> Reports </a>
-            </li>
+            </li> --}}
 
             <li>
                 <a
